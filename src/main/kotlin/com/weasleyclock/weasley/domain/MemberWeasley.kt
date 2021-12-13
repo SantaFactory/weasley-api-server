@@ -11,14 +11,17 @@ class MemberWeasley : BaseEntity() {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var id: Long? = null
 
-    @Column(nullable = false)
-    private var userId: Long? = null
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    private var user: User? = null
 
-    @Column(nullable = false)
-    private var memberId: Long? = null
+    @OneToOne
+    @JoinColumn(name = "member_id", nullable = false, referencedColumnName = "id")
+    private var member: Member? = null
 
-    @Column(nullable = false)
-    private var weasleyTitle: String? = null
+    @OneToOne
+    @JoinColumn(name = "weasley_item_id" , nullable = false , referencedColumnName = "id")
+    private var weasleyItem: WeasleyItem? = null
 
     // 위도
     @Column(nullable = false, columnDefinition = "decimal(19,2) not null default 0")
@@ -27,5 +30,4 @@ class MemberWeasley : BaseEntity() {
     // 경도
     @Column(nullable = false, columnDefinition = "decimal(19,2) not null default 0")
     private var longitude: BigDecimal? = null
-
 }
