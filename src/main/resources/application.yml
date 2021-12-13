@@ -19,12 +19,6 @@ spring:
         format_sql: true
         # Hibernate Statistics Logger
         generate_statistics: true
-  datasource:
-    url: ENC(RK860/2DxCSJiA6YCghFAc1dL3OMvLtO2GIE4izB9HtVz/AAMf32ZXV2qAaKYhKnUhuUrrcZHQmAYEE3/kgZPghfnOimfYafi/Yu3SRL82ENZweZX9WHSg==)
-    username: ENC(pceESDIFw0AAXCB74qdBPg==)
-    password: ENC(9NZFuDY0JD1m2HTDNjEi1Q==)
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
 
 logging:
   level:

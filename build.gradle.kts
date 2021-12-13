@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -26,16 +27,21 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    // swagger
+    //swagger
     implementation("io.springfox:springfox-boot-starter:3.0.0")
-    //looger
+    //logger
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
-    // jasypt
+    //jasypt
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:1.17")
-    // mysql
+    //Mysql
     implementation("mysql:mysql-connector-java")
-    // jpa
-    implementation( "org.springframework.boot:spring-boot-starter-data-jpa")
+    //JPA
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    //H2
+    implementation("com.h2database:h2")
+    runtimeOnly("com.h2database:h2")
+    implementation("org.apache.tomcat:tomcat-jdbc:7.0.19")
 
 }
 
