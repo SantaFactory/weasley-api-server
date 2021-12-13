@@ -15,18 +15,17 @@ class MemberWeasley : BaseEntity() {
     private var userId: Long? = null
 
     @Column(nullable = false)
-    private var menuberId: Long? = null
+    private var memberId: Long? = null
 
     @Column(nullable = false)
     private var weasleyTitle: String? = null
 
     // 위도
-    // todo : default value check
-    @Column(nullable = false , columnDefinition = "default 0")
+    @Column(nullable = false, columnDefinition = "decimal(19,2) not null default 0")
     private var latitude: BigDecimal? = null
 
     // 경도
-    @Column(nullable = false , columnDefinition = "default 0")
+    @Column(nullable = false, columnDefinition = "decimal(19,2) not null default 0")
     private var longitude: BigDecimal? = null
 
 }
