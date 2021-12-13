@@ -1,0 +1,36 @@
+server:
+  port: 5050
+
+spring:
+  # H2-Console
+  h2:
+    console:
+      enabled: true
+  application:
+    name: kopring-basic-app
+  jpa:
+    # Show Console SQL Query
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        # format SQL Logger
+        format_sql: true
+        # Hibernate Statistics Logger
+        generate_statistics: true
+  datasource:
+    url: ENC(RK860/2DxCSJiA6YCghFAc1dL3OMvLtO2GIE4izB9HtVz/AAMf32ZXV2qAaKYhKnUhuUrrcZHQmAYEE3/kgZPghfnOimfYafi/Yu3SRL82ENZweZX9WHSg==)
+    username: ENC(pceESDIFw0AAXCB74qdBPg==)
+    password: ENC(9NZFuDY0JD1m2HTDNjEi1Q==)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        # Statistics Logger
+        stat: debug
+        # Parameter Trace
+        type: trace
