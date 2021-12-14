@@ -1,6 +1,8 @@
 package com.weasleyclock.weasley.config
 
 import com.weasleyclock.weasley.dto.ErrorDTO
+import com.weasleyclock.weasley.enmus.ErrorType
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -19,8 +21,15 @@ class GlobalControllerAdvice {
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun controllerAdvice(e: Exception): ResponseEntity<ErrorDTO> {
-        val message = e.message
-        val dto = ErrorDTO("server error", message, "default message")
+
+        e.printStackTrace()
+
+        val detailMessage = ExceptionUtils.getStackTrace(e)
+
+        val dto = ErrorDTO(
+            ErrorType.S001.code, ErrorType.S001.message, detailMessage
+        )
+
         return ResponseEntity.ok(dto)
     }
 

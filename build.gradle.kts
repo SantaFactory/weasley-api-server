@@ -37,11 +37,12 @@ dependencies {
     implementation("mysql:mysql-connector-java")
     //JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
     //H2
     implementation("com.h2database:h2")
     runtimeOnly("com.h2database:h2")
     implementation("org.apache.tomcat:tomcat-jdbc:7.0.19")
+    // utils
+    implementation("org.apache.commons:commons-lang3:3.9")
 
 }
 
