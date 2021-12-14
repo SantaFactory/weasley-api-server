@@ -10,13 +10,13 @@ class MemberUserKey : Serializable {
     @Transient
     private val serialVersionUID = 1L
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     var userId: Long? = null
 
-    @Column(name = "member_id", nullable = false)
+    @Column(name = "member_id")
     var memberId: Long? = null
 
-    @Column(name = "member_role_id", nullable = false)
+    @Column(name = "member_role_id")
     var memberRoleId: Long? = null
 
     constructor()

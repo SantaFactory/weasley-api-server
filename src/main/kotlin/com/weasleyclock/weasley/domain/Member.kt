@@ -6,8 +6,8 @@ import javax.persistence.*
 
 @Table
 @Entity
-//@DynamicInsert
-//@DynamicUpdate
+@DynamicInsert
+@DynamicUpdate
 class Member : BaseEntity {
 
     @Id
@@ -17,12 +17,12 @@ class Member : BaseEntity {
     @Column(name = "member_title", nullable = false)
     var title: String? = null
 
-    @OneToMany
     @JoinColumn(name = "member_id")
+    @OneToMany(cascade = [CascadeType.ALL])
     var memberUserSet: Set<MemberUser> = HashSet();
 
-    @OneToMany
     @JoinColumn(name = "menber_id")
+    @OneToMany(cascade = [CascadeType.ALL])
     var weasleyItemSet: Set<WeasleyItem> = HashSet()
 
     constructor()
