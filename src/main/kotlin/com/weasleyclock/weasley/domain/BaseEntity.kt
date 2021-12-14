@@ -3,30 +3,44 @@ package com.weasleyclock.weasley.domain
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.MappedSuperclass
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import javax.persistence.*
 
 @MappedSuperclass
+@EntityListeners(value = [AuditingEntityListener::class])
 abstract class BaseEntity {
 
     @CreatedBy
     @Column(nullable = false, name = "created_by")
-    private var createdBy: String? = null
+    var createdBy: String? = null
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, name = "created_date")
-    private var createdDate: Date? = null
+    var createdDate: Date? = null
 
     @LastModifiedBy
     @Column(name = "last_modified_by", nullable = false)
-    private var lastModifiedBy: String? = null
+    var lastModifiedBy: String? = null
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_modified_date", nullable = false)
-    private var lastModifiedDate: Date? = null
+    var lastModifiedDate: Date? = null
+
+
+    @PrePersist
+    fun onInsert() {
+        this.createdBy = "system"
+        this.lastModifiedBy = "system"
+        this.createdDate = Date()
+        this.lastModifiedDate = Date()
+    }
+
+    @PreUpdate
+    fun onUpdate() {
+        this.lastModifiedBy = "system"
+        this.lastModifiedDate = Date()
+    }
 
 }

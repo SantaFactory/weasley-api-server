@@ -13,8 +13,15 @@ class WeasleyItem {
     @Column(nullable = false)
     private var title: String? = null
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "menber_id", nullable = false)
     private var member: Member? = null
+
+    constructor()
+
+    constructor(title: String, member: Member) {
+        this.title = title
+        this.member = member
+    }
 
 }

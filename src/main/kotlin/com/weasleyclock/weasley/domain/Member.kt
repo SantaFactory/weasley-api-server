@@ -1,28 +1,45 @@
 package com.weasleyclock.weasley.domain
 
+import org.hibernate.annotations.DynamicInsert
+import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
 
-@Entity
 @Table
-class Member : BaseEntity() {
+@Entity
+//@DynamicInsert
+//@DynamicUpdate
+class Member : BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long? = null
+    var id: Long? = null
 
     @Column(name = "member_title", nullable = false)
-    private var title: String? = null
+    var title: String? = null
 
-//    @OneToMany
-//    @JoinColumn(name = "member_id")
-//    private var weasleyItemSet : Set<WeasleyItem> = HashSet()
+    @OneToMany
+    @JoinColumn(name = "member_id")
+    var memberUserSet: Set<MemberUser> = HashSet();
 
-//    @ManyToMany
-//    @JoinTable(
-//        name = "user_member_relation",
-//        joinColumns = [JoinColumn(name = "member_id", referencedColumnName = "id")],
-//        inverseJoinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")]
-//    )
-//    private var userSet: Set<User> = HashSet()
+    @OneToMany
+    @JoinColumn(name = "menber_id")
+    var weasleyItemSet: Set<WeasleyItem> = HashSet()
+
+    constructor()
+
+    constructor(title: String) {
+        this.title = title
+    }
+
+    constructor(title: String, memberUserSet: Set<MemberUser>) {
+        this.title = title
+        this.memberUserSet = memberUserSet
+    }
+
+    constructor(id: Long, title: String, memberUserSet: Set<MemberUser>) {
+        this.id = id
+        this.title = title
+        this.memberUserSet = memberUserSet
+    }
 
 }
