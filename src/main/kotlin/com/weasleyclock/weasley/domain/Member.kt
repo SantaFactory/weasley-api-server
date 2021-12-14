@@ -25,8 +25,6 @@ class Member : BaseEntity {
     @OneToMany(cascade = [CascadeType.ALL])
     var weasleyItemSet: Set<WeasleyItem> = HashSet()
 
-    constructor()
-
     constructor(title: String) {
         this.title = title
     }
@@ -41,5 +39,7 @@ class Member : BaseEntity {
         this.title = title
         this.memberUserSet = memberUserSet
     }
+
+    constructor()
 
 }

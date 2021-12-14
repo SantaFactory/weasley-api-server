@@ -28,5 +28,6 @@ class MemberDTO {
 
     }
 
+    data class Updated(val title: String, val memberUserSet: Set<MemberUser>, val weasleyItemSet: Set<WeasleyItem>)
 
 }

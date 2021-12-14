@@ -7,10 +7,11 @@ import com.weasleyclock.weasley.dto.MemberDTO
 import com.weasleyclock.weasley.repository.MemberRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 
 @Service
-//@Transactional(rollbackFor = [Exception::class])
+@Transactional(rollbackFor = [Exception::class])
 class MemberService(
     private val memberRepository: MemberRepository
 ) {
@@ -42,4 +43,31 @@ class MemberService(
         return saveEntity
     }
 
+    @Transactional
+    fun updateByMember(id: Long, dto: MemberDTO.Updated): Member {
+
+        var updateEntity: Member? = null
+
+        val updateEntityOptional = memberRepository.findById(id)
+
+        if (updateEntityOptional.isEmpty) {
+
+            val updateEntity = updateEntityOptional.get()
+
+            updateEntity.title = dto.title
+            updateEntity.memberUserSet = dto.memberUserSet
+            updateEntity.weasleyItemSet = dto.weasleyItemSet
+
+        }
+
+        return Optional.ofNullable(updateEntity).orElse(Member())
+    }
+
+    @Transactional
+    fun removeByMember(id: Long): Long {
+        memberRepository.deleteById(id)
+        return id
+    }
+
 }
+
