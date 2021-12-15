@@ -2,9 +2,10 @@ package com.weasleyclock.weasley.service
 
 import com.weasleyclock.weasley.domain.Member
 import com.weasleyclock.weasley.domain.MemberUser
-import com.weasleyclock.weasley.domain.embedd.MemberUserKey
 import com.weasleyclock.weasley.dto.MemberDTO
 import com.weasleyclock.weasley.repository.MemberRepository
+import com.weasleyclock.weasley.repository.MemberRoleRepository
+import com.weasleyclock.weasley.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -13,7 +14,8 @@ import java.util.*
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class MemberService(
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val userRepository: UserRepository,
 ) {
 
     /**
@@ -28,13 +30,11 @@ class MemberService(
     @Transactional
     fun createByMember(dto: MemberDTO.Created): Member {
 
-        val userId = dto.userId
-
         val saveEntity = memberRepository.save(dto.toEntity())
 
-        val memberUserSet = listOf(MemberUser(MemberUserKey(userId, saveEntity.id!!, 1))).toSet()
+        val leaderUser = userRepository.findById(dto.userId).orElseThrow()
 
-        saveEntity.memberUserSet = memberUserSet
+        saveEntity.memberUserSet = listOf(MemberUser(leaderUser, saveEntity, "LEADER")).toSet()
 
         val weasleyItemSet = dto.getByWeasleyItemSet(saveEntity)
 

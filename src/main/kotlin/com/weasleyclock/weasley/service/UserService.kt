@@ -1,4 +1,4 @@
-package com.weasleyclock.weasley
+package com.weasleyclock.weasley.service
 
 import com.weasleyclock.weasley.domain.User
 import com.weasleyclock.weasley.repository.UserRepository
