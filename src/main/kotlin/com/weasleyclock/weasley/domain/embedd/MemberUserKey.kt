@@ -16,20 +16,16 @@ class MemberUserKey : Serializable {
     @Column(name = "member_id")
     var memberId: Long? = null
 
-    @Column(name = "member_role_id")
-    var memberRoleId: Long? = null
-
     constructor()
 
-    constructor(userId: Long, memberRoleId: Long) {
+    constructor(userId: Long) {
         this.userId = userId
-        this.memberRoleId = memberRoleId
     }
 
-    constructor(userId: Long, memberId: Long, memberRoleId: Long) {
+    constructor(userId: Long, memberId: Long) {
         this.userId = userId
         this.memberId = memberId
-        this.memberRoleId = memberRoleId
     }
+
 
 }

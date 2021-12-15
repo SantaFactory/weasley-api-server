@@ -1,5 +1,6 @@
 package com.weasleyclock.weasley.domain
 
+import org.jetbrains.annotations.NotNull
 import javax.persistence.*
 
 @Entity
@@ -7,10 +8,8 @@ import javax.persistence.*
 class MemberRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id : Long? = null
-
-    @Column(name = "title" , nullable = false)
-    private var title : String? = null
+    @NotNull
+    @Column(name = "title", nullable = false)
+    var title: String? = null
 
 }

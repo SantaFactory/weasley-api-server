@@ -40,6 +40,13 @@ class Member : BaseEntity {
         this.memberUserSet = memberUserSet
     }
 
+    constructor(id: Long, title: String, memberUserSet: Set<MemberUser>, weasleyItemSet: Set<WeasleyItem>) {
+        this.id = id
+        this.title = title
+        this.memberUserSet = memberUserSet
+        this.weasleyItemSet = weasleyItemSet
+    }
+
     constructor()
 
 }
