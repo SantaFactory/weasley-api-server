@@ -9,7 +9,6 @@ class MemberDTO {
 
     data class Created(
         val title: String,
-        val userId: Long,
         val weasleyTitleSet: Set<String>
     ) {
 

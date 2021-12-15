@@ -3,12 +3,11 @@ package com.weasleyclock.weasley.service
 import com.weasleyclock.weasley.domain.Member
 import com.weasleyclock.weasley.domain.MemberUser
 import com.weasleyclock.weasley.dto.MemberDTO
+import com.weasleyclock.weasley.enmus.MemberRoles
 import com.weasleyclock.weasley.repository.MemberRepository
-import com.weasleyclock.weasley.repository.MemberRoleRepository
 import com.weasleyclock.weasley.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 
 @Service
@@ -17,11 +16,9 @@ class MemberService(
     private val memberRepository: MemberRepository,
     private val userRepository: UserRepository,
 ) {
+    // todo : 시큐리티시 삭제
+    private val userId = 1L
 
-    /**
-     * All Member Data By List </br>
-     * @return List<Member>
-     */
     @Transactional(readOnly = true)
     fun getAllByMembers(): List<Member> {
         return memberRepository.findAll()
@@ -30,11 +27,13 @@ class MemberService(
     @Transactional
     fun createByMember(dto: MemberDTO.Created): Member {
 
-        val saveEntity = memberRepository.save(dto.toEntity())
+        val saveEntity = dto.toEntity()
 
-        val leaderUser = userRepository.findById(dto.userId).orElseThrow()
+        val leaderUser = userRepository.findById(userId).orElseThrow()
 
-        saveEntity.memberUserSet = listOf(MemberUser(leaderUser, saveEntity, "LEADER")).toSet()
+        memberRepository.save(saveEntity)
+
+        saveEntity.memberUserSet = listOf(MemberUser(leaderUser, saveEntity, MemberRoles.LEADER.name)).toSet()
 
         val weasleyItemSet = dto.getByWeasleyItemSet(saveEntity)
 
@@ -46,21 +45,13 @@ class MemberService(
     @Transactional
     fun updateByMember(id: Long, dto: MemberDTO.Updated): Member {
 
-        var updateEntity: Member? = null
+        val updateEntity = memberRepository.findById(id).orElseThrow()
 
-        val updateEntityOptional = memberRepository.findById(id)
+        updateEntity.title = dto.title
+        updateEntity.memberUserSet = dto.memberUserSet
+        updateEntity.weasleyItemSet = dto.weasleyItemSet
 
-        if (updateEntityOptional.isEmpty) {
-
-            val updateEntity = updateEntityOptional.get()
-
-            updateEntity.title = dto.title
-            updateEntity.memberUserSet = dto.memberUserSet
-            updateEntity.weasleyItemSet = dto.weasleyItemSet
-
-        }
-
-        return Optional.ofNullable(updateEntity).orElse(Member())
+        return updateEntity
     }
 
     @Transactional

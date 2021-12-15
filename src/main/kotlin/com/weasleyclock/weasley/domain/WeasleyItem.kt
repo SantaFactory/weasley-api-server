@@ -1,5 +1,6 @@
 package com.weasleyclock.weasley.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Table
@@ -8,14 +9,15 @@ class WeasleyItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long? = null
+    var id: Long? = null
 
     @Column(nullable = false)
-    private var title: String? = null
+    var title: String? = null
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "menber_id", nullable = false)
-    private var member: Member? = null
+     var member: Member? = null
 
     constructor()
 
