@@ -19,7 +19,7 @@ class MemberResource(private val service: MemberService) {
     private val applicationName: String? = null
     private val entityName = "member"
 
-    @GetMapping("/user")
+    @GetMapping("/self")
     fun showMemberByUser(): ResponseEntity<AppMessageDTO> {
 
         val body = AppMessageDTO(HttpStatus.OK.value(), service.getMembersBySelf())
