@@ -2,7 +2,6 @@ package com.weasleyclock.weasley.service
 
 import com.weasleyclock.weasley.domain.Member
 import com.weasleyclock.weasley.domain.MemberUser
-import com.weasleyclock.weasley.domain.User
 import com.weasleyclock.weasley.dto.MemberDTO
 import com.weasleyclock.weasley.enmus.MemberRoles
 import com.weasleyclock.weasley.repository.MemberRepository
