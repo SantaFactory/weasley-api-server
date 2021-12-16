@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface MemberRepository : JpaRepository<Member, Long> {
+
     @EntityGraph(attributePaths = ["memberUserSet.user"])
     fun <T> findById(id: Long, type: Class<T>): T
+
+    fun findByMemberUserSet_User_Id(userId : Long) : List<Member>
+
 }

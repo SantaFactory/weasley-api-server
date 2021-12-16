@@ -19,8 +19,19 @@ class MemberResource(private val service: MemberService) {
     private val applicationName: String? = null
     private val entityName = "member"
 
+    @GetMapping("/user")
+    fun showMemberByUser(): ResponseEntity<AppMessageDTO> {
+
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.getMembersBySelf())
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtils.createByAlert(applicationName, entityName, "self", ApiType.SELECT))
+            .body(body)
+    }
+
     @GetMapping("/{id}/users")
-    fun showMemberByUser(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
+    fun showMemberByUsers(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
 
         val body = AppMessageDTO(HttpStatus.OK.value(), service.getMemberByUsers(id))
 
@@ -54,14 +65,7 @@ class MemberResource(private val service: MemberService) {
     }
 
     @PutMapping("/{id}")
-    fun updateByMember(
-        @PathVariable id: Long,
-        @RequestBody
-        @ApiParam(
-            value = "그룹 정보 업데이터",
-            required = true
-        ) dto: MemberDTO.Updated
-    ): ResponseEntity<AppMessageDTO> {
+    fun updateByMember(@PathVariable id: Long, @RequestBody dto: MemberDTO.Updated): ResponseEntity<AppMessageDTO> {
 
         val data = service.updateByMember(id, dto)
 

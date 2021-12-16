@@ -29,10 +29,12 @@ class MemberDTO {
 
     data class Updated(val title: String, val memberUserSet: Set<MemberUser>, val weasleyItemSet: Set<WeasleyItem>)
 
+    data class User(val id: Long, val email: String, val role: String)
+
     interface OnlyMemberUserSet {
         fun getMemberUserSet(): Set<MemberUser>
     }
 
-    data class User(val id: Long, val email: String, val role: String)
+    data class Defualt(val id: Long, val title: String)
 
 }

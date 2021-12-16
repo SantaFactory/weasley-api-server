@@ -17,12 +17,20 @@ class MemberService(
     private val memberRepository: MemberRepository,
     private val userRepository: UserRepository,
 ) {
+
     // todo : 시큐리티시 삭제
     private val userId = 1L
 
     @Transactional(readOnly = true)
-    fun getAllByMembers(): List<Member> {
+    fun getAllByMembers(): List<MemberDTO.Defualt> {
         return memberRepository.findAll()
+            ?.map { member -> MemberDTO.Defualt(member.id!!, member.title!!) }.toList()
+    }
+
+    @Transactional(readOnly = true)
+    fun getMembersBySelf(): List<MemberDTO.Defualt> {
+        return memberRepository.findByMemberUserSet_User_Id(userId)
+            ?.map { member -> MemberDTO.Defualt(member.id!!, member.title!!) }.toList()
     }
 
     @Transactional(readOnly = true)
