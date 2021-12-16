@@ -44,6 +44,8 @@ dependencies {
     // utils
     implementation("org.apache.commons:commons-lang3:3.9")
 
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
 }
 
 tasks.withType<KotlinCompile> {
