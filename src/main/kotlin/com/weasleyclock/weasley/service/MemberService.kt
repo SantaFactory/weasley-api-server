@@ -2,6 +2,7 @@ package com.weasleyclock.weasley.service
 
 import com.weasleyclock.weasley.domain.Member
 import com.weasleyclock.weasley.domain.MemberUser
+import com.weasleyclock.weasley.domain.User
 import com.weasleyclock.weasley.dto.MemberDTO
 import com.weasleyclock.weasley.enmus.MemberRoles
 import com.weasleyclock.weasley.repository.MemberRepository
@@ -22,6 +23,17 @@ class MemberService(
     @Transactional(readOnly = true)
     fun getAllByMembers(): List<Member> {
         return memberRepository.findAll()
+    }
+
+    @Transactional(readOnly = true)
+    fun getMemberByUsers(memberId: Long): Set<MemberDTO.User?> {
+        return memberRepository.findById(memberId, MemberDTO.OnlyMemberUserSet::class.java)?.getMemberUserSet()
+            .map { memberUser ->
+                memberUser.user?.let {
+                    MemberDTO.User(it.id!!, it.email!!, memberUser.memberRole!!)
+                }
+            }
+            .toSet()
     }
 
     @Transactional

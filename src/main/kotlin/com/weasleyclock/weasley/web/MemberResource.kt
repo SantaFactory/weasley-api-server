@@ -19,6 +19,17 @@ class MemberResource(private val service: MemberService) {
     private val applicationName: String? = null
     private val entityName = "member"
 
+    @GetMapping("/{id}/users")
+    fun showMemberByUser(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
+
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.getMemberByUsers(id))
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtils.createByAlert(applicationName, entityName, id.toString(), ApiType.SELECT))
+            .body(body)
+    }
+
     @GetMapping("")
     fun showByMembers(): ResponseEntity<AppMessageDTO> {
 
@@ -31,13 +42,7 @@ class MemberResource(private val service: MemberService) {
     }
 
     @PostMapping("")
-    fun saveByMember(
-        @RequestBody
-        @ApiParam(
-            value = "그룹에서 첫음 만들때 정보",
-            required = true
-        ) dto: MemberDTO.Created
-    ): ResponseEntity<AppMessageDTO> {
+    fun saveByMember(@RequestBody dto: MemberDTO.Created): ResponseEntity<AppMessageDTO> {
 
         val data = service.createByMember(dto)
 
