@@ -25,10 +25,9 @@ class StartResource {
     fun showByStart(): ResponseEntity<AppMessageDTO> {
         val data = "start project"
         val appMessageDTO = AppMessageDTO(HttpStatus.OK.value(), data)
-//        return ResponseEntity.ok()
-//            .headers(HeaderUtils.createByAlert(applicationName, entityName, "start", ApiType.CREATE))
-//            .body(appMessageDTO)
-        throw NullPointerException()
+        return ResponseEntity.ok()
+            .headers(HeaderUtils.createByAlert(applicationName, entityName, "start", ApiType.CREATE))
+            .body(appMessageDTO)
     }
 
 }
