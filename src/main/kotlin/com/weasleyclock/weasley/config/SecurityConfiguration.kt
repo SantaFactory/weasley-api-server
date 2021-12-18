@@ -3,6 +3,7 @@ package com.weasleyclock.weasley.config
 import com.weasleyclock.weasley.config.security.CachingFilter
 import com.weasleyclock.weasley.config.security.OpenIdConnectFilter
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -30,14 +31,22 @@ class SecurityConfiguration() : WebSecurityConfigurerAdapter() {
             .csrf()
             .disable()
             // login filter
-            .addFilterBefore(CachingFilter() , UsernamePasswordAuthenticationFilter::class.java)
-            .addFilterBefore(OpenIdConnectFilter("/login-process" , jwkUrl.toString()), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(CachingFilter(), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(
+                openIdConnectFilter(),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
 
     }
 
     override fun configure(web: WebSecurity?) {
         web!!.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
+    }
+
+    @Bean
+    fun openIdConnectFilter(): OpenIdConnectFilter {
+        return OpenIdConnectFilter("/login-process", jwkUrl.toString())
     }
 
 }

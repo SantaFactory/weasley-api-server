@@ -1,10 +1,10 @@
 package com.weasleyclock.weasley.config.security
 
 import com.auth0.jwk.JwkProvider
+import com.auth0.jwk.SigningKeyNotFoundException
 import com.auth0.jwk.UrlJwkProvider
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.jwt.JwtHelper
@@ -24,26 +24,25 @@ import javax.servlet.http.HttpServletResponse
  */
 class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
-    private var jwkUrl : String? = null
+    private val log = KotlinLogging.logger {}
 
-    constructor(defaultFilterProcessesUrl: String , jwkUrl : String) : super(defaultFilterProcessesUrl) {
+    private var jwkUrl: String? = null
+
+    constructor(defaultFilterProcessesUrl: String, jwkUrl: String) : super(defaultFilterProcessesUrl) {
         // NoAuth manager class
         authenticationManager = NoOpAuthenticationManager()
+        setAuthenticationFailureHandler(DomainFailureHandler())
         this.jwkUrl = jwkUrl
     }
 
-//    @Value("\${google.jwkUrl}")
-//    private var jwkUrl: String? = null
-
-    private val log = KotlinLogging.logger {}
-
-    override fun attemptAuthentication(request: HttpServletRequest?, response: HttpServletResponse?): Authentication {
+    @Throws(Exception::class)
+    override fun attemptAuthentication(request: HttpServletRequest?, response: HttpServletResponse?): Authentication? {
 
         val requestBody = getByRequestBodyToMap(request)
 
         val idToken = requestBody["id_token"]
 
-        val kid = requestBody["kid"] as String
+        val kid = JwtHelper.headers(idToken)["kid"] as String
 
         val tokenDecoded: org.springframework.security.jwt.Jwt? = JwtHelper.decodeAndVerify(idToken, verifier(kid))
 
