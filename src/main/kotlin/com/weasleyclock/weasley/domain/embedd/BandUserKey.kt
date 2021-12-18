@@ -22,7 +22,7 @@ class BandUserKey : Serializable {
         this.userId = userId
     }
 
-    constructor(userId: Long, bandId: Long) {
+    constructor(userId: Long?, bandId: Long?) {
         this.userId = userId
         this.bandId = bandId
     }

@@ -5,11 +5,15 @@ import javax.persistence.*
 
 @Table
 @Entity
-class BandRole {
+class BandRole() {
 
     @Id
     @NotNull
     @Column(nullable = false)
     var title: String? = null
+
+    constructor(title : String) : this() {
+        this.title = title
+    }
 
 }

@@ -1,33 +1,59 @@
 package com.weasleyclock.weasley.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.weasleyclock.weasley.domain.embedd.BandUserKey
+import org.jetbrains.annotations.NotNull
 import java.math.BigDecimal
 import javax.persistence.*
 
 @Table
 @Entity
-class BandWeasley : BaseEntity() {
-
-//    @OneToOne
-//    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
-//    private var user: User? = null
-//
-//    @OneToOne
-//    @JoinColumn(name = "group_id", nullable = false, referencedColumnName = "id")
-//    private var group: Group? = null
+class BandWeasley : BaseEntity {
 
     @EmbeddedId
-    var bandUserKey : BandUserKey? = null
+    var id: BandUserKey? = null
 
-    @Column(name = "weasley_item", nullable = false)
-    private var weasleyItem: String? = null
+    @Column(nullable = false)
+    var title: String? = null
+
+    @NotNull
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @MapsId("userId")
+    var user: User? = null
+
+    @NotNull
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "band_id", referencedColumnName = "id")
+    @MapsId("bandId")
+    var band: Band? = null
 
     // 위도
     @Column(nullable = false, columnDefinition = "decimal(19,2) not null default 0")
-    private var latitude: BigDecimal? = null
+    var latitude: BigDecimal? = null
 
     // 경도
     @Column(nullable = false, columnDefinition = "decimal(19,2) not null default 0")
-    private var longitude: BigDecimal? = null
+    var longitude: BigDecimal? = null
+
+    constructor()
+
+    constructor(
+        band: Band?,
+        user: User?,
+        id: BandUserKey?,
+        title: String,
+        latitude: BigDecimal,
+        longitude: BigDecimal
+    ) {
+        this.band = band
+        this.user = user
+        this.id = id
+        this.title = title
+        this.latitude = latitude
+        this.longitude = longitude
+    }
 
 }
