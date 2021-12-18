@@ -1,7 +1,6 @@
 package com.weasleyclock.weasley.config.security
 
 import com.auth0.jwk.JwkProvider
-import com.auth0.jwk.SigningKeyNotFoundException
 import com.auth0.jwk.UrlJwkProvider
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
@@ -40,7 +39,11 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
         val requestBody = getByRequestBodyToMap(request)
 
-        val idToken = requestBody["id_token"]
+        val idToken = requestBody["id_token"] as String
+
+        if (idToken.isEmpty()){
+            throw IdTokenEmptyException()
+        }
 
         val kid = JwtHelper.headers(idToken)["kid"] as String
 
@@ -55,6 +58,12 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         return this.authenticationManager.authenticate(UsernamePasswordAuthenticationToken(userName, null))
     }
 
+    /**
+     * Get by request body to map </br>
+     * @description 요청에서 From 으로 넘길 경우 데이터를 읽고 가지고는 메소드
+     * @param request
+     * @return
+     */
     private fun getByRequestBodyToMap(request: HttpServletRequest?): Map<String, String> {
 
         val objectMapper = ObjectMapper()
@@ -64,6 +73,12 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         return objectMapper.readValue(requestBody, Map::class.java) as Map<String, String>
     }
 
+    /**
+     * kid 체크로 google check 값 리턴
+     *
+     * @param kid
+     * @return
+     */
     @Throws(Exception::class)
     private fun verifier(kid: String): RsaVerifier? {
         val provider: JwkProvider = UrlJwkProvider(URL(jwkUrl))

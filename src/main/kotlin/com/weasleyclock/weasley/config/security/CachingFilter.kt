@@ -34,6 +34,8 @@ class CachingFilter : OncePerRequestFilter() {
             filterChain.doFilter(contentCachingRequestWrapper, contentCachingResponseWrapper)
 
             contentCachingResponseWrapper.copyBodyToResponse()
+        } catch (e: IdTokenEmptyException) {
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorType.A002)
         } catch (e: SigningKeyNotFoundException) {
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorType.A001)
         } catch (e: Exception) {
