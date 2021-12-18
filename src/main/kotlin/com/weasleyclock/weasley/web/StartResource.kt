@@ -1,7 +1,7 @@
 package com.weasleyclock.weasley.web
 
 import com.weasleyclock.weasley.dto.AppMessageDTO
-import com.weasleyclock.weasley.enmus.ApiType
+import com.weasleyclock.weasley.enmus.ApiTypes
 import com.weasleyclock.weasley.utils.HeaderUtils
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.beans.factory.annotation.Value
@@ -26,7 +26,7 @@ class StartResource {
         val data = "start project"
         val appMessageDTO = AppMessageDTO(HttpStatus.OK.value(), data)
         return ResponseEntity.ok()
-            .headers(HeaderUtils.createByAlert(applicationName, entityName, "start", ApiType.CREATE))
+            .headers(HeaderUtils.createByAlert(applicationName, entityName, "start", ApiTypes.CREATE))
             .body(appMessageDTO)
     }
 

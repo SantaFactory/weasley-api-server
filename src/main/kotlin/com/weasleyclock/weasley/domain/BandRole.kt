@@ -3,13 +3,13 @@ package com.weasleyclock.weasley.domain
 import org.jetbrains.annotations.NotNull
 import javax.persistence.*
 
+@Table
 @Entity
-@Table(name = "member_role")
-class MemberRole {
+class BandRole {
 
     @Id
     @NotNull
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     var title: String? = null
 
 }

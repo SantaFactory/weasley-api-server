@@ -4,8 +4,8 @@ import com.weasleyclock.weasley.domain.convert.UserTypeConvert
 import com.weasleyclock.weasley.enmus.UserType
 import javax.persistence.*
 
+@Table
 @Entity
-@Table(name = "user")
 class User : BaseEntity() {
 
     @Id

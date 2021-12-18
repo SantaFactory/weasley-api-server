@@ -5,16 +5,16 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class MemberUserKey : Serializable {
+class BandUserKey : Serializable {
 
     @Transient
     private val serialVersionUID = 1L
 
-    @Column(name = "user_id")
+    @Column
     var userId: Long? = null
 
-    @Column(name = "member_id")
-    var memberId: Long? = null
+    @Column
+    var bandId: Long? = null
 
     constructor()
 
@@ -22,10 +22,9 @@ class MemberUserKey : Serializable {
         this.userId = userId
     }
 
-    constructor(userId: Long, memberId: Long) {
+    constructor(userId: Long, bandId: Long) {
         this.userId = userId
-        this.memberId = memberId
+        this.bandId = bandId
     }
-
 
 }

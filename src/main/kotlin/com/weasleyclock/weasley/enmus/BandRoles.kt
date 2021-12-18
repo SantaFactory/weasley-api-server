@@ -1,5 +1,5 @@
 package com.weasleyclock.weasley.enmus
 
-enum class MemberRoles {
+enum class BandRoles {
     LEADER, MEMBER
 }
