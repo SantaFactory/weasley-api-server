@@ -24,13 +24,16 @@ import javax.servlet.http.HttpServletResponse
  */
 class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
-    constructor(defaultFilterProcessesUrl: String) : super(defaultFilterProcessesUrl) {
+    private var jwkUrl : String? = null
+
+    constructor(defaultFilterProcessesUrl: String , jwkUrl : String) : super(defaultFilterProcessesUrl) {
         // NoAuth manager class
         authenticationManager = NoOpAuthenticationManager()
+        this.jwkUrl = jwkUrl
     }
 
-    @Value("\${google.jwkUrl}")
-    private var jwkUrl: String? = null
+//    @Value("\${google.jwkUrl}")
+//    private var jwkUrl: String? = null
 
     private val log = KotlinLogging.logger {}
 

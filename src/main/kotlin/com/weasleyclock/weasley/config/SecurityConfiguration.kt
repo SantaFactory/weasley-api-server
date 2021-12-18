@@ -2,6 +2,7 @@ package com.weasleyclock.weasley.config
 
 import com.weasleyclock.weasley.config.security.CachingFilter
 import com.weasleyclock.weasley.config.security.OpenIdConnectFilter
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -13,6 +14,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration() : WebSecurityConfigurerAdapter() {
+
+    @Value("\${google.jwkUrl}")
+    private var jwkUrl: String? = null
 
     override fun configure(http: HttpSecurity?) {
 
@@ -27,7 +31,7 @@ class SecurityConfiguration() : WebSecurityConfigurerAdapter() {
             .disable()
             // login filter
             .addFilterBefore(CachingFilter() , UsernamePasswordAuthenticationFilter::class.java)
-            .addFilterBefore(OpenIdConnectFilter("/login-process"), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(OpenIdConnectFilter("/login-process" , jwkUrl.toString()), UsernamePasswordAuthenticationFilter::class.java)
 
     }
 
