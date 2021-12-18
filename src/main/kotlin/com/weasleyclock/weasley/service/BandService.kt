@@ -1,7 +1,11 @@
 package com.weasleyclock.weasley.service
 
 import com.weasleyclock.weasley.domain.Band
-import com.weasleyclock.weasley.dto.GroupDTO
+import com.weasleyclock.weasley.domain.BandRole
+import com.weasleyclock.weasley.domain.BandUser
+import com.weasleyclock.weasley.domain.embedd.BandUserKey
+import com.weasleyclock.weasley.dto.BandDTO
+import com.weasleyclock.weasley.enmus.BandRoles
 import com.weasleyclock.weasley.repository.BandRepository
 import com.weasleyclock.weasley.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -18,11 +22,11 @@ class BandService(
     // todo : 시큐리티시 삭제
     private val userId = 1L
 
-    @Transactional(readOnly = true)
-    fun getAllByGroups(): List<GroupDTO.Defualt> {
-        return bandRepository.findAll()
-            ?.map { group -> GroupDTO.Defualt(group.id!!, group.title!!) }.toList()
-    }
+//    @Transactional(readOnly = true)
+//    fun getAllByGroups(): List<BandDTO.Defualt> {
+//        return bandRepository.findAll()
+//            ?.map { group -> BandDTO.Defualt(group.id!!, group.title!!) }.toList()
+//    }
 
 //    @Transactional(readOnly = true)
 //    fun getGroupsBySelf(): List<GroupDTO.Defualt> {
@@ -43,21 +47,27 @@ class BandService(
 //    }
 
     @Transactional
-    fun createByGroup(dto: GroupDTO.Created): Band {
+    fun createByGroup(dto: BandDTO.Created): Band {
 
         val saveEntity = dto.toEntity()
 
         val leaderUser = userRepository.findById(userId).orElseThrow()
 
-        bandRepository.save(saveEntity)
+        val bandUserKey = BandUserKey(leaderUser.id, saveEntity.id)
 
-//        saveEntity.groupUserSet = listOf(GroupUser(leaderUser, saveEntity, GroupRoles.LEADER.name)).toSet()
+        val bandUser = BandUser(saveEntity, leaderUser, bandUserKey, BandRole(BandRoles.LEADER.name))
+
+        saveEntity.bandUserSet = listOf(bandUser).toSet() as MutableSet<BandUser>
+
+        saveEntity.bandWeasleySet = dto.toWeasleyItems(bandUser)
+
+        bandRepository.save(saveEntity)
 
         return saveEntity
     }
 
     @Transactional
-    fun updateByGroup(id: Long, dto: GroupDTO.Updated): Band {
+    fun updateByGroup(id: Long, dto: BandDTO.Updated): Band {
         val updateEntity = bandRepository.findById(id).orElseThrow()
         updateEntity.title = dto.title
 //        updateEntity.groupUserSet = dto.groupUserSet
