@@ -32,6 +32,7 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         // NoAuth manager class
         authenticationManager = NoOpAuthenticationManager()
         setAuthenticationFailureHandler(DomainFailureHandler())
+        setAuthenticationSuccessHandler(DomainSuccessHandler())
         this.jwkUrl = jwkUrl
     }
 
@@ -40,7 +41,7 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
         val method = request!!.method
 
-        if (HttpMethod.POST.name != method){
+        if (HttpMethod.POST.name != method) {
             throw NotPostMethodException()
         }
 
@@ -48,7 +49,7 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
         val idToken = requestBody["id_token"] as String
 
-        if (idToken.isEmpty()){
+        if (idToken.isEmpty()) {
             throw IdTokenEmptyException()
         }
 
@@ -62,7 +63,7 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
         log.info { "login user $userName" }
 
-        return this.authenticationManager.authenticate(UsernamePasswordAuthenticationToken(userName, null))
+        return UsernamePasswordAuthenticationToken(userName, null)
     }
 
     /**

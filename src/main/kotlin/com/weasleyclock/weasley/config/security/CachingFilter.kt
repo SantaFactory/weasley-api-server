@@ -1,10 +1,9 @@
 package com.weasleyclock.weasley.config.security
 
 import com.auth0.jwk.SigningKeyNotFoundException
-import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.weasleyclock.weasley.dto.ErrorDTO
 import com.weasleyclock.weasley.enmus.ErrorType
+import com.weasleyclock.weasley.utils.JsonUtils
 import mu.KotlinLogging
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.http.HttpStatus
@@ -55,28 +54,20 @@ class CachingFilter : OncePerRequestFilter() {
 
         response.status = status.value()
 
-        response.contentType = "application/json"
+        response.contentType = AppProperties.CONTENT_TYPE
 
         val detailMessage = ExceptionUtils.getStackTrace(ex)
 
         val errorDTO = ErrorDTO(errorType.code, errorType.message, detailMessage)
 
         try {
-            response.writer.write(convertObjectToJson(errorDTO));
+            response.writer.write(JsonUtils.convertObjectToJson(errorDTO));
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
     }
 
-    @Throws(JsonProcessingException::class)
-    private fun convertObjectToJson(any: Any?): String {
-        if (any == null) {
-            return ""
-        }
-        val mapper = ObjectMapper()
-        return mapper.writeValueAsString(any)
-    }
 
 }
 
