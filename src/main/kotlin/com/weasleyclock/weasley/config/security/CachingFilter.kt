@@ -36,6 +36,8 @@ class CachingFilter : OncePerRequestFilter() {
             contentCachingResponseWrapper.copyBodyToResponse()
         } catch (e: IdTokenEmptyException) {
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorType.A002)
+        } catch (e: NotPostMethodException) {
+            setErrorResponse(HttpStatus.NOT_FOUND, response, e, ErrorType.A003)
         } catch (e: SigningKeyNotFoundException) {
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorType.A001)
         } catch (e: Exception) {
@@ -48,7 +50,7 @@ class CachingFilter : OncePerRequestFilter() {
         status: HttpStatus,
         response: HttpServletResponse,
         ex: Exception,
-        erroType: ErrorType
+        errorType: ErrorType
     ) {
 
         response.status = status.value()
@@ -57,7 +59,7 @@ class CachingFilter : OncePerRequestFilter() {
 
         val detailMessage = ExceptionUtils.getStackTrace(ex)
 
-        val errorDTO = ErrorDTO(erroType.code, erroType.message, detailMessage)
+        val errorDTO = ErrorDTO(errorType.code, errorType.message, detailMessage)
 
         try {
             response.writer.write(convertObjectToJson(errorDTO));

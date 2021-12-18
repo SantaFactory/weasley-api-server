@@ -4,6 +4,7 @@ import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.UrlJwkProvider
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.jwt.JwtHelper
@@ -36,6 +37,12 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
     @Throws(Exception::class)
     override fun attemptAuthentication(request: HttpServletRequest?, response: HttpServletResponse?): Authentication? {
+
+        val method = request!!.method
+
+        if (HttpMethod.POST.name != method){
+            throw NotPostMethodException()
+        }
 
         val requestBody = getByRequestBodyToMap(request)
 
