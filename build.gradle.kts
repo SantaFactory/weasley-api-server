@@ -45,6 +45,8 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
+    implementation("org.springframework.security:spring-security-jwt:1.1.1.RELEASE")
+    implementation("com.auth0:jwks-rsa:0.3.0")
 }
 
 tasks.withType<KotlinCompile> {

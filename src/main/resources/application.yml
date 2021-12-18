@@ -33,3 +33,6 @@ logging:
         stat: debug
         # Parameter Trace
         type: trace
+
+google:
+  jwkUrl: https://www.googleapis.com/oauth2/v2/certs
