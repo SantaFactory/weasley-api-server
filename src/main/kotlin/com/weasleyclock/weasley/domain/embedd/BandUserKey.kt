@@ -5,26 +5,18 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class BandUserKey : Serializable {
+data class BandUserKey(
+    @Column
+    var userId: Long? = null,
+    @Column
+    var bandId: Long? = null,
+) : Serializable {
 
     @Transient
     private val serialVersionUID = 1L
 
-    @Column
-    var userId: Long? = null
-
-    @Column
-    var bandId: Long? = null
-
-    constructor()
-
-    constructor(userId: Long) {
+    constructor(userId: Long) : this() {
         this.userId = userId
-    }
-
-    constructor(userId: Long?, bandId: Long?) {
-        this.userId = userId
-        this.bandId = bandId
     }
 
 }
