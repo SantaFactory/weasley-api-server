@@ -3,6 +3,10 @@ package com.weasleyclock.weasley.config.security
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.UrlJwkProvider
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.weasleyclock.weasley.domain.Auth
+import com.weasleyclock.weasley.domain.User
+import com.weasleyclock.weasley.enmus.AppRoles
+import com.weasleyclock.weasley.enmus.UserTypes
 import com.weasleyclock.weasley.repository.UserRepository
 import mu.KotlinLogging
 import org.springframework.http.HttpMethod
@@ -31,7 +35,9 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
     private var userRepository: UserRepository? = null
 
-    constructor(defaultFilterProcessesUrl: String, jwkUrl: String , userRepository: UserRepository) : super(defaultFilterProcessesUrl) {
+    constructor(defaultFilterProcessesUrl: String, jwkUrl: String, userRepository: UserRepository) : super(
+        defaultFilterProcessesUrl
+    ) {
         // NoAuth manager class
         authenticationManager = NoOpAuthenticationManager()
         setAuthenticationFailureHandler(DomainFailureHandler())
@@ -63,11 +69,31 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
         val authInfo: MutableMap<*, *>? = ObjectMapper().readValue(tokenDecoded?.claims, MutableMap::class.java)
 
-        val userName = authInfo?.get("email")
+        val userName = authInfo?.get("email") as String
 
         log.info { "login user $userName" }
 
-        return UsernamePasswordAuthenticationToken(userName, null)
+        val userOptional = userRepository!!.findByEmail(userName)
+
+        if (userOptional.isEmpty) {
+
+            val name = authInfo?.get("name") as String
+
+            val sub = authInfo?.get("sub") as String
+
+            val newEntity = User(userName, name, UserTypes.GOOGLE, sub, linkedSetOf(Auth(AppRoles.USER.value)))
+
+            userRepository!!.save(newEntity)
+
+            val domainUserDetail = DomainUserDetail(newEntity)
+
+            return UsernamePasswordAuthenticationToken(domainUserDetail, null, domainUserDetail.authorities)
+
+        }
+
+        val domainUserDetail = DomainUserDetail(userOptional.get())
+
+        return UsernamePasswordAuthenticationToken(domainUserDetail, null, domainUserDetail.authorities)
     }
 
     /**

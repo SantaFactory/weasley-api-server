@@ -3,6 +3,8 @@ package com.weasleyclock.weasley.domain
 import com.weasleyclock.weasley.domain.convert.UserTypeConvert
 import com.weasleyclock.weasley.enmus.UserTypes
 import org.springframework.beans.factory.support.ManagedSet
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import javax.persistence.*
 
 @Table
@@ -18,6 +20,8 @@ data class User(
     @Convert(converter = UserTypeConvert::class)
     @Column(name = "login_type", nullable = false, length = 10)
     var loginType: UserTypes? = null,
+    @Column(name = "user_key", nullable = false)
+    var userKey: String? = null,
     @OneToMany
     @JoinTable(
         name = "user_auth",
@@ -25,4 +29,24 @@ data class User(
         inverseJoinColumns = [JoinColumn(name = "auth_name", referencedColumnName = "title")]
     )
     var authSet: MutableSet<Auth> = ManagedSet()
-) : BaseEntity()
+) : BaseEntity() {
+
+    constructor(
+        email: String,
+        name: String,
+        loginType: UserTypes?,
+        userKey : String,
+        authSet: MutableSet<Auth>
+    ) : this() {
+        this.email = email
+        this.name = name
+        this.loginType = loginType
+        this.userKey = userKey
+        this.authSet = authSet
+    }
+
+    fun getAuthorities(): Set<GrantedAuthority> {
+        return authSet.map { auth -> SimpleGrantedAuthority(auth.title) }.toSet()
+    }
+
+}

@@ -1,6 +1,8 @@
 package com.weasleyclock.weasley.config.security
 
 import com.weasleyclock.weasley.dto.AppMessageDTO
+import com.weasleyclock.weasley.dto.UserDTO
+import com.weasleyclock.weasley.repository.UserRepository
 import com.weasleyclock.weasley.utils.JsonUtils
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
@@ -20,11 +22,14 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
     ) {
 
         try {
+
+            val userInfo = authentication!!.principal as DomainUserDetail
+
             response!!.status = HttpStatus.OK.value()
 
             response.contentType = AppProperties.CONTENT_TYPE
 
-            val message = AppMessageDTO(HttpStatus.OK.value(), "success login")
+            val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(userInfo.username, userInfo.userKey))
 
             response.writer.write(JsonUtils.convertObjectToJson(message))
 
