@@ -1,5 +1,13 @@
 # weasley-api-server
 
+## Runbook
+
+JVM Option 
+
+```cmd
+-Dspring.profiles.active=local
+```
+
 ## Spec
 
 - Spring boot 2.6.1
@@ -10,14 +18,6 @@
 - myssql (prod)
 - aws
 
-
-## Runbook
-
-JVM Option 
-
-```
--Dspring.profiles.active=local
-```
 ## Releases
 
 ### AWS Releases
