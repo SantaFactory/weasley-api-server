@@ -1,4 +1,4 @@
-# weasley-api-server
+# Weasley App API Server
 
 ## Runbook
 
