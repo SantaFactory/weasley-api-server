@@ -12,7 +12,8 @@ JVM Option
 
 - Spring boot 2.6.1
 - Jvm version 11 ~ 13 
-- kotlin 
+- kotlin
+- JPA & Hibernate 
 - gradle
 - h2 (local)
 - myssql (prod)
