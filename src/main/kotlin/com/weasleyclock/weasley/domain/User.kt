@@ -1,7 +1,7 @@
 package com.weasleyclock.weasley.domain
 
 import com.weasleyclock.weasley.domain.convert.UserTypeConvert
-import com.weasleyclock.weasley.enmus.UserType
+import com.weasleyclock.weasley.enmus.UserTypes
 import javax.persistence.*
 
 @Table
@@ -20,6 +20,6 @@ class User : BaseEntity() {
 
     @Convert(converter = UserTypeConvert::class)
     @Column(name = "login_type", nullable = false, length = 10)
-    var loginType: UserType? = null
+    var loginType: UserTypes? = null
 
 }

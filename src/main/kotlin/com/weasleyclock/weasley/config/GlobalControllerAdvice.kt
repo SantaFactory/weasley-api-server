@@ -1,7 +1,7 @@
 package com.weasleyclock.weasley.config
 
 import com.weasleyclock.weasley.dto.ErrorDTO
-import com.weasleyclock.weasley.enmus.ErrorType
+import com.weasleyclock.weasley.enmus.ErrorTypes
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -27,7 +27,7 @@ class GlobalControllerAdvice {
         val detailMessage = ExceptionUtils.getStackTrace(e)
 
         val dto = ErrorDTO(
-            ErrorType.S001.code, ErrorType.S001.message, detailMessage
+            ErrorTypes.S001.code, ErrorTypes.S001.message, detailMessage
         )
 
         return ResponseEntity.ok(dto)

@@ -2,7 +2,7 @@ package com.weasleyclock.weasley.config.security
 
 import com.auth0.jwk.SigningKeyNotFoundException
 import com.weasleyclock.weasley.dto.ErrorDTO
-import com.weasleyclock.weasley.enmus.ErrorType
+import com.weasleyclock.weasley.enmus.ErrorTypes
 import com.weasleyclock.weasley.utils.JsonUtils
 import mu.KotlinLogging
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -34,13 +34,13 @@ class CachingFilter : OncePerRequestFilter() {
 
             contentCachingResponseWrapper.copyBodyToResponse()
         } catch (e: IdTokenEmptyException) {
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorType.A002)
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.A002)
         } catch (e: NotPostMethodException) {
-            setErrorResponse(HttpStatus.NOT_FOUND, response, e, ErrorType.A003)
+            setErrorResponse(HttpStatus.NOT_FOUND, response, e, ErrorTypes.A003)
         } catch (e: SigningKeyNotFoundException) {
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorType.A001)
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.A001)
         } catch (e: Exception) {
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorType.S001)
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.S001)
         }
 
     }
@@ -49,7 +49,7 @@ class CachingFilter : OncePerRequestFilter() {
         status: HttpStatus,
         response: HttpServletResponse,
         ex: Exception,
-        errorType: ErrorType
+        errorTypes: ErrorTypes
     ) {
 
         response.status = status.value()
@@ -58,7 +58,7 @@ class CachingFilter : OncePerRequestFilter() {
 
         val detailMessage = ExceptionUtils.getStackTrace(ex)
 
-        val errorDTO = ErrorDTO(errorType.code, errorType.message, detailMessage)
+        val errorDTO = ErrorDTO(errorTypes.code, errorTypes.message, detailMessage)
 
         try {
             response.writer.write(JsonUtils.convertObjectToJson(errorDTO));
