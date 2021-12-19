@@ -5,7 +5,6 @@ import com.weasleyclock.weasley.domain.embedd.BandUserKey
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
-import kotlin.jvm.Transient
 
 @Table
 @Entity
@@ -27,13 +26,6 @@ data class BandUser (
     @JoinColumn(name = "band_id", referencedColumnName = "id")
     var band: Band? = null
 ){
-
-//    constructor() : this()
-//
-//    constructor(id: BandUserKey) {
-//        this.id = id
-//    }
-//
 
     constructor(band: Band, user: User, id: BandUserKey, bandRole: BandRole) : this() {
         this.band = band

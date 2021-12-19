@@ -3,6 +3,7 @@ package com.weasleyclock.weasley.config.security
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.UrlJwkProvider
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.weasleyclock.weasley.repository.UserRepository
 import mu.KotlinLogging
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -28,12 +29,15 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
     private var jwkUrl: String? = null
 
-    constructor(defaultFilterProcessesUrl: String, jwkUrl: String) : super(defaultFilterProcessesUrl) {
+    private var userRepository: UserRepository? = null
+
+    constructor(defaultFilterProcessesUrl: String, jwkUrl: String , userRepository: UserRepository) : super(defaultFilterProcessesUrl) {
         // NoAuth manager class
         authenticationManager = NoOpAuthenticationManager()
         setAuthenticationFailureHandler(DomainFailureHandler())
         setAuthenticationSuccessHandler(DomainSuccessHandler())
         this.jwkUrl = jwkUrl
+        this.userRepository = userRepository
     }
 
     @Throws(Exception::class)
