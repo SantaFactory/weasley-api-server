@@ -1,6 +1,14 @@
 # weasley-api-server
 
+## Spec
 
+- Spring boot 2.6.1
+- Jvm version 11 ~ 13 
+- kotlin 
+- gradle
+- h2 (local)
+- myssql (prod)
+- aws
 
 
 ## Runbook
