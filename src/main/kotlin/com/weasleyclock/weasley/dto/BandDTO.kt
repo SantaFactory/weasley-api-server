@@ -1,8 +1,7 @@
 package com.weasleyclock.weasley.dto
 
-import com.weasleyclock.weasley.domain.Band
-import com.weasleyclock.weasley.domain.BandUser
-import com.weasleyclock.weasley.domain.BandWeasley
+import com.weasleyclock.weasley.domain.*
+import org.springframework.beans.factory.annotation.Value
 import java.math.BigDecimal
 
 class BandDTO {
@@ -21,7 +20,6 @@ class BandDTO {
                 BandWeasley(
                     bandUser.band,
                     bandUser.user,
-                    bandUser.id,
                     weasleyItem.title,
                     weasleyItem.latitude,
                     weasleyItem.longitude
@@ -34,5 +32,26 @@ class BandDTO {
     data class Weasley(val title: String, val latitude: BigDecimal, val longitude: BigDecimal)
 
     data class Updated(val title: String, val bandUserSet: Set<BandUser>)
+
+    data class Base(val id: Long, val title: String)
+
+    data class UserInfo(val id: Long, val email: String, val role: String)
+
+    interface OnlyBandUser {
+
+        @Value("#{target.bandUserSet}")
+        fun getBandUserSet(): MutableSet<BandUser>
+
+        interface BandUser {
+            fun getUser(): User
+            fun getBandRole(): BandRole
+        }
+
+        interface User {
+            fun getId(): Long
+            fun getEmail(): String
+        }
+
+    }
 
 }

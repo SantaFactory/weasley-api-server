@@ -3,7 +3,7 @@ package com.weasleyclock.weasley.web
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.enmus.ApiTypes
 import com.weasleyclock.weasley.utils.HeaderUtils
-import io.swagger.v3.oas.annotations.Operation
+import com.weasleyclock.weasley.web.swagger.StartSwagger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api")
-class StartResource {
+class StartResource : StartSwagger {
 
     @Value("\${spring.application.name}")
     private val applicationName: String? = null
@@ -21,8 +21,7 @@ class StartResource {
     private val entityName = "start"
 
     @GetMapping("/start")
-    @Operation(summary = "test api start", description = "swagger example")
-    fun showByStart(): ResponseEntity<AppMessageDTO> {
+    override fun showByStart(): ResponseEntity<AppMessageDTO> {
         val data = "start project"
         val appMessageDTO = AppMessageDTO(HttpStatus.OK.value(), data)
         return ResponseEntity.ok()

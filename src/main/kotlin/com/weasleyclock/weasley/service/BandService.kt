@@ -3,7 +3,6 @@ package com.weasleyclock.weasley.service
 import com.weasleyclock.weasley.domain.Band
 import com.weasleyclock.weasley.domain.BandRole
 import com.weasleyclock.weasley.domain.BandUser
-import com.weasleyclock.weasley.domain.embedd.BandUserKey
 import com.weasleyclock.weasley.dto.BandDTO
 import com.weasleyclock.weasley.enmus.BandRoles
 import com.weasleyclock.weasley.repository.BandRepository
@@ -22,29 +21,29 @@ class BandService(
     // todo : 시큐리티시 삭제
     private val userId = 1L
 
-//    @Transactional(readOnly = true)
-//    fun getAllByGroups(): List<BandDTO.Defualt> {
-//        return bandRepository.findAll()
-//            ?.map { group -> BandDTO.Defualt(group.id!!, group.title!!) }.toList()
-//    }
+    @Transactional(readOnly = true)
+    fun getAllByGroups(): List<BandDTO.Base> {
+        return bandRepository.findAll()
+            ?.map { group -> BandDTO.Base(group.id!!, group.title!!) }
+            .toList()
+    }
 
-//    @Transactional(readOnly = true)
-//    fun getGroupsBySelf(): List<GroupDTO.Defualt> {
-//        return groupRepository.findByGroupUserSet_User_Id(userId)
-//            ?.map { group -> GroupDTO.Defualt(group.id!!, group.title!!) }.toList()
-//    }
+    @Transactional(readOnly = true)
+    fun getGroupsBySelf(): List<BandDTO.Base> {
+        return bandRepository.findByBandUserSet_User_Id(userId)
+            ?.map { band -> BandDTO.Base(band.id!!, band.title!!) }
+    }
 
-//    @Transactional(readOnly = true)
-//    fun getGroupByUsers(groupId: Long): Set<GroupDTO.User?> {
-//        return null
-////        return groupRepository.findById(groupId, GroupDTO.OnlyGroupUserSet::class.java)?.getMemberUserSet()
-////            .map { groupUser ->
-////                groupUser.user?.let {
-////                    GroupDTO.User(it.id!!, it.email!!, groupUser.groupRole!!)
-////                }
-////            }
-////            .toSet()
-//    }
+    @Transactional(readOnly = true)
+    fun getGroupByUsers(groupId: Long): Set<BandDTO.UserInfo> {
+        return bandRepository.findById(groupId, BandDTO.OnlyBandUser::class.java)?.getBandUserSet()
+            .map { bandUser ->
+                bandUser.getUser()?.let {
+                    BandDTO.UserInfo(it.getId()!!, it.getEmail()!!, bandUser.getBandRole()!!.title!!)
+                }
+            }
+            .toSet()
+    }
 
     @Transactional
     fun createByGroup(dto: BandDTO.Created): Band {
@@ -53,15 +52,13 @@ class BandService(
 
         val leaderUser = userRepository.findById(userId).orElseThrow()
 
-        val bandUserKey = BandUserKey(leaderUser.id, saveEntity.id)
+        bandRepository.save(saveEntity)
 
-        val bandUser = BandUser(saveEntity, leaderUser, bandUserKey, BandRole(BandRoles.LEADER.name))
+        val bandUser = BandUser(saveEntity, leaderUser, BandRole(BandRoles.LEADER.name))
 
         saveEntity.bandUserSet = listOf(bandUser).toSet() as MutableSet<BandUser>
 
         saveEntity.bandWeasleySet = dto.toWeasleyItems(bandUser)
-
-        bandRepository.save(saveEntity)
 
         return saveEntity
     }
@@ -70,7 +67,6 @@ class BandService(
     fun updateByGroup(id: Long, dto: BandDTO.Updated): Band {
         val updateEntity = bandRepository.findById(id).orElseThrow()
         updateEntity.title = dto.title
-//        updateEntity.groupUserSet = dto.groupUserSet
         return updateEntity
     }
 
