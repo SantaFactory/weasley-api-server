@@ -52,6 +52,8 @@ class CachingFilter : OncePerRequestFilter() {
         errorTypes: ErrorTypes
     ) {
 
+        response.reset()
+
         response.status = status.value()
 
         response.contentType = AppProperties.CONTENT_TYPE

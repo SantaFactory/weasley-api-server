@@ -9,26 +9,28 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
+import javax.servlet.http.HttpServletResponse
 
 /**
  * Global Exception Handler to Controller Layer
  */
-
 @ControllerAdvice
 class GlobalControllerAdvice {
 
     @ResponseBody
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun controllerAdvice(e: Exception): ResponseEntity<ErrorDTO> {
+    fun controllerAdvice(e: Exception, response: HttpServletResponse): ResponseEntity<ErrorDTO> {
 
-        e.printStackTrace()
+        response.reset()
 
         val detailMessage = ExceptionUtils.getStackTrace(e)
 
         val dto = ErrorDTO(
             ErrorTypes.S001.code, ErrorTypes.S001.message, detailMessage
         )
+
+        e.printStackTrace()
 
         return ResponseEntity.ok(dto)
     }

@@ -2,7 +2,6 @@ package com.weasleyclock.weasley.config.security
 
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.UserDTO
-import com.weasleyclock.weasley.repository.UserRepository
 import com.weasleyclock.weasley.utils.JsonUtils
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
