@@ -5,7 +5,7 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class BandUserKey : Serializable {
+class BandWeasleyKey : Serializable {
 
     @Transient
     private val serialVersionUID = 1L
@@ -16,15 +16,15 @@ class BandUserKey : Serializable {
     @Column
     var bandId: Long? = null
 
+    @Column(nullable = false)
+    var title: String? = null
+
     constructor()
 
-    constructor(userId: Long) {
-        this.userId = userId
-    }
-
-    constructor(userId: Long?, bandId: Long?) {
+    constructor(userId: Long, bandId: Long, title: String) {
         this.userId = userId
         this.bandId = bandId
+        this.title = title
     }
 
 }
