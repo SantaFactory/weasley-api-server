@@ -85,4 +85,24 @@ class BandResource(private val service: BandService) : BandSwagger {
             .body(body)
     }
 
+    @PostMapping("{bandId}/user/{userId}")
+    override fun inviteFromBandToUser(
+        @PathVariable bandId: Long,
+        @PathVariable userId: Long
+    ): ResponseEntity<AppMessageDTO> {
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.saveByBandUser(bandId, userId))
+
+        return ResponseEntity
+            .ok()
+            .headers(
+                HeaderUtils.createByAlert(
+                    applicationName,
+                    entityName,
+                    "bandId is ${bandId} and useId is $userId",
+                    ApiTypes.CREATE
+                )
+            )
+            .body(body)
+    }
+
 }

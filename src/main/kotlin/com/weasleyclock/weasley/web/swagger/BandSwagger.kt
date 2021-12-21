@@ -35,4 +35,7 @@ interface BandSwagger {
     @Operation(summary = "그룹을 삭제 할때 사용", description = "그룹을 삭제 할때 사용 로직")
     fun removeByGroup(id: Long): ResponseEntity<AppMessageDTO>
 
+    @Operation(summary = "유저 초대", description = "유저 초대하는 로직")
+    fun inviteFromBandToUser(bandId : Long , userId : Long) : ResponseEntity<AppMessageDTO>
+
 }

@@ -6,32 +6,30 @@ import com.weasleyclock.weasley.domain.BandUser
 import com.weasleyclock.weasley.dto.BandDTO
 import com.weasleyclock.weasley.enmus.BandRoles
 import com.weasleyclock.weasley.repository.BandRepository
+import com.weasleyclock.weasley.repository.BandUserRepository
 import com.weasleyclock.weasley.repository.UserRepository
+import org.apache.commons.lang3.ObjectUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class BandService(
     private val bandRepository: BandRepository,
     private val userRepository: UserRepository,
+    private val bandUserRepository: BandUserRepository,
 ) {
-
     // todo : 시큐리티시 삭제
     private val userId = 1L
 
     @Transactional(readOnly = true)
-    fun getAllByGroups(): List<BandDTO.Base> {
-        return bandRepository.findAll()
-            ?.map { group -> BandDTO.Base(group.id!!, group.title!!) }
-            .toList()
+    fun getAllByGroups(): List<BandDTO.BandUserCount> {
+        return bandRepository.findBy(BandDTO.BandUserCount::class.java)
     }
 
     @Transactional(readOnly = true)
-    fun getGroupsBySelf(): List<BandDTO.Base> {
-        return bandRepository.findByBandUserSet_User_Id(userId)
-            ?.map { band -> BandDTO.Base(band.id!!, band.title!!) }
+    fun getGroupsBySelf(): List<BandDTO.BandUserCount> {
+        return bandRepository.findByBandUserSet_User_Id(userId, BandDTO.BandUserCount::class.java)
     }
 
     @Transactional(readOnly = true)
@@ -72,8 +70,31 @@ class BandService(
 
     @Transactional
     fun removeByGroup(id: Long): Long {
-        bandRepository.deleteById(id)
-        return id
+
+        val leaderRoleUser: BandUser =
+            bandUserRepository.findByBand_IdAndUser_IdAndBandRole_Title(id, userId, BandRoles.LEADER.name)
+
+        val isLeaderAble = ObjectUtils.isNotEmpty(leaderRoleUser)
+
+        if (isLeaderAble) {
+
+            bandRepository.deleteById(id)
+            return id
+
+        }else{
+            // todo : exception
+            throw NullPointerException()
+        }
+
+    }
+
+    @Transactional
+    fun saveByBandUser(bandId: Long, userId: Long) : BandUser {
+        val band = bandRepository.findById(bandId).orElseThrow()
+        val user = userRepository.findById(userId).orElseThrow()
+        val entity = BandDTO.Member().toEntity(band, user)
+        bandUserRepository.save(entity)
+        return entity
     }
 
 }

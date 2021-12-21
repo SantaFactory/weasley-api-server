@@ -8,10 +8,16 @@ import org.springframework.stereotype.Repository
 @Repository
 interface BandRepository : JpaRepository<Band, Long> {
 
+    @EntityGraph(attributePaths = ["bandUserSet"])
+    fun <T> findBy(type: Class<T>): List<T>
+
     @EntityGraph(attributePaths = ["bandUserSet", "bandUserSet.user"])
-    fun findByBandUserSet_User_Id(userId: Long): List<Band>
+    fun <T> findByBandUserSet_User_Id(userId: Long, type: Class<T>): List<T>
 
     @EntityGraph(attributePaths = ["bandUserSet", "bandUserSet.user" , "bandWeasleySet"])
     fun <T> findById(id: Long, type: Class<T>): T
+
+    @EntityGraph(attributePaths = ["bandUserSet"])
+    fun <T> findByBandUser_User_IdAndId(userId : Long , id : Long , type : Class<T>)
 
 }
