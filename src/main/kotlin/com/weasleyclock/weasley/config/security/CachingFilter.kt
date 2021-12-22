@@ -36,13 +36,13 @@ class CachingFilter : OncePerRequestFilter() {
 
             contentCachingResponseWrapper.copyBodyToResponse()
         } catch (e: IdTokenEmptyException) {
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.A002)
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.IS_EMPTY_TOKEN)
         } catch (e: NotPostMethodException) {
-            setErrorResponse(HttpStatus.NOT_FOUND, response, e, ErrorTypes.A003)
+            setErrorResponse(HttpStatus.NOT_FOUND, response, e, ErrorTypes.NOT_USE_POST_METHOD)
         } catch (e: SigningKeyNotFoundException) {
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.A001)
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.NOT_FOUND_KEY)
         } catch (e: Exception) {
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.S001)
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.INTERNAL_SERVER_ERROR)
         }
 
     }

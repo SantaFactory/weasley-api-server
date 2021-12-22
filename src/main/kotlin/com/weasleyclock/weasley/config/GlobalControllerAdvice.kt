@@ -28,7 +28,7 @@ class GlobalControllerAdvice {
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun controllerAdvice(e: Exception, response: HttpServletResponse): ResponseEntity<ErrorDTO> =
-        createByResponseBody(e, response, ErrorTypes.S001)
+        createByResponseBody(e, response, ErrorTypes.INTERNAL_SERVER_ERROR)
 
     /**
      * Controller advice By AppException </br>
