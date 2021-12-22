@@ -17,7 +17,4 @@ interface BandRepository : JpaRepository<Band, Long> {
     @EntityGraph(attributePaths = ["bandUserSet", "bandUserSet.user" , "bandWeasleySet"])
     fun <T> findById(id: Long, type: Class<T>): T
 
-    @EntityGraph(attributePaths = ["bandUserSet"])
-    fun <T> findByBandUser_User_IdAndId(userId : Long , id : Long , type : Class<T>)
-
 }

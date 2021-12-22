@@ -54,6 +54,8 @@ class CachingFilter : OncePerRequestFilter() {
         errorTypes: ErrorTypes
     ) {
 
+        ex.printStackTrace()
+
         response.reset()
 
         response.status = status.value()

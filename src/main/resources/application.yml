@@ -2,10 +2,10 @@ server:
   port: 5050
 
 spring:
-  # H2-Console
-  h2:
-    console:
-      enabled: true
+### H2-Console
+#  h2:
+#    console:
+#      enabled: true
   application:
     name: weasley
   jpa:
@@ -15,24 +15,24 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate:
-        # ORM ID value
-        id:
-          new_generator_mappings: false
-        # format SQL Logger
         format_sql: true
-        # Hibernate Statistics Logger
-        generate_statistics: true
+        jdbc.lob.non_contextual_creation: true
+        jdbc.time_zone: UTC
+        id.new_generator_mappings: true
     generate-ddl: true
     open-in-view: true
 
 logging:
   level:
     org:
-      hibernate:
-        # Statistics Logger
-        stat: debug
-        # Parameter Trace
-        type: trace
+      #      # Statistics Logger
+      #      hibernate.stat: DEBUG
+      #      # Parameter Trace
+      #      hibernate.type: TRACE
+      hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 google:
   jwkUrl: https://www.googleapis.com/oauth2/v3/certs
+
+jwt:
+  key: test1231321

@@ -10,10 +10,10 @@ class DomainUserDetail : User {
 
     var userKey: String? = null
 
-    constructor(user: com.weasleyclock.weasley.domain.User) : super(user.email, null, user.getAuthorities()) {
-        this.id = user.id
-        this.name = user.name
-        this.userKey = user.userKey
+    constructor(user: com.weasleyclock.weasley.domain.User?) : super(user?.email, "", user?.getAuthorities()) {
+        this.id = user?.id
+        this.name = user?.name
+        this.userKey = user?.userKey
     }
 
 }

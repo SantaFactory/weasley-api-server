@@ -11,9 +11,11 @@ import com.weasleyclock.weasley.enmus.AppRoles
 import com.weasleyclock.weasley.enmus.UserTypes
 import com.weasleyclock.weasley.repository.UserRepository
 import mu.KotlinLogging
+import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.jwt.JwtHelper
 import org.springframework.security.jwt.crypto.sign.RsaVerifier
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
@@ -37,13 +39,18 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
     private var userRepository: UserRepository? = null
 
-    constructor(defaultFilterProcessesUrl: String, jwkUrl: String, userRepository: UserRepository) : super(
+    constructor(
+        defaultFilterProcessesUrl: String,
+        jwkUrl: String,
+        userRepository: UserRepository,
+        jwtKey: String
+    ) : super(
         defaultFilterProcessesUrl
     ) {
         // NoAuth manager class
         authenticationManager = NoOpAuthenticationManager()
         setAuthenticationFailureHandler(DomainFailureHandler())
-        setAuthenticationSuccessHandler(DomainSuccessHandler())
+        setAuthenticationSuccessHandler(DomainSuccessHandler(jwtKey))
         this.jwkUrl = jwkUrl
         this.userRepository = userRepository
     }
@@ -58,10 +65,13 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         }
 
         val requestBody = getByRequestBodyToMap(request)
+        val idToken = requestBody["id_token"]
+        val id = requestBody["id"]
+        if (StringUtils.isNotEmpty(id)) {
+            return getAdminAuthenticationToken(id!!)
+        }
 
-        val idToken = requestBody["id_token"] as String
-
-        if (idToken.isEmpty()) {
+        if (idToken!!.isEmpty()) {
             throw IdTokenEmptyException()
         }
 
@@ -96,6 +106,21 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         val domainUserDetail = DomainUserDetail(userOptional.get())
 
         return UsernamePasswordAuthenticationToken(domainUserDetail, null, domainUserDetail.authorities)
+    }
+
+    private fun getAdminAuthenticationToken(id: String): UsernamePasswordAuthenticationToken {
+
+        val adminUserOptional = userRepository!!.findByEmail(id)
+
+        if (adminUserOptional.isEmpty) {
+            throw UsernameNotFoundException("user not found name is $id")
+        }
+
+        val adminUser = adminUserOptional.get()
+
+        val adminUserDetail = DomainUserDetail(adminUser)
+
+        return UsernamePasswordAuthenticationToken(adminUserDetail, null, adminUserDetail.authorities)
     }
 
     /**

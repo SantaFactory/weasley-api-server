@@ -28,7 +28,7 @@ data class User(
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "auth_name", referencedColumnName = "title")]
     )
-    var authSet: MutableSet<Auth> = ManagedSet()
+    private var authSet: MutableSet<Auth> = ManagedSet()
 ) : BaseEntity() {
 
     constructor(

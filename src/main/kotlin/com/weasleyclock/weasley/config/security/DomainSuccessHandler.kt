@@ -15,6 +15,14 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class DomainSuccessHandler : AuthenticationSuccessHandler {
 
+    private var jwtKey: String? = null
+
+    constructor()
+
+    constructor(jwtKey : String){
+        this.jwtKey = jwtKey
+    }
+
     override fun onAuthenticationSuccess(
         request: HttpServletRequest?,
         response: HttpServletResponse?,
@@ -31,7 +39,7 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
             val email = userInfo.username;
 
-            val jwt = JwtUtils.makeByJwtToken("", userInfo.id, email, userInfo.name)
+            val jwt = JwtUtils.makeByJwtToken(jwtKey!!, userInfo.id, email, userInfo.name)
 
             val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, jwt))
 

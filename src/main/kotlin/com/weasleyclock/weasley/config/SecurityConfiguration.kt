@@ -20,6 +20,9 @@ class SecurityConfiguration(private val userRepository: UserRepository) : WebSec
     @Value("\${google.jwkUrl}")
     private var jwkUrl: String? = null
 
+    @Value("\${jwt.key}")
+    private var jwtKey: String? = null
+
     override fun configure(http: HttpSecurity?) {
 
         http!!.authorizeRequests()
@@ -47,7 +50,7 @@ class SecurityConfiguration(private val userRepository: UserRepository) : WebSec
 
     @Bean
     fun openIdConnectFilter(): OpenIdConnectFilter {
-        return OpenIdConnectFilter("/login-process", jwkUrl.toString(), userRepository)
+        return OpenIdConnectFilter("/login-process", jwkUrl.toString(), userRepository , jwtKey.toString())
     }
 
 }
