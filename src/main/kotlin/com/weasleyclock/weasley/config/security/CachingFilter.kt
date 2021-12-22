@@ -1,6 +1,8 @@
 package com.weasleyclock.weasley.config.security
 
 import com.auth0.jwk.SigningKeyNotFoundException
+import com.weasleyclock.weasley.config.exception.IdTokenEmptyException
+import com.weasleyclock.weasley.config.exception.NotPostMethodException
 import com.weasleyclock.weasley.dto.ErrorDTO
 import com.weasleyclock.weasley.enmus.ErrorTypes
 import com.weasleyclock.weasley.utils.JsonUtils

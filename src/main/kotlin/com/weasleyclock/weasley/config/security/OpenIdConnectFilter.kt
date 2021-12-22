@@ -3,6 +3,8 @@ package com.weasleyclock.weasley.config.security
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.UrlJwkProvider
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.weasleyclock.weasley.config.exception.IdTokenEmptyException
+import com.weasleyclock.weasley.config.exception.NotPostMethodException
 import com.weasleyclock.weasley.domain.Auth
 import com.weasleyclock.weasley.domain.User
 import com.weasleyclock.weasley.enmus.AppRoles

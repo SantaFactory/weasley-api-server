@@ -1,5 +1,6 @@
 package com.weasleyclock.weasley.config
 
+import com.weasleyclock.weasley.config.exception.AppException
 import com.weasleyclock.weasley.dto.ErrorDTO
 import com.weasleyclock.weasley.enmus.ErrorTypes
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -17,22 +18,55 @@ import javax.servlet.http.HttpServletResponse
 @ControllerAdvice
 class GlobalControllerAdvice {
 
+    /**
+     * Controller advice By Exception </br>
+     * @param e
+     * @param response
+     * @return
+     */
     @ResponseBody
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun controllerAdvice(e: Exception, response: HttpServletResponse): ResponseEntity<ErrorDTO> {
+    fun controllerAdvice(e: Exception, response: HttpServletResponse): ResponseEntity<ErrorDTO> =
+        createByResponseBody(e, response, ErrorTypes.S001)
 
-        response.reset()
+    /**
+     * Controller advice By AppException </br>
+     * @param e
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @ExceptionHandler(AppException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun controllerAdvice(e: AppException, response: HttpServletResponse): ResponseEntity<ErrorDTO> =
+        createByResponseBody(e, response, e.getErrorTypes()!!)
+
+
+    /**
+     * Create by Error response body </br>
+     * @param e
+     * @param response
+     * @param errorTypes
+     * @return
+     */
+    private fun createByResponseBody(
+        e: Exception,
+        response: HttpServletResponse,
+        errorTypes: ErrorTypes
+    ): ResponseEntity<ErrorDTO> {
 
         val detailMessage = ExceptionUtils.getStackTrace(e)
 
-        val dto = ErrorDTO(
-            ErrorTypes.S001.code, ErrorTypes.S001.message, detailMessage
-        )
+        val body = ErrorDTO(errorTypes.code, errorTypes.message, detailMessage)
 
         e.printStackTrace()
 
-        return ResponseEntity.ok(dto)
+        response.reset()
+
+        return ResponseEntity
+            .ok()
+            .body(body)
     }
 
 }
