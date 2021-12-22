@@ -1,5 +1,5 @@
 package com.weasleyclock.weasley.dto
 
 class UserDTO {
-    data class Info(val email: String?, val sub: String?)
+    data class Info(val email: String?, val sub: String? , val jwt : String?)
 }

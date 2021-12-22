@@ -47,6 +47,7 @@ dependencies {
 
     implementation("org.springframework.security:spring-security-jwt:1.1.1.RELEASE")
     implementation("com.auth0:jwks-rsa:0.3.0")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
 }
 
 tasks.withType<KotlinCompile> {

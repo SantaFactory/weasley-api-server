@@ -3,6 +3,7 @@ package com.weasleyclock.weasley.config.security
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.UserDTO
 import com.weasleyclock.weasley.utils.JsonUtils
+import com.weasleyclock.weasley.utils.JwtUtils
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
@@ -28,7 +29,11 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
             response.contentType = AppProperties.CONTENT_TYPE
 
-            val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(userInfo.username, userInfo.userKey))
+            val email = userInfo.username;
+
+            val jwt = JwtUtils.makeByJwtToken("", userInfo.id, email, userInfo.name)
+
+            val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, jwt))
 
             response.writer.write(JsonUtils.convertObjectToJson(message))
 
