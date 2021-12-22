@@ -1,10 +1,12 @@
 package com.weasleyclock.weasley.service
 
+import com.weasleyclock.weasley.config.exception.AppException
 import com.weasleyclock.weasley.domain.Band
 import com.weasleyclock.weasley.domain.BandRole
 import com.weasleyclock.weasley.domain.BandUser
 import com.weasleyclock.weasley.dto.BandDTO
 import com.weasleyclock.weasley.enmus.BandRoles
+import com.weasleyclock.weasley.enmus.ErrorTypes
 import com.weasleyclock.weasley.repository.BandRepository
 import com.weasleyclock.weasley.repository.BandUserRepository
 import com.weasleyclock.weasley.repository.UserRepository
@@ -70,31 +72,26 @@ class BandService(
 
     @Transactional
     fun removeByGroup(id: Long): Long {
-
-        val leaderRoleUser: BandUser =
-            bandUserRepository.findByBand_IdAndUser_IdAndBandRole_Title(id, userId, BandRoles.LEADER.name)
-
-        val isLeaderAble = ObjectUtils.isNotEmpty(leaderRoleUser)
-
-        if (isLeaderAble) {
-
+        if (isLeaderAble(id, userId)) {
             bandRepository.deleteById(id)
             return id
-
-        }else{
-            // todo : exception
-            throw NullPointerException()
         }
-
+        throw AppException(ErrorTypes.IS_NOT_READER)
     }
 
     @Transactional
-    fun saveByBandUser(bandId: Long, userId: Long) : BandUser {
+    fun saveByBandUser(bandId: Long, userId: Long): BandUser {
         val band = bandRepository.findById(bandId).orElseThrow()
         val user = userRepository.findById(userId).orElseThrow()
         val entity = BandDTO.Member().toEntity(band, user)
         bandUserRepository.save(entity)
         return entity
+    }
+
+    private fun isLeaderAble(bandId: Long, userId: Long): Boolean {
+        val leaderRoleUser: BandUser =
+            bandUserRepository.findByBand_IdAndUser_IdAndBandRole_Title(bandId, userId, BandRoles.LEADER.name)
+        return ObjectUtils.isNotEmpty(leaderRoleUser)
     }
 
 }
