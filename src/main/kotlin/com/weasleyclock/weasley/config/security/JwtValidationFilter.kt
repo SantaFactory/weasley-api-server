@@ -2,12 +2,16 @@ package com.weasleyclock.weasley.config.security
 
 import com.weasleyclock.weasley.domain.Auth
 import com.weasleyclock.weasley.domain.User
+import com.weasleyclock.weasley.enmus.ErrorTypes
+import com.weasleyclock.weasley.utils.HttpUtils
+import com.weasleyclock.weasley.utils.HttpUtils.Companion.setErrorResponse
 import com.weasleyclock.weasley.utils.JwtUtils
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
 import org.springframework.beans.factory.support.ManagedSet
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -60,18 +64,19 @@ class JwtValidationFilter : OncePerRequestFilter {
             filterChain.doFilter(request, response)
 
         } catch (e: Exception) {
-            // 모든 예외 처리
-            e.printStackTrace();
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.INTERNAL_SERVER_ERROR)
         } catch (e: UnsupportedJwtException) {
             // 예상하는 형식과 다른 형식이거나 구성의 JWT일 때
+            setErrorResponse(HttpStatus.FORBIDDEN, response, e, ErrorTypes.JWT_UNSUPPORTED)
         } catch (e: MalformedJwtException) {
             // JWT가 올바르게 구서오디지 않았을 때
+            setErrorResponse(HttpStatus.FORBIDDEN, response, e, ErrorTypes.JWT_MALFORMED)
         } catch (e: ExpiredJwtException) {
             // JWT를 생성할 때 지정한 유효기간이 초과되었을 때
+            setErrorResponse(HttpStatus.GONE, response, e, ErrorTypes.JWT_EXPIRED)
         } catch (e: SignatureException) {
             // JWT의 기존 서명을 확인하지 못했을 때
-        } catch (e: IllegalArgumentException) {
-            // 위의 예외에 대해 적절한 처리를 해주는 것이 좋습니다!
+            setErrorResponse(HttpStatus.GONE, response, e, ErrorTypes.JWT_SIGNATURE)
         }
 
     }
