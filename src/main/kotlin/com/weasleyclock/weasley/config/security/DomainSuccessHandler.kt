@@ -46,7 +46,7 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
                 userInfo.id,
                 email,
                 userInfo.name,
-                createByAuthDomain(userInfo.authorities)
+                createByArrayToString(userInfo.authorities)
             )
 
             val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, jwt))
@@ -59,8 +59,8 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
     }
 
-    private fun createByAuthDomain(authorities: Collection<GrantedAuthority>): MutableSet<Auth> {
-        return authorities.map { role -> Auth(role.authority as String) }.toList().toMutableSet()
+    private fun createByArrayToString(authorities: Collection<GrantedAuthority>): List<String> {
+        return authorities.map { role -> role.authority as String }.toList()
     }
 
 }

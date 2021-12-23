@@ -3,13 +3,11 @@ package com.weasleyclock.weasley.config.security
 import com.weasleyclock.weasley.domain.Auth
 import com.weasleyclock.weasley.domain.User
 import com.weasleyclock.weasley.enmus.ErrorTypes
-import com.weasleyclock.weasley.utils.HttpUtils
 import com.weasleyclock.weasley.utils.HttpUtils.Companion.setErrorResponse
 import com.weasleyclock.weasley.utils.JwtUtils
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
-import org.springframework.beans.factory.support.ManagedSet
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -24,8 +22,6 @@ import javax.servlet.http.HttpServletResponse
 class JwtValidationFilter : OncePerRequestFilter {
 
     private var jwtKey: String? = null
-
-    constructor()
 
     constructor(jwtKey: String) {
         this.jwtKey = jwtKey
@@ -43,15 +39,15 @@ class JwtValidationFilter : OncePerRequestFilter {
 
             val claims = JwtUtils.parseJwtToken(authorization, jwtKey!!)
 
-            val id = claims["id"] as Int
+            val id = (claims["id"] as Int).toLong()
 
             val email = claims["email"] as String
 
             val name = claims["name"] as String
 
-            val authorities = claims["authorities"] as List<Auth>
+            val authorities = (claims["authorities"] as List<String>).map { title -> Auth(title) }.toMutableSet()
 
-            val jwtLoginUser = User(id.toLong(), email, name, ManagedSet())
+            val jwtLoginUser = User(id, email, name, authorities)
 
             val jwtLoginDetail = DomainUserDetail(jwtLoginUser)
 

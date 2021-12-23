@@ -31,7 +31,7 @@ class JwtUtils {
             id: Long?,
             email: String?,
             name: String?,
-            authorities : Set<Auth>
+            authorities : List<String>?
         ): String? {
 
             val now = Date()
