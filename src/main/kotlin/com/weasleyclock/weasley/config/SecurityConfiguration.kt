@@ -26,17 +26,17 @@ class SecurityConfiguration(private val userRepository: UserRepository) : WebSec
 
     override fun configure(http: HttpSecurity?) {
 
-        http!!.authorizeRequests()
-            .antMatchers("/swagger-ui/**")
-            .permitAll()
-            .and()
+        http!!
             // todo : 나중에 풀기
             .cors()
             .disable()
             .csrf()
             .disable()
             // login filter
-            .addFilterBefore(CachingFilter(), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(
+                CachingFilter(),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
             .addFilterBefore(
                 openIdConnectFilter(),
                 UsernamePasswordAuthenticationFilter::class.java
@@ -45,17 +45,20 @@ class SecurityConfiguration(private val userRepository: UserRepository) : WebSec
                 JwtValidationFilter(jwtKey.toString()),
                 UsernamePasswordAuthenticationFilter::class.java
             )
-
+//            .authorizeRequests()
+//            .antMatchers("/swagger-ui/**")
+//            .permitAll()
     }
 
     override fun configure(web: WebSecurity?) {
-        web!!.ignoring()
-            .antMatchers(HttpMethod.OPTIONS, "/**")
+//        web!!.ignoring()
+//            .antMatchers(HttpMethod.OPTIONS, "/swagger-ui/**")
+        web!!.ignoring().antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**")
     }
 
     @Bean
     fun openIdConnectFilter(): OpenIdConnectFilter {
-        return OpenIdConnectFilter("/login-process", jwkUrl.toString(), userRepository , jwtKey.toString())
+        return OpenIdConnectFilter("/login-process", jwkUrl.toString(), userRepository, jwtKey.toString())
     }
 
 }
