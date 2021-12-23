@@ -1,5 +1,6 @@
 package com.weasleyclock.weasley.utils
 
+import com.weasleyclock.weasley.domain.Auth
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Header
 import io.jsonwebtoken.Jwts
@@ -29,9 +30,12 @@ class JwtUtils {
             secretKey: String,
             id: Long?,
             email: String?,
-            name: String?
+            name: String?,
+            authorities : Set<Auth>
         ): String? {
+
             val now = Date()
+
             return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer(issuer)
@@ -40,6 +44,7 @@ class JwtUtils {
                 .claim("id", id)
                 .claim("email", email)
                 .claim("name", name)
+                .claim("authorities", authorities)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact()
         }
@@ -56,7 +61,7 @@ class JwtUtils {
             val token = extractToken(authorizationHeader)
             return Jwts.parser()
                 .setSigningKey(secretKey)
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .body
         }
 

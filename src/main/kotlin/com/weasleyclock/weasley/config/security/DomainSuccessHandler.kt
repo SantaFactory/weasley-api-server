@@ -1,11 +1,13 @@
 package com.weasleyclock.weasley.config.security
 
+import com.weasleyclock.weasley.domain.Auth
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.UserDTO
 import com.weasleyclock.weasley.utils.JsonUtils
 import com.weasleyclock.weasley.utils.JwtUtils
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.stereotype.Component
 import java.io.IOException
@@ -19,7 +21,7 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
     constructor()
 
-    constructor(jwtKey : String){
+    constructor(jwtKey: String) {
         this.jwtKey = jwtKey
     }
 
@@ -39,7 +41,13 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
             val email = userInfo.username;
 
-            val jwt = JwtUtils.makeByJwtToken(jwtKey!!, userInfo.id, email, userInfo.name)
+            val jwt = JwtUtils.makeByJwtToken(
+                jwtKey!!,
+                userInfo.id,
+                email,
+                userInfo.name,
+                createByAuthDomain(userInfo.authorities)
+            )
 
             val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, jwt))
 
@@ -49,6 +57,10 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
             e.printStackTrace()
         }
 
+    }
+
+    private fun createByAuthDomain(authorities: Collection<GrantedAuthority>): MutableSet<Auth> {
+        return authorities.map { role -> Auth(role.authority as String) }.toList().toMutableSet()
     }
 
 }

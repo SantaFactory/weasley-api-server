@@ -1,6 +1,7 @@
 package com.weasleyclock.weasley.config
 
 import com.weasleyclock.weasley.config.security.CachingFilter
+import com.weasleyclock.weasley.config.security.JwtValidationFilter
 import com.weasleyclock.weasley.config.security.OpenIdConnectFilter
 import com.weasleyclock.weasley.repository.UserRepository
 import org.springframework.beans.factory.annotation.Value
@@ -38,6 +39,10 @@ class SecurityConfiguration(private val userRepository: UserRepository) : WebSec
             .addFilterBefore(CachingFilter(), UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(
                 openIdConnectFilter(),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
+            .addFilterBefore(
+                JwtValidationFilter(jwtKey.toString()),
                 UsernamePasswordAuthenticationFilter::class.java
             )
 

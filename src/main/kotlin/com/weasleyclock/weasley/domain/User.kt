@@ -9,19 +9,25 @@ import javax.persistence.*
 
 @Table
 @Entity
-data class User(
+class User() : BaseEntity() {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Long? = null
+
     @Column(nullable = false, length = 300)
-    var email: String? = null,
+    var email: String? = null
+
     @Column(nullable = false, length = 300)
-    var name: String? = null,
+    var name: String? = null
+
     @Convert(converter = UserTypeConvert::class)
     @Column(name = "login_type", nullable = false, length = 10)
-    var loginType: UserTypes? = null,
+    var loginType: UserTypes? = null
+
     @Column(name = "user_key", nullable = false)
-    var userKey: String? = null,
+    var userKey: String? = null
+
     @OneToMany
     @JoinTable(
         name = "user_auth",
@@ -29,13 +35,23 @@ data class User(
         inverseJoinColumns = [JoinColumn(name = "auth_name", referencedColumnName = "title")]
     )
     private var authSet: MutableSet<Auth> = ManagedSet()
-) : BaseEntity() {
+
+    fun getAuthorities(): List<GrantedAuthority> {
+        return authSet.map { auth -> SimpleGrantedAuthority(auth.title) }.toList()
+    }
+
+    constructor (id: Long, email: String, name: String, authSet: MutableSet<Auth>) : this() {
+        this.id = id
+        this.email = email
+        this.name = name
+        this.authSet = authSet
+    }
 
     constructor(
         email: String,
         name: String,
         loginType: UserTypes?,
-        userKey : String,
+        userKey: String,
         authSet: MutableSet<Auth>
     ) : this() {
         this.email = email
@@ -43,10 +59,6 @@ data class User(
         this.loginType = loginType
         this.userKey = userKey
         this.authSet = authSet
-    }
-
-    fun getAuthorities(): Set<GrantedAuthority> {
-        return authSet.map { auth -> SimpleGrantedAuthority(auth.title) }.toSet()
     }
 
 }
