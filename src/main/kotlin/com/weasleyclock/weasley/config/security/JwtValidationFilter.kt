@@ -77,4 +77,9 @@ class JwtValidationFilter : OncePerRequestFilter {
 
     }
 
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        return !request.servletPath.startsWith("/api")
+    }
+
+
 }
