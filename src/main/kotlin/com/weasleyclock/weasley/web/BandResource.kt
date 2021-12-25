@@ -5,7 +5,7 @@ import com.weasleyclock.weasley.dto.BandDTO
 import com.weasleyclock.weasley.enmus.ApiTypes
 import com.weasleyclock.weasley.service.BandService
 import com.weasleyclock.weasley.utils.HeaderUtils
-import com.weasleyclock.weasley.web.swagger.BandSwagger
+import com.weasleyclock.weasley.web.docs.BandDocs
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/band")
-class BandResource(private val service: BandService) : BandSwagger {
+class BandResource(private val service: BandService) : BandDocs {
 
     @Value("\${spring.application.name}")
     private val applicationName: String? = null

@@ -3,7 +3,7 @@ package com.weasleyclock.weasley.web
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.enmus.ApiTypes
 import com.weasleyclock.weasley.utils.HeaderUtils
-import com.weasleyclock.weasley.web.swagger.StartSwagger
+import com.weasleyclock.weasley.web.docs.StartDocs
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api")
-class StartResource : StartSwagger {
+class StartResource : StartDocs {
 
     @Value("\${spring.application.name}")
     private val applicationName: String? = null
