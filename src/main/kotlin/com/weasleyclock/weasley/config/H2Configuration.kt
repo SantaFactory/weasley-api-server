@@ -15,7 +15,7 @@ class H2Configuration {
     @Bean("dataSource")
     @ConfigurationProperties(prefix = "spring.datasource")
     fun dataSource(): HikariDataSource {
-        val server: Server = defaultRun()
+        defaultRun()
         return HikariDataSource()
     }
 
