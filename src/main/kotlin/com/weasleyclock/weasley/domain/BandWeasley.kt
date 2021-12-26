@@ -2,6 +2,7 @@ package com.weasleyclock.weasley.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.weasleyclock.weasley.domain.embedd.BandWeasleyKey
+import org.apache.commons.lang3.ObjectUtils
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -33,7 +34,7 @@ class BandWeasley() : BaseEntity() {
     var longitude: BigDecimal? = null
 
     @Column(nullable = false)
-    var isCurrent : Boolean ? = null
+    var isCurrent: Boolean? = null
 
     constructor(
         band: Band?,
@@ -57,6 +58,20 @@ class BandWeasley() : BaseEntity() {
         this.id = id
         this.latitude = latitude
         this.longitude = longitude
+    }
+
+    @PrePersist
+    fun prePersist() {
+        if (ObjectUtils.isEmpty(isCurrent)) {
+            isCurrent = false
+        }
+    }
+
+    @PreUpdate
+    fun preUpdate() {
+        if (ObjectUtils.isEmpty(isCurrent)) {
+            isCurrent = false
+        }
     }
 
 }
