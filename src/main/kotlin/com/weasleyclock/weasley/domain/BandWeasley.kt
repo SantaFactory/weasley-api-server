@@ -32,6 +32,9 @@ class BandWeasley() : BaseEntity() {
     @Column(nullable = false, columnDefinition = "decimal(19,2) not null default 0")
     var longitude: BigDecimal? = null
 
+    @Column(nullable = false)
+    var isCurrent : Boolean ? = null
+
     constructor(
         band: Band?,
         user: User?,
