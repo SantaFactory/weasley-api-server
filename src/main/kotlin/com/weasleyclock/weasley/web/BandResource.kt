@@ -21,7 +21,7 @@ class BandResource(private val service: BandService) : BandDocs {
     }
 
     @GetMapping("/self")
-    override fun showGroupByUser(): ResponseEntity<AppMessageDTO> {
+    override fun showBandByUser(): ResponseEntity<AppMessageDTO> {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupsBySelf())
         return ResponseEntity
             .ok()
@@ -29,7 +29,7 @@ class BandResource(private val service: BandService) : BandDocs {
     }
 
     @GetMapping("/{id}/users")
-    override fun showGroupByUsers(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
+    override fun showBandByUsers(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupByUsers(id))
         return ResponseEntity
             .ok()
@@ -37,7 +37,7 @@ class BandResource(private val service: BandService) : BandDocs {
     }
 
     @GetMapping("")
-    override fun showByGroups(): ResponseEntity<AppMessageDTO> {
+    override fun showByAllBands(): ResponseEntity<AppMessageDTO> {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.getAllByGroups())
         return ResponseEntity
             .ok()
@@ -45,7 +45,7 @@ class BandResource(private val service: BandService) : BandDocs {
     }
 
     @PostMapping("")
-    override fun saveByGroup(@RequestBody dto: BandDTO.Created): ResponseEntity<AppMessageDTO> {
+    override fun saveByBand(@RequestBody dto: BandDTO.Created): ResponseEntity<AppMessageDTO> {
 
         val data = service.createByGroup(dto)
 
@@ -56,7 +56,7 @@ class BandResource(private val service: BandService) : BandDocs {
     }
 
     @PutMapping("/{id}")
-    override fun updateByGroup(
+    override fun updateByBand(
         @PathVariable id: Long,
         @RequestBody dto: BandDTO.Updated
     ): ResponseEntity<AppMessageDTO> {
@@ -70,7 +70,7 @@ class BandResource(private val service: BandService) : BandDocs {
     }
 
     @DeleteMapping("/{id}")
-    override fun removeByGroup(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
+    override fun removeByBand(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
 
         val data = service.removeByGroup(id)
 

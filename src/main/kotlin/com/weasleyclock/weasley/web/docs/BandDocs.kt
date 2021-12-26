@@ -14,7 +14,7 @@ interface BandDocs {
     fun showByBandOne(id : Long): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "내가 속해있는 유저 그룹", description = "내가 속해있는 유저 그룹 목록 이다.")
-    fun showGroupByUser(): ResponseEntity<AppMessageDTO>
+    fun showBandByUser(): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "밴드 하나의 유저 목록", description = "밴드 하나의 유저 목록을 출력")
     @ApiImplicitParams(
@@ -24,13 +24,13 @@ interface BandDocs {
             example = "1"
         )]
     )
-    fun showGroupByUsers(id: Long): ResponseEntity<AppMessageDTO>
+    fun showBandByUsers(id: Long): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "밴드 전체 목록 출력", description = "밴드 전체의 목록 출력")
-    fun showByGroups(): ResponseEntity<AppMessageDTO>
+    fun showByAllBands(): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "처음 밴드을 저장", description = "밴드을 만들때 사용하는 로직")
-    fun saveByGroup(dto: BandDTO.Created): ResponseEntity<AppMessageDTO>
+    fun saveByBand(dto: BandDTO.Created): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "밴드을 업데이트 할때 사용하는 로직", description = "밴드에 대한 업데이트 로직")
     @ApiImplicitParams(
@@ -43,7 +43,7 @@ interface BandDocs {
             )
         ]
     )
-    fun updateByGroup(id: Long, dto: BandDTO.Updated): ResponseEntity<AppMessageDTO>
+    fun updateByBand(id: Long, dto: BandDTO.Updated): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "그룹을 삭제 할때 사용", description = "그룹을 삭제 할때 사용 로직")
     @ApiImplicitParams(
@@ -56,7 +56,7 @@ interface BandDocs {
             )
         ]
     )
-    fun removeByGroup(id: Long): ResponseEntity<AppMessageDTO>
+    fun removeByBand(id: Long): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "유저 초대", description = "유저 초대하는 로직")
     @ApiImplicitParams(
