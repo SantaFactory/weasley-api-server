@@ -44,14 +44,7 @@ nohup java -jar <jar_file> &
 ## Architecture 
 
 
-### Login Architecture
+### login architecture
 
-<img width="926" alt="스크린샷 2021-12-19 오전 11 06 33" src="https://user-images.githubusercontent.com/53357210/146661063-31dc0bdc-9dbc-46af-bd42-7547e163f1e9.png">
-
-1. ios 에서 email 과 password 로 구글 oauth 인증을 통하여 access_token 과 id_token 을 리턴
-2. ios 에서 받은 id_token 을 web server 로 전송
-3. web server 에서 전송 받은 id_token 을 가지고 decode (kid 값) 을 사용
-4. id_token 의 정보를 가지고 새로운 유저면 insert 그리고 새로운 유저가 아니면 update 
-6. 유저 정보를 토대로 jwt 를 내려준다.
-
+<img width="1467" alt="스크린샷 2021-12-26 오후 7 18 40" src="https://user-images.githubusercontent.com/53357210/147405254-af2af1a4-a9f9-4fc2-93d9-83b7dc24dc5c.png">
 
