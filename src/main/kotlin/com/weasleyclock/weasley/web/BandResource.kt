@@ -2,9 +2,7 @@ package com.weasleyclock.weasley.web
 
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.BandDTO
-import com.weasleyclock.weasley.enmus.ApiTypes
 import com.weasleyclock.weasley.service.BandService
-import com.weasleyclock.weasley.utils.HeaderUtils
 import com.weasleyclock.weasley.web.docs.BandDocs
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -15,16 +13,11 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/band")
 class BandResource(private val service: BandService) : BandDocs {
 
-    @Value("\${spring.application.name}")
-    private val applicationName: String? = null
-    private val entityName = "band"
-
     @GetMapping("/self")
     override fun showGroupByUser(): ResponseEntity<AppMessageDTO> {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupsBySelf())
         return ResponseEntity
             .ok()
-            .headers(HeaderUtils.createByAlert(applicationName, entityName, "self", ApiTypes.SELECT))
             .body(body)
     }
 
@@ -33,7 +26,6 @@ class BandResource(private val service: BandService) : BandDocs {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupByUsers(id))
         return ResponseEntity
             .ok()
-            .headers(HeaderUtils.createByAlert(applicationName, entityName, id.toString(), ApiTypes.SELECT))
             .body(body)
     }
 
@@ -42,7 +34,6 @@ class BandResource(private val service: BandService) : BandDocs {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.getAllByGroups())
         return ResponseEntity
             .ok()
-            .headers(HeaderUtils.createByAlert(applicationName, entityName, "ALL", ApiTypes.SELECT))
             .body(body)
     }
 
@@ -54,7 +45,6 @@ class BandResource(private val service: BandService) : BandDocs {
         val body = AppMessageDTO(HttpStatus.OK.value(), data)
 
         return ResponseEntity.ok()
-            .headers(HeaderUtils.createByAlert(applicationName, entityName, data.title.toString(), ApiTypes.CREATE))
             .body(body)
     }
 
@@ -69,7 +59,6 @@ class BandResource(private val service: BandService) : BandDocs {
         val body = AppMessageDTO(HttpStatus.OK.value(), data)
 
         return ResponseEntity.ok()
-            .headers(HeaderUtils.createByAlert(applicationName, entityName, id.toString(), ApiTypes.UPDATE))
             .body(body)
     }
 
@@ -81,7 +70,6 @@ class BandResource(private val service: BandService) : BandDocs {
         val body = AppMessageDTO(HttpStatus.OK.value(), data)
 
         return ResponseEntity.ok()
-            .headers(HeaderUtils.createByAlert(applicationName, entityName, id.toString(), ApiTypes.DELETE))
             .body(body)
     }
 
@@ -94,14 +82,6 @@ class BandResource(private val service: BandService) : BandDocs {
 
         return ResponseEntity
             .ok()
-            .headers(
-                HeaderUtils.createByAlert(
-                    applicationName,
-                    entityName,
-                    "bandId is ${bandId} and useId is $userId",
-                    ApiTypes.CREATE
-                )
-            )
             .body(body)
     }
 
