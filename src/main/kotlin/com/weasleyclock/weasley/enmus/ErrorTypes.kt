@@ -12,9 +12,16 @@ enum class ErrorTypes(val code: String, val message: String) {
     // Member 관련 Error
     IS_NOT_READER("M001", "is not reader"),
 
+    // jwt 관련
     JWT_UNSUPPORTED("J001", "jwt not supported"),
     JWT_MALFORMED("J002", "jwt malformed"),
     JWT_EXPIRED("J003" , "jwt expired"),
-    JWT_SIGNATURE("J003" , "jwt signature")
+    JWT_SIGNATURE("J003" , "jwt signature"),
+
+    // user
+    USER_NOT_FOUND ("U001" , "user not found data"),
+
+    // band
+    BAND_NOT_FOUND("B001" , "band not found data")
 
 }

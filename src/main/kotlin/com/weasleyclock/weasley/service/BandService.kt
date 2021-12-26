@@ -23,7 +23,7 @@ class BandService(
     private val bandUserRepository: BandUserRepository,
 ) {
 
-    fun getBandOne(id: Long): BandDTO.BandOne = bandRepository.findById(BandDTO.BandOne::class.java, id)
+    fun getBandOne(id: Long): BandDTO.BandOne = bandRepository.findBandById(id, BandDTO.BandOne::class.java)
 
     @Transactional(readOnly = true)
     fun getAllByGroups(): List<BandDTO.BandUserCount> = bandRepository.findBy(BandDTO.BandUserCount::class.java)
@@ -48,8 +48,8 @@ class BandService(
 
         val saveEntity = dto.toEntity()
 
-        // todo :  exception
-        val leaderUser = userRepository.findById(getCurrentLoginUserId()).orElseThrow { throw NullPointerException() }
+        val leaderUser = userRepository.findById(getCurrentLoginUserId())
+            .orElseThrow { throw AppException(ErrorTypes.USER_NOT_FOUND) }
 
         bandRepository.save(saveEntity)
 
@@ -64,8 +64,7 @@ class BandService(
 
     @Transactional
     fun updateByGroup(id: Long, dto: BandDTO.Updated): Band {
-        // todo : exception
-        val updateEntity = bandRepository.findById(id).orElseThrow { throw NullPointerException() }
+        val updateEntity = bandRepository.findById(id).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
         updateEntity.title = dto.title
         return updateEntity
     }
@@ -82,8 +81,8 @@ class BandService(
     @Transactional
     fun saveByBandUser(bandId: Long, userId: Long): BandUser {
         // todo : exception
-        val band = bandRepository.findById(bandId).orElseThrow { throw NullPointerException() }
-        val user = userRepository.findById(userId).orElseThrow { throw NullPointerException() }
+        val band = bandRepository.findById(bandId).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
+        val user = userRepository.findById(userId).orElseThrow { throw AppException(ErrorTypes.USER_NOT_FOUND) }
         val entity = BandDTO.Member().toEntity(band, user)
         bandUserRepository.save(entity)
         return entity
