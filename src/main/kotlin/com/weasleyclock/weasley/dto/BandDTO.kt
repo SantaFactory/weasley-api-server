@@ -35,7 +35,7 @@ class BandDTO {
 
     data class Weasley(val title: String, val latitude: BigDecimal, val longitude: BigDecimal)
 
-    data class Updated(val title: String, val bandUserSet: Set<BandUser>)
+    data class Updated(val title: String)
 
     data class UserInfo(val id: Long, val email: String, val role: String)
 
