@@ -4,7 +4,6 @@ import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.BandDTO
 import com.weasleyclock.weasley.service.BandService
 import com.weasleyclock.weasley.web.docs.BandDocs
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -12,6 +11,14 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/band")
 class BandResource(private val service: BandService) : BandDocs {
+
+    @GetMapping("/{id}")
+    override fun showByBandOne(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.getBandOne(id))
+        return ResponseEntity
+            .ok()
+            .body(body)
+    }
 
     @GetMapping("/self")
     override fun showGroupByUser(): ResponseEntity<AppMessageDTO> {

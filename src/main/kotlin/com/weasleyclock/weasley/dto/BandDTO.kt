@@ -64,4 +64,21 @@ class BandDTO {
         fun getUserCount(): Long
     }
 
+    interface BandOne {
+        fun getId(): Long
+        fun getTitle(): String
+
+        @Value("#{target.bandWeasleySet}")
+        fun getWeasley(): MutableSet<UserNameAndPosition>
+
+        interface UserNameAndPosition {
+            fun getLatitude(): BigDecimal
+            fun getLongitude(): BigDecimal
+            fun getIsCurrent(): Boolean
+
+            @Value("#{target.user.name}")
+            fun getUserName(): String
+        }
+    }
+
 }

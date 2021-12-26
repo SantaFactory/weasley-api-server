@@ -5,11 +5,13 @@ import com.weasleyclock.weasley.dto.BandDTO
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiImplicitParams
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.http.ResponseEntity
 
 
 interface BandDocs {
+
+    @Operation(summary = "밴드 하나의 정보", description = "밴드 하나의 정보")
+    fun showByBandOne(id : Long): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "내가 속해있는 유저 그룹", description = "내가 속해있는 유저 그룹 목록 이다.")
     fun showGroupByUser(): ResponseEntity<AppMessageDTO>

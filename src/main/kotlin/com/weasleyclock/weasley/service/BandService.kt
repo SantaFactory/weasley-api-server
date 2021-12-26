@@ -23,6 +23,11 @@ class BandService(
     private val bandUserRepository: BandUserRepository,
 ) {
 
+    fun getBandOne(id: Long): BandDTO.BandOne {
+        val bandOne = bandRepository.findById(BandDTO.BandOne::class.java, id)
+        return bandOne
+    }
+
     @Transactional(readOnly = true)
     fun getAllByGroups(): List<BandDTO.BandUserCount> = bandRepository.findBy(BandDTO.BandUserCount::class.java)
 
