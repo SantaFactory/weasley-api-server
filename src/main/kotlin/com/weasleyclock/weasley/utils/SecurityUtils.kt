@@ -12,6 +12,8 @@ class SecurityUtils {
 
         fun getCurrentLoginUserId(): Long = getCurrentLoginUser().orElseThrow { throw NullPointerException() }.id!!
 
+        fun getCurrentLoginEmail(): String = getCurrentLoginUser().orElseThrow { throw NullPointerException() }.username!!
+
         fun getCurrentLoginUserName(): String = getCurrentLoginUser().orElseThrow { throw NullPointerException() }.name!!
 
         private fun getCurrentLoginUser(): Optional<DomainUserDetail> = Optional.ofNullable(extractPrincipal(SecurityContextHolder.getContext()))
