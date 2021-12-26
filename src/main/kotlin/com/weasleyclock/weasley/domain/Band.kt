@@ -14,7 +14,7 @@ class Band : BaseEntity {
     var title: String? = null
 
     @OneToMany(mappedBy = "band" , cascade = [CascadeType.ALL])
-    var bandUserSet: MutableSet<BandUser> = ManagedSet()
+    var memberSet: MutableSet<Member> = ManagedSet()
 
     @OneToMany(mappedBy = "band" , cascade = [CascadeType.ALL])
     var bandWeasleySet : MutableSet<BandWeasley> = ManagedSet()

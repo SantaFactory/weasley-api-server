@@ -75,6 +75,6 @@ interface BandDocs {
             )
         ]
     )
-    fun inviteFromBandToUser(bandId: Long, userId: Long): ResponseEntity<AppMessageDTO>
+    fun inviteFromMember(bandId: Long, userId: Long): ResponseEntity<AppMessageDTO>
 
 }

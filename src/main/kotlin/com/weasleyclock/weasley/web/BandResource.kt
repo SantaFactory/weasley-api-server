@@ -81,11 +81,11 @@ class BandResource(private val service: BandService) : BandDocs {
     }
 
     @PostMapping("{bandId}/user/{userId}")
-    override fun inviteFromBandToUser(
+    override fun inviteFromMember(
         @PathVariable bandId: Long,
         @PathVariable userId: Long
     ): ResponseEntity<AppMessageDTO> {
-        val body = AppMessageDTO(HttpStatus.OK.value(), service.saveByBandUser(bandId, userId))
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.saveByMember(bandId, userId))
 
         return ResponseEntity
             .ok()

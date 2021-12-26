@@ -1,19 +1,19 @@
 package com.weasleyclock.weasley.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.weasleyclock.weasley.domain.embedd.BandUserKey
+import com.weasleyclock.weasley.domain.embedd.MemberKey
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
 
-@Table
 @Entity
 @DynamicInsert
 @DynamicUpdate
-class BandUser() {
+@Table(name = "band_user")
+class Member() {
 
     @EmbeddedId
-    var id: BandUserKey? = null
+    var id: MemberKey? = null
 
     @OneToOne
     var bandRole: BandRole? = null
@@ -34,10 +34,10 @@ class BandUser() {
         this.band = band
         this.user = user
         this.bandRole = bandRole
-        this.id = BandUserKey(user.id!!, band.id!!)
+        this.id = MemberKey(user.id!!, band.id!!)
     }
 
-    constructor(band: Band, user: User, id: BandUserKey, bandRole: BandRole) : this() {
+    constructor(band: Band, user: User, id: MemberKey, bandRole: BandRole) : this() {
         this.band = band
         this.user = user
         this.bandRole = bandRole

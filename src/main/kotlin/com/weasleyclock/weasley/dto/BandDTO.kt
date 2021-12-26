@@ -1,19 +1,10 @@
 package com.weasleyclock.weasley.dto
 
 import com.weasleyclock.weasley.domain.*
-import com.weasleyclock.weasley.enmus.BandRoles
 import org.springframework.beans.factory.annotation.Value
 import java.math.BigDecimal
 
 class BandDTO {
-
-    class Member {
-
-        fun toEntity(band: Band, user: User): BandUser {
-            return BandUser(band, user, BandRole(BandRoles.MEMBER.name))
-        }
-
-    }
 
     data class Created(
         val title: String, val weasley: Set<Weasley>
@@ -23,10 +14,10 @@ class BandDTO {
             return Band(this.title)
         }
 
-        fun toWeasleyItems(bandUser: BandUser): MutableSet<BandWeasley> {
+        fun toWeasleyItems(member: Member): MutableSet<BandWeasley> {
             return weasley.map { weasleyItem ->
                 BandWeasley(
-                    bandUser.band, bandUser.user, weasleyItem.title, weasleyItem.latitude, weasleyItem.longitude
+                    member.band, member.user, weasleyItem.title, weasleyItem.latitude, weasleyItem.longitude
                 )
             }.toSet() as MutableSet<BandWeasley>
         }
@@ -39,8 +30,8 @@ class BandDTO {
 
     interface OnlyBandUser {
 
-        @Value("#{target.bandUserSet}")
-        fun getBandUserSet(): MutableSet<UserAndBandRole>
+        @Value("#{target.memberSet}")
+        fun getMembers(): MutableSet<UserAndBandRole>
 
         interface UserAndBandRole {
 
@@ -60,7 +51,7 @@ class BandDTO {
         fun getId(): Long
         fun getTitle(): String
 
-        @Value("#{target.bandUserSet.size()}")
+        @Value("#{target.memberSet.size()}")
         fun getUserCount(): Long
     }
 

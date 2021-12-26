@@ -3,12 +3,12 @@ package com.weasleyclock.weasley.service
 import com.weasleyclock.weasley.config.exception.AppException
 import com.weasleyclock.weasley.domain.Band
 import com.weasleyclock.weasley.domain.BandRole
-import com.weasleyclock.weasley.domain.BandUser
+import com.weasleyclock.weasley.domain.Member
 import com.weasleyclock.weasley.dto.BandDTO
 import com.weasleyclock.weasley.enmus.BandRoles
 import com.weasleyclock.weasley.enmus.ErrorTypes
 import com.weasleyclock.weasley.repository.BandRepository
-import com.weasleyclock.weasley.repository.BandUserRepository
+import com.weasleyclock.weasley.repository.MemberRepository
 import com.weasleyclock.weasley.repository.UserRepository
 import com.weasleyclock.weasley.utils.SecurityUtils.Companion.getCurrentLoginUserId
 import org.apache.commons.lang3.ObjectUtils
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 class BandService(
     private val bandRepository: BandRepository,
     private val userRepository: UserRepository,
-    private val bandUserRepository: BandUserRepository,
+    private val memberRepository: MemberRepository,
 ) {
 
     @Transactional(readOnly = true)
@@ -31,11 +31,11 @@ class BandService(
 
     @Transactional(readOnly = true)
     fun getGroupsBySelf(): List<BandDTO.BandUserCount>? =
-        bandRepository.findByBandUserSet_User_Id(getCurrentLoginUserId(), BandDTO.BandUserCount::class.java)
+        bandRepository.findByMemberSet_User_Id(getCurrentLoginUserId(), BandDTO.BandUserCount::class.java)
 
     @Transactional(readOnly = true)
     fun getGroupByUsers(groupId: Long): Set<BandDTO.OnlyBandUser.UserAndBandRole>? =
-        bandRepository.findById(groupId, BandDTO.OnlyBandUser::class.java)?.getBandUserSet()?.toSet()
+        bandRepository.findById(groupId, BandDTO.OnlyBandUser::class.java)?.getMembers()?.toSet()
 
     @Transactional
     fun createByGroup(dto: BandDTO.Created): Band? {
@@ -47,11 +47,11 @@ class BandService(
 
         bandRepository.save(saveEntity)
 
-        val bandUser = BandUser(saveEntity, leaderUser, BandRole(BandRoles.LEADER.name))
+        val member = Member(saveEntity, leaderUser, BandRole(BandRoles.LEADER.name))
 
-        saveEntity.bandUserSet = listOf(bandUser).toSet() as MutableSet<BandUser>
+        saveEntity.memberSet = listOf(member).toSet() as MutableSet<Member>
 
-        saveEntity.bandWeasleySet = dto.toWeasleyItems(bandUser)
+        saveEntity.bandWeasleySet = dto.toWeasleyItems(member)
 
         return saveEntity
     }
@@ -73,17 +73,17 @@ class BandService(
     }
 
     @Transactional
-    fun saveByBandUser(bandId: Long, userId: Long): BandUser? {
+    fun saveByMember(bandId: Long, userId: Long): Member? {
         val band = bandRepository.findById(bandId).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
         val user = userRepository.findById(userId).orElseThrow { throw AppException(ErrorTypes.USER_NOT_FOUND) }
-        val entity = BandDTO.Member().toEntity(band, user)
-        bandUserRepository.save(entity)
+        val entity = Member(band, user, BandRole(BandRoles.MEMBER.name))
+        memberRepository.save(entity)
         return entity
     }
 
     private fun isLeaderAble(bandId: Long, userId: Long): Boolean =
         ObjectUtils.isNotEmpty(
-            bandUserRepository.findByBand_IdAndUser_IdAndBandRole_Title(
+            memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(
                 bandId,
                 userId,
                 BandRoles.LEADER.name
