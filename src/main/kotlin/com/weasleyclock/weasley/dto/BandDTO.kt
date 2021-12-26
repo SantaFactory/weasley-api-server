@@ -37,21 +37,21 @@ class BandDTO {
 
     data class Updated(val title: String)
 
-    data class UserInfo(val id: Long, val email: String, val role: String)
-
     interface OnlyBandUser {
 
         @Value("#{target.bandUserSet}")
         fun getBandUserSet(): MutableSet<UserAndBandRole>
 
         interface UserAndBandRole {
-            fun getUser(): IdAndEmail
-            fun getBandRole(): BandRole
-        }
 
-        interface IdAndEmail {
-            fun getId(): Long
+            @Value("#{target.user.id}")
+            fun getUserId(): Long
+
+            @Value("#{target.user.email}")
             fun getEmail(): String
+
+            @Value("#{target.bandRole.title}")
+            fun getBandRole(): String
         }
 
     }

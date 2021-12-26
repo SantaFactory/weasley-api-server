@@ -33,14 +33,8 @@ class BandService(
         bandRepository.findByBandUserSet_User_Id(getCurrentLoginUserId(), BandDTO.BandUserCount::class.java)
 
     @Transactional(readOnly = true)
-    fun getGroupByUsers(groupId: Long): Set<BandDTO.UserInfo> {
+    fun getGroupByUsers(groupId: Long): Set<BandDTO.OnlyBandUser.UserAndBandRole> {
         return bandRepository.findById(groupId, BandDTO.OnlyBandUser::class.java)?.getBandUserSet()
-            .map { bandUser ->
-                bandUser.getUser()?.let {
-                    BandDTO.UserInfo(it.getId()!!, it.getEmail()!!, bandUser.getBandRole()!!.title!!)
-                }
-            }
-            .toSet()
     }
 
     @Transactional
