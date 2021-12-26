@@ -15,6 +15,6 @@ interface BandUserRepository : JpaRepository<BandUser, BandUserKey> {
 
     @Transactional
     @EntityGraph(attributePaths = ["band", "user"])
-    fun findByBand_IdAndUser_IdAndBandRole_Title(bandId: Long, userId: Long, title: String): BandUser
+    fun findByBand_IdAndUser_IdAndBandRole_Title(bandId: Long, userId: Long, title: String): BandUser?
 
 }

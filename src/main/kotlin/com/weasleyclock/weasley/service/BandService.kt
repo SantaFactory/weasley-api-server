@@ -23,22 +23,22 @@ class BandService(
     private val bandUserRepository: BandUserRepository,
 ) {
 
-    fun getBandOne(id: Long): BandDTO.BandOne = bandRepository.findBandById(id, BandDTO.BandOne::class.java)
+    @Transactional(readOnly = true)
+    fun getBandOne(id: Long): BandDTO.BandOne? = bandRepository.findBandById(id, BandDTO.BandOne::class.java)
 
     @Transactional(readOnly = true)
-    fun getAllByGroups(): List<BandDTO.BandUserCount> = bandRepository.findBy(BandDTO.BandUserCount::class.java)
+    fun getAllByGroups(): List<BandDTO.BandUserCount>? = bandRepository.findBy(BandDTO.BandUserCount::class.java)
 
     @Transactional(readOnly = true)
-    fun getGroupsBySelf(): List<BandDTO.BandUserCount> =
+    fun getGroupsBySelf(): List<BandDTO.BandUserCount>? =
         bandRepository.findByBandUserSet_User_Id(getCurrentLoginUserId(), BandDTO.BandUserCount::class.java)
 
     @Transactional(readOnly = true)
-    fun getGroupByUsers(groupId: Long): Set<BandDTO.OnlyBandUser.UserAndBandRole> {
-        return bandRepository.findById(groupId, BandDTO.OnlyBandUser::class.java)?.getBandUserSet()
-    }
+    fun getGroupByUsers(groupId: Long): Set<BandDTO.OnlyBandUser.UserAndBandRole>? =
+        bandRepository.findById(groupId, BandDTO.OnlyBandUser::class.java)?.getBandUserSet()?.toSet()
 
     @Transactional
-    fun createByGroup(dto: BandDTO.Created): Band {
+    fun createByGroup(dto: BandDTO.Created): Band? {
 
         val saveEntity = dto.toEntity()
 
@@ -57,7 +57,7 @@ class BandService(
     }
 
     @Transactional
-    fun updateByGroup(id: Long, dto: BandDTO.Updated): Band {
+    fun updateByGroup(id: Long, dto: BandDTO.Updated): Band? {
         val updateEntity = bandRepository.findById(id).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
         updateEntity.title = dto.title
         return updateEntity
@@ -73,8 +73,7 @@ class BandService(
     }
 
     @Transactional
-    fun saveByBandUser(bandId: Long, userId: Long): BandUser {
-        // todo : exception
+    fun saveByBandUser(bandId: Long, userId: Long): BandUser? {
         val band = bandRepository.findById(bandId).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
         val user = userRepository.findById(userId).orElseThrow { throw AppException(ErrorTypes.USER_NOT_FOUND) }
         val entity = BandDTO.Member().toEntity(band, user)
@@ -82,11 +81,14 @@ class BandService(
         return entity
     }
 
-    private fun isLeaderAble(bandId: Long, userId: Long): Boolean {
-        val leaderRoleUser: BandUser =
-            bandUserRepository.findByBand_IdAndUser_IdAndBandRole_Title(bandId, userId, BandRoles.LEADER.name)
-        return ObjectUtils.isNotEmpty(leaderRoleUser)
-    }
+    private fun isLeaderAble(bandId: Long, userId: Long): Boolean =
+        ObjectUtils.isNotEmpty(
+            bandUserRepository.findByBand_IdAndUser_IdAndBandRole_Title(
+                bandId,
+                userId,
+                BandRoles.LEADER.name
+            )
+        )
 
 }
 

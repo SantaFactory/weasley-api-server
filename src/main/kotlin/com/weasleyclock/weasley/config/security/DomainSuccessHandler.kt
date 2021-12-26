@@ -1,6 +1,5 @@
 package com.weasleyclock.weasley.config.security
 
-import com.weasleyclock.weasley.domain.Auth
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.UserDTO
 import com.weasleyclock.weasley.utils.JsonUtils

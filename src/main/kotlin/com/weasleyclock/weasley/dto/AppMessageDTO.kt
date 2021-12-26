@@ -10,5 +10,5 @@ data class AppMessageDTO(
     @ApiModelProperty(
         example = "데이터"
     )
-    val data: Any
+    val data: Any?
 )
