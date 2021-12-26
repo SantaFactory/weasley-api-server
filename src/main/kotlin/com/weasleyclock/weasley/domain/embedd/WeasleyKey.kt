@@ -5,7 +5,7 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class BandWeasleyKey : Serializable {
+class WeasleyKey : Serializable {
 
     @Transient
     private val serialVersionUID = 1L

@@ -1,7 +1,7 @@
 package com.weasleyclock.weasley.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.weasleyclock.weasley.domain.embedd.BandWeasleyKey
+import com.weasleyclock.weasley.domain.embedd.WeasleyKey
 import org.apache.commons.lang3.ObjectUtils
 import java.math.BigDecimal
 import javax.persistence.*
@@ -11,7 +11,7 @@ import javax.persistence.*
 class Weasley() : BaseEntity() {
 
     @EmbeddedId
-    var id: BandWeasleyKey? = null
+    var id: WeasleyKey? = null
 
     @ManyToOne
     @JsonIgnore
@@ -45,13 +45,13 @@ class Weasley() : BaseEntity() {
     ) : this() {
         this.band = band
         this.user = user
-        this.id = BandWeasleyKey(user!!.id!!, band!!.id!!, title!!)
+        this.id = WeasleyKey(user!!.id!!, band!!.id!!, title!!)
         this.latitude = latitude
         this.longitude = longitude
     }
 
     constructor(
-        id: BandWeasleyKey?,
+        id: WeasleyKey?,
         latitude: BigDecimal,
         longitude: BigDecimal
     ) : this() {
