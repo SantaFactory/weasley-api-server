@@ -14,12 +14,12 @@ class BandDTO {
             return Band(this.title)
         }
 
-        fun toWeasleyItems(member: Member): MutableSet<BandWeasley> {
+        fun toWeasleyItems(member: Member): MutableSet<com.weasleyclock.weasley.domain.Weasley> {
             return weasley.map { weasleyItem ->
-                BandWeasley(
+                Weasley(
                     member.band, member.user, weasleyItem.title, weasleyItem.latitude, weasleyItem.longitude
                 )
-            }.toSet() as MutableSet<BandWeasley>
+            }.toSet() as MutableSet<com.weasleyclock.weasley.domain.Weasley>
         }
 
     }
@@ -59,7 +59,7 @@ class BandDTO {
         fun getId(): Long
         fun getTitle(): String
 
-        @Value("#{target.bandWeasleySet}")
+        @Value("#{target.weasleySet}")
         fun getWeasley(): MutableSet<UserNameAndPosition>
 
         interface UserNameAndPosition {

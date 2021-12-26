@@ -51,7 +51,7 @@ class BandService(
 
         saveEntity.memberSet = listOf(member).toSet() as MutableSet<Member>
 
-        saveEntity.bandWeasleySet = dto.toWeasleyItems(member)
+        saveEntity.weasleySet = dto.toWeasleyItems(member)
 
         return saveEntity
     }

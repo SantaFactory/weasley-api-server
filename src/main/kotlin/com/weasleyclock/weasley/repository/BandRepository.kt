@@ -14,10 +14,10 @@ interface BandRepository : JpaRepository<Band, Long> {
     @EntityGraph(attributePaths = ["memberSet", "memberSet.user"])
     fun <T> findByMemberSet_User_Id(userId: Long, type: Class<T>): List<T>
 
-    @EntityGraph(attributePaths = ["memberSet", "memberSet.user", "bandWeasleySet"])
+    @EntityGraph(attributePaths = ["memberSet", "memberSet.user", "weasleySet"])
     fun <T> findById(id: Long, type: Class<T>): T?
 
-    @EntityGraph(attributePaths = ["bandWeasleySet", "bandWeasleySet.user"])
+    @EntityGraph(attributePaths = ["weasleySet", "weasleySet.user"])
     fun <T> findBandById(id: Long, type: Class<T>): T?
 
 }

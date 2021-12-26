@@ -6,9 +6,9 @@ import org.apache.commons.lang3.ObjectUtils
 import java.math.BigDecimal
 import javax.persistence.*
 
-@Table
+@Table(name = "band_weasley")
 @Entity
-class BandWeasley() : BaseEntity() {
+class Weasley() : BaseEntity() {
 
     @EmbeddedId
     var id: BandWeasleyKey? = null
