@@ -20,17 +20,17 @@ class BandResource(private val service: BandService) : BandDocs {
             .body(body)
     }
 
-    @GetMapping("/self")
-    override fun showBandByUser(): ResponseEntity<AppMessageDTO> {
-        val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupsBySelf())
+    @GetMapping("/{id}/users")
+    override fun showBandByUsers(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupByUsers(id))
         return ResponseEntity
             .ok()
             .body(body)
     }
 
-    @GetMapping("/{id}/users")
-    override fun showBandByUsers(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
-        val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupByUsers(id))
+    @GetMapping("/self")
+    override fun showBandByUser(): ResponseEntity<AppMessageDTO> {
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupsBySelf())
         return ResponseEntity
             .ok()
             .body(body)

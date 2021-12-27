@@ -11,10 +11,14 @@ import org.springframework.http.ResponseEntity
 interface BandDocs {
 
     @Operation(summary = "밴드 하나의 정보", description = "밴드 하나의 정보")
+    @ApiImplicitParams(
+        value = [ApiImplicitParam(
+            name = "id",
+            value = "밴드 id value",
+            example = "1"
+        )]
+    )
     fun showByBandOne(id : Long): ResponseEntity<AppMessageDTO>
-
-    @Operation(summary = "내가 속해있는 유저 그룹", description = "내가 속해있는 유저 그룹 목록 이다.")
-    fun showBandByUser(): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "밴드 하나의 유저 목록", description = "밴드 하나의 유저 목록을 출력")
     @ApiImplicitParams(
@@ -25,6 +29,9 @@ interface BandDocs {
         )]
     )
     fun showBandByUsers(id: Long): ResponseEntity<AppMessageDTO>
+
+    @Operation(summary = "내가 속해있는 유저 그룹", description = "내가 속해있는 유저 그룹 목록 이다.")
+    fun showBandByUser(): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "밴드 전체 목록 출력", description = "밴드 전체의 목록 출력")
     fun showByAllBands(): ResponseEntity<AppMessageDTO>
