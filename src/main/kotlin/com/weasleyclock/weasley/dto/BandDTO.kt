@@ -7,24 +7,22 @@ import java.math.BigDecimal
 class BandDTO {
 
     data class Created(
-        val title: String, val weasley: Set<Weasley>
+        val title: String, val weasley: Set<WeasleyDTO.Base>
     ) {
 
         fun toEntity(): Band {
             return Band(this.title)
         }
 
-        fun toWeasleyItems(member: Member): MutableSet<com.weasleyclock.weasley.domain.Weasley> {
+        fun toWeasleyItems(member: Member): MutableSet<Weasley> {
             return weasley.map { weasleyItem ->
                 Weasley(
                     member.band, member.user, weasleyItem.title, weasleyItem.latitude, weasleyItem.longitude
                 )
-            }.toSet() as MutableSet<com.weasleyclock.weasley.domain.Weasley>
+            }.toSet() as MutableSet<Weasley>
         }
 
     }
-
-    data class Weasley(val title: String, val latitude: BigDecimal, val longitude: BigDecimal)
 
     data class Updated(val title: String)
 
