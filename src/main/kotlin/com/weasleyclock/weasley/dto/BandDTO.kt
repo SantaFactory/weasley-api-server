@@ -7,7 +7,8 @@ import java.math.BigDecimal
 class BandDTO {
 
     data class Created(
-        val title: String, val weasley: Set<WeasleyDTO.Base>
+        val title: String,
+        val weasley: Set<WeasleyDTO.Base>
     ) {
 
         fun toEntity(): Band {

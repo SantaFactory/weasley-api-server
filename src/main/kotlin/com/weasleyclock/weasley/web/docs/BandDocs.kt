@@ -4,6 +4,7 @@ import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.BandDTO
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiImplicitParams
+import io.swagger.annotations.ApiParam
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 
@@ -18,7 +19,7 @@ interface BandDocs {
             example = "1"
         )]
     )
-    fun showByBandOne(id : Long): ResponseEntity<AppMessageDTO>
+    fun showByBandOne(@ApiParam(example = "1") id: Long): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "밴드 하나의 유저 목록", description = "밴드 하나의 유저 목록을 출력")
     @ApiImplicitParams(
@@ -37,6 +38,17 @@ interface BandDocs {
     fun showByAllBands(): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "처음 밴드을 저장", description = "밴드을 만들때 사용하는 로직")
+    @ApiImplicitParams(
+        value = [
+            ApiImplicitParam(
+                name = "dto",
+                value = "Object to be created",
+                required = true,
+                dataType = "com.weasleyclock.weasley.dto.BandDTO.Created",
+                paramType = "body"
+            )
+        ]
+    )
     fun saveByBand(dto: BandDTO.Created): ResponseEntity<AppMessageDTO>
 
     @Operation(summary = "밴드을 업데이트 할때 사용하는 로직", description = "밴드에 대한 업데이트 로직")
