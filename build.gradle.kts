@@ -44,10 +44,13 @@ dependencies {
     implementation("org.apache.tomcat:tomcat-jdbc:7.0.19")
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("org.springframework.boot:spring-boot-starter-security")
-
     implementation("org.springframework.security:spring-security-jwt:1.1.1.RELEASE")
     implementation("com.auth0:jwks-rsa:0.3.0")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("org.infinispan:infinispan-core:12.0.1.Final")
+    implementation("org.infinispan:infinispan-commons:12.0.1.Final")
+    implementation("org.infinispan:infinispan-marshaller-protostuff:12.0.1.Final")
+    implementation("org.jboss.marshalling:jboss-marshalling-osgi:2.0.10.Final")
 }
 
 tasks.withType<KotlinCompile> {
