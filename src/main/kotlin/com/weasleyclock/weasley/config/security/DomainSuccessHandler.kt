@@ -40,7 +40,7 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
             val email = userInfo.username;
 
-            val jwt = JwtUtils.makeByJwtToken(
+            val accessToken = JwtUtils.createByAccessToken(
                 jwtKey!!,
                 userInfo.id,
                 email,
@@ -48,7 +48,15 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
                 createByArrayToString(userInfo.authorities)
             )
 
-            val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, jwt))
+            val refreshToken = JwtUtils.createByRefreshToken(
+                jwtKey!!,
+                userInfo.id,
+                email,
+                userInfo.name,
+                createByArrayToString(userInfo.authorities)
+            )
+
+            val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, accessToken , refreshToken))
 
             response.writer.write(JsonUtils.convertObjectToJson(message))
 

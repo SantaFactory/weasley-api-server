@@ -1,6 +1,5 @@
 package com.weasleyclock.weasley.utils
 
-import com.weasleyclock.weasley.domain.Auth
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Header
 import io.jsonwebtoken.Jwts
@@ -17,6 +16,26 @@ class JwtUtils {
 
         private const val HEADER_PREFIX: String = "Bearer "
 
+        private val ACCESS_TOKEN_DATE = Date(Date().time + Duration.ofMinutes(30).toMillis())
+
+        private val REFRESH_TOKEN_DATE = Date(Date().time + Duration.ofMinutes(60).toMillis())
+
+        fun createByAccessToken(
+            secretKey: String,
+            id: Long?,
+            email: String?,
+            name: String?,
+            authorities: List<String>?
+        ): String? = createByToken(secretKey, id, email, name, authorities, ACCESS_TOKEN_DATE)
+
+        fun createByRefreshToken(
+            secretKey: String,
+            id: Long?,
+            email: String?,
+            name: String?,
+            authorities: List<String>?
+        ): String? = createByToken(secretKey, id, email, name, authorities, REFRESH_TOKEN_DATE)
+
         /**
          * JWT 토큰 만들기
          *
@@ -26,21 +45,20 @@ class JwtUtils {
          * @param name
          * @return String
          */
-        fun makeByJwtToken(
+        private fun createByToken(
             secretKey: String,
             id: Long?,
             email: String?,
             name: String?,
-            authorities : List<String>?
+            authorities: List<String>?,
+            expiration: Date?
         ): String? {
-
             val now = Date()
-
             return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer(issuer)
                 .setIssuedAt(now)
-                .setExpiration(Date(now.time + Duration.ofMinutes(30).toMillis()))
+                .setExpiration(expiration)
                 .claim("id", id)
                 .claim("email", email)
                 .claim("name", name)
