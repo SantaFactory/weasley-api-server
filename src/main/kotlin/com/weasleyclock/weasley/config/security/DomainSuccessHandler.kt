@@ -56,7 +56,8 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
                 createByArrayToString(userInfo.authorities)
             )
 
-            val message = AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, accessToken , refreshToken))
+            val message =
+                AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, accessToken, refreshToken))
 
             response.writer.write(JsonUtils.convertObjectToJson(message))
 
@@ -66,8 +67,7 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
     }
 
-    private fun createByArrayToString(authorities: Collection<GrantedAuthority>): List<String> {
-        return authorities.map { role -> role.authority as String }.toList()
-    }
+    private fun createByArrayToString(authorities: Collection<GrantedAuthority>): List<String> =
+        authorities.map { role -> role.authority as String }.toList()
 
 }
