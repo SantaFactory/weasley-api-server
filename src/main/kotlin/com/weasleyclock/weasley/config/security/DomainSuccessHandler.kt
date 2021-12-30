@@ -1,7 +1,9 @@
 package com.weasleyclock.weasley.config.security
 
+import com.weasleyclock.weasley.domain.Token
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.UserDTO
+import com.weasleyclock.weasley.repository.TokenRepository
 import com.weasleyclock.weasley.utils.JsonUtils
 import com.weasleyclock.weasley.utils.JwtUtils
 import org.springframework.http.HttpStatus
@@ -18,10 +20,13 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
     private var jwtKey: String? = null
 
+    private var tokenRepository: TokenRepository? = null
+
     constructor()
 
-    constructor(jwtKey: String) {
+    constructor(jwtKey: String, tokenRepository: TokenRepository) {
         this.jwtKey = jwtKey
+        this.tokenRepository = tokenRepository
     }
 
     override fun onAuthenticationSuccess(
@@ -58,6 +63,8 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
             val message =
                 AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, accessToken, refreshToken))
+
+            tokenRepository!!.save(Token(userInfo.id!!, refreshToken!!))
 
             response.writer.write(JsonUtils.convertObjectToJson(message))
 

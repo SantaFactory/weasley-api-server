@@ -3,6 +3,7 @@ package com.weasleyclock.weasley.config
 import com.weasleyclock.weasley.config.security.CachingFilter
 import com.weasleyclock.weasley.config.security.JwtValidationFilter
 import com.weasleyclock.weasley.config.security.OpenIdConnectFilter
+import com.weasleyclock.weasley.repository.TokenRepository
 import com.weasleyclock.weasley.repository.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -15,7 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfiguration(private val userRepository: UserRepository) : WebSecurityConfigurerAdapter() {
+class SecurityConfiguration(
+    private val userRepository: UserRepository,
+    private val tokenRepository: TokenRepository
+) : WebSecurityConfigurerAdapter() {
 
     @Value("\${google.jwkUrl}")
     private var jwkUrl: String? = null
@@ -51,7 +55,13 @@ class SecurityConfiguration(private val userRepository: UserRepository) : WebSec
 
     @Bean
     fun openIdConnectFilter(): OpenIdConnectFilter {
-        return OpenIdConnectFilter("/login-process", jwkUrl.toString(), userRepository, jwtKey.toString())
+        return OpenIdConnectFilter(
+            "/login-process",
+            jwkUrl.toString(),
+            userRepository,
+            tokenRepository,
+            jwtKey.toString()
+        )
     }
 
 }
