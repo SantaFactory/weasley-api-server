@@ -30,15 +30,15 @@ class TokenService(private val tokenRepository: TokenRepository) {
             throw AppException(ErrorTypes.NOT_MATCH_ID)
         }
 
-        var email = claims["email"] as String
+        val email = claims["email"] as String
 
-        var name = claims["name"] as String
+        val name = claims["name"] as String
 
-        var authorities = claims["authorities"] as List<String>
+        val authorities = claims["authorities"] as List<String>
 
-        var accessToken = JwtUtils.createByAccessToken(jwtKey.toString(), id, email, name, authorities)
+        val accessToken = JwtUtils.createByAccessToken(jwtKey.toString(), id, email, name, authorities)
 
-        var refreshToken = JwtUtils.createByRefreshToken(jwtKey.toString(), id, email, name, authorities)
+        val refreshToken = JwtUtils.createByRefreshToken(jwtKey.toString(), id, email, name, authorities)
 
         foundToken.token = refreshToken
 
