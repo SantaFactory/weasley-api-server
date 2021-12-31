@@ -13,3 +13,6 @@ jasypt:
   encryptor:
     algorithm: PBEWithMD5AndDES
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
+
+jwt:
+  key: ENC(FddU21dyfrYySYHAIy9TYtuYYgnGX37EA2u2aqa2Hf1XRRssW1Mu/Q==)
