@@ -43,33 +43,57 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
             response.contentType = AppProperties.CONTENT_TYPE
 
-            val email = userInfo.username;
+            val email = userInfo.username
+
+            val userId = userInfo.id
+
+            val userName = userInfo.name
+
+            val authorities = createByArrayToString(userInfo.authorities)
 
             val accessToken = JwtUtils.createByAccessToken(
                 jwtKey!!,
-                userInfo.id,
+                userId,
                 email,
-                userInfo.name,
-                createByArrayToString(userInfo.authorities)
+                userName,
+                authorities
             )
 
             val refreshToken = JwtUtils.createByRefreshToken(
                 jwtKey!!,
-                userInfo.id,
+                userId,
                 email,
-                userInfo.name,
-                createByArrayToString(userInfo.authorities)
+                userName,
+                authorities
             )
 
             val message =
                 AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, accessToken, refreshToken))
 
-            tokenRepository!!.save(Token(userInfo.id!!, refreshToken!!))
+            createByToken(userId, refreshToken)
 
             response.writer.write(JsonUtils.convertObjectToJson(message))
 
         } catch (e: IOException) {
             e.printStackTrace()
+        }
+
+    }
+
+    private fun createByToken(userId: Long?, refreshToken: String?) {
+
+        val foundTokenOptional = tokenRepository!!.findByUserId(userId!!)
+
+        if (foundTokenOptional.isPresent) {
+
+            val foundToken = foundTokenOptional.get()
+
+            foundToken.token = refreshToken
+
+        } else {
+
+            tokenRepository!!.save(Token(userId!!, refreshToken!!))
+
         }
 
     }
