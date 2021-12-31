@@ -1,6 +1,8 @@
 package com.weasleyclock.weasley.service
 
+import com.weasleyclock.weasley.config.exception.AppException
 import com.weasleyclock.weasley.dto.UserDTO
+import com.weasleyclock.weasley.enmus.ErrorTypes
 import com.weasleyclock.weasley.repository.TokenRepository
 import com.weasleyclock.weasley.utils.JwtUtils
 import org.springframework.beans.factory.annotation.Value
@@ -17,16 +19,15 @@ class TokenService(private val tokenRepository: TokenRepository) {
     @Transactional
     fun issuedByAccessToken(refreshToken: String): UserDTO.AccessToken {
 
-        // todo : exception
-        val foundToken = tokenRepository.findByToken(refreshToken).orElseThrow { NullPointerException() }
+        val foundToken =
+            tokenRepository.findByToken(refreshToken).orElseThrow { AppException(ErrorTypes.NOT_FOUND_TOKEN) }
 
         val claims = JwtUtils.parseJwtToken(refreshToken, jwtKey!!)
 
         val id = (claims["id"] as Int).toLong()
 
         if (foundToken.userId != id) {
-            //todo : exception
-            throw NullPointerException()
+            throw AppException(ErrorTypes.NOT_MATCH_ID)
         }
 
         var email = claims["email"] as String

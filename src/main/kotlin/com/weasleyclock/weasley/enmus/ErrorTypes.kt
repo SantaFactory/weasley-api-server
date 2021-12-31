@@ -7,6 +7,11 @@ enum class ErrorTypes(val code: String, val message: String) {
     // 인증 관련
     NOT_FOUND_KEY("A001", "not found google decode key"),
     IS_EMPTY_TOKEN("A002", "is_token is empty"),
+
+    // refresh token
+    NOT_MATCH_ID("A003", "not match id value"),
+    NOT_FOUND_TOKEN("A004" ,  "not found Token"),
+
     NOT_USE_POST_METHOD("A003", "is login process use to post method"),
 
     // Member 관련 Error
@@ -15,13 +20,14 @@ enum class ErrorTypes(val code: String, val message: String) {
     // jwt 관련
     JWT_UNSUPPORTED("J001", "jwt not supported"),
     JWT_MALFORMED("J002", "jwt malformed"),
-    JWT_EXPIRED("J003" , "jwt expired"),
-    JWT_SIGNATURE("J003" , "jwt signature"),
+    JWT_EXPIRED("J003", "jwt expired"),
+
+    JWT_SIGNATURE("J003", "jwt signature"),
 
     // user
-    USER_NOT_FOUND ("U001" , "user not found data"),
+    USER_NOT_FOUND("U001", "user not found data"),
 
     // band
-    BAND_NOT_FOUND("B001" , "band not found data")
+    BAND_NOT_FOUND("B001", "band not found data")
 
 }
