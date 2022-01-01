@@ -37,7 +37,6 @@ class TokenService(private val tokenRepository: TokenRepository) {
         val authorities = claims["authorities"] as List<String>
 
         val accessToken = JwtUtils.createByAccessToken(jwtKey.toString(), id, email, name, authorities)
-
         val refreshToken = JwtUtils.createByRefreshToken(jwtKey.toString(), id, email, name, authorities)
 
         foundToken.token = refreshToken

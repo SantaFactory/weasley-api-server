@@ -67,8 +67,11 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         }
 
         val requestBody = getByRequestBodyToMap(request)
+
         val idToken = requestBody["id_token"]
+
         val id = requestBody["id"]
+
         if (StringUtils.isNotEmpty(id)) {
             return getAdminAuthenticationToken(id!!)
         }
@@ -91,9 +94,9 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
         if (userOptional.isEmpty) {
 
-            val name = authInfo?.get("name") as String
+            val name = authInfo["name"] as String
 
-            val sub = authInfo?.get("sub") as String
+            val sub = authInfo["sub"] as String
 
             val newEntity = User(userName, name, UserTypes.GOOGLE, sub, linkedSetOf(Auth(AppRoles.USER.value)))
 
@@ -142,7 +145,6 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
     /**
      * kid 체크로 google check 값 리턴
-     *
      * @param kid
      * @return
      */

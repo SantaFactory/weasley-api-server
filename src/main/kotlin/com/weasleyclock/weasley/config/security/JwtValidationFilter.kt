@@ -19,13 +19,9 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class JwtValidationFilter : OncePerRequestFilter {
+class JwtValidationFilter(jwtKey: String) : OncePerRequestFilter() {
 
-    private var jwtKey: String? = null
-
-    constructor(jwtKey: String) {
-        this.jwtKey = jwtKey
-    }
+    private var jwtKey: String? = jwtKey
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -80,6 +76,5 @@ class JwtValidationFilter : OncePerRequestFilter {
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         return !request.servletPath.startsWith("/api")
     }
-
 
 }
