@@ -51,6 +51,8 @@ dependencies {
     implementation("org.infinispan:infinispan-commons:12.0.1.Final")
     implementation("org.infinispan:infinispan-marshaller-protostuff:12.0.1.Final")
     implementation("org.jboss.marshalling:jboss-marshalling-osgi:2.0.10.Final")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+
 }
 
 tasks.withType<KotlinCompile> {
