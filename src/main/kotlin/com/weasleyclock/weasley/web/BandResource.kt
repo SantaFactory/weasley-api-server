@@ -47,7 +47,7 @@ class BandResource(private val service: BandService) : BandDocs {
     @PostMapping("")
     override fun saveByBand(@RequestBody dto: BandDTO.Created): ResponseEntity<AppMessageDTO> {
 
-        val data = service.createByGroup(dto)
+        val data = service.createByBand(dto)
 
         val body = AppMessageDTO(HttpStatus.OK.value(), data)
 

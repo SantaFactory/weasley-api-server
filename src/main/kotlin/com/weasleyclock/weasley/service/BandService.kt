@@ -38,7 +38,7 @@ class BandService(
         bandRepository.findById(groupId, BandDTO.OnlyBandUser::class.java)?.getMembers()?.toSet()
 
     @Transactional
-    fun createByGroup(dto: BandDTO.Created): Band? {
+    fun createByBand(dto: BandDTO.Created): Band? {
 
         val saveEntity = dto.toEntity()
 
