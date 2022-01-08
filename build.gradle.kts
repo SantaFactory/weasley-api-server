@@ -37,7 +37,6 @@ dependencies {
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
-//    implementation("mysql:mysql-connector-java")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.h2database:h2")
     runtimeOnly("com.h2database:h2")
