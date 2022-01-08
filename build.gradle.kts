@@ -37,7 +37,7 @@ dependencies {
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
-    implementation("mysql:mysql-connector-java")
+//    implementation("mysql:mysql-connector-java")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.h2database:h2")
     runtimeOnly("com.h2database:h2")
@@ -52,7 +52,7 @@ dependencies {
     implementation("org.infinispan:infinispan-marshaller-protostuff:12.0.1.Final")
     implementation("org.jboss.marshalling:jboss-marshalling-osgi:2.0.10.Final")
     implementation("org.springframework.boot:spring-boot-starter-aop")
-
+    implementation("org.postgresql:postgresql:42.2.23")
 }
 
 tasks.withType<KotlinCompile> {

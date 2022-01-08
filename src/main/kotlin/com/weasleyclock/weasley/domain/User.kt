@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import javax.persistence.*
 
-@Table
+@Table(name = "weasley_user")
 @Entity
 class User() : BaseEntity() {
 

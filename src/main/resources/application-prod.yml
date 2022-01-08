@@ -3,11 +3,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    database: postgresql
+
   datasource:
-    url: ENC(+HIwCzptNpf8+PETTnc8v7GQbr8QObp/fXf8C+5ZtfTepvAjNRts1wvnYRz0+WggP0Y+SU0v0ZeUuz2UEg4mAaxi5ohyovPI8L1bxIHh1T3JmTyLHeR2cg==)
-    username: ENC(p0ZzSlK9oCJlQVCxvhVFhw==)
-    password: ENC(wlvmrK26o4pdEh+vOKdwxA==)
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(HiNJzyTM5DpvW2lSHLljUy6y/V5b/HgkfibNiqnJaxjg5OCMa9rm+iUXnUghnuITL8wov8VFLrdQan90G6OrRjWzbRI8wpbFn5pgrX5IAPegWaXDIVH3Jc3WPmZMOJGG)
+    username: ENC(lAevW7+4dOwAHXZrLEtEj7cJ3C6mTTbV)
+    password: ENC(dBCMjotzAbEltEZP7Tq2xMlVE1vSdiGz)
+    driver-class-name: org.postgresql.Driver
 
 jasypt:
   encryptor:
