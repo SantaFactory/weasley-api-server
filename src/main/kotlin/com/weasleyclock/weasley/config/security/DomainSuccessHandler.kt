@@ -3,7 +3,7 @@ package com.weasleyclock.weasley.config.security
 import com.weasleyclock.weasley.domain.Token
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.UserDTO
-import com.weasleyclock.weasley.repository.TokenRepository
+import com.weasleyclock.weasley.service.TokenService
 import com.weasleyclock.weasley.utils.JsonUtils
 import com.weasleyclock.weasley.utils.JwtUtils
 import org.springframework.http.HttpStatus
@@ -20,13 +20,13 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
     private var jwtKey: String? = null
 
-    private var tokenRepository: TokenRepository? = null
+    private var tokenService: TokenService? = null
 
     constructor()
 
-    constructor(jwtKey: String, tokenRepository: TokenRepository) {
+    constructor(jwtKey: String, tokenService: TokenService) {
         this.jwtKey = jwtKey
-        this.tokenRepository = tokenRepository
+        this.tokenService = tokenService
     }
 
     override fun onAuthenticationSuccess(
@@ -70,30 +70,12 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
             val message =
                 AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, accessToken, refreshToken))
 
-            createByToken(userId, refreshToken)
+            tokenService!!.createByToken(userId, refreshToken)
 
             response.writer.write(JsonUtils.convertObjectToJson(message))
 
         } catch (e: IOException) {
             e.printStackTrace()
-        }
-
-    }
-
-    private fun createByToken(userId: Long?, refreshToken: String?) {
-
-        val foundTokenOptional = tokenRepository!!.findByUserId(userId!!)
-
-        if (foundTokenOptional.isPresent) {
-
-            val foundToken = foundTokenOptional.get()
-
-            foundToken.token = refreshToken
-
-        } else {
-
-            tokenRepository!!.save(Token(userId!!, refreshToken!!))
-
         }
 
     }

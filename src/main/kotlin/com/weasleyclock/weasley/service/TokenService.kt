@@ -1,6 +1,7 @@
 package com.weasleyclock.weasley.service
 
 import com.weasleyclock.weasley.config.exception.AppException
+import com.weasleyclock.weasley.domain.Token
 import com.weasleyclock.weasley.dto.UserDTO
 import com.weasleyclock.weasley.enmus.ErrorTypes
 import com.weasleyclock.weasley.repository.TokenRepository
@@ -42,6 +43,24 @@ class TokenService(private val tokenRepository: TokenRepository) {
         foundToken.token = refreshToken
 
         return UserDTO.AccessToken(accessToken, refreshToken)
+    }
+
+    fun createByToken(userId: Long?, refreshToken: String?) {
+
+        val foundTokenOptional = tokenRepository.findByUserId(userId!!)
+
+        if (foundTokenOptional.isPresent) {
+
+            val foundToken = foundTokenOptional.get()
+
+            foundToken.token = refreshToken
+
+        } else {
+
+            tokenRepository.save(Token(userId, refreshToken!!))
+
+        }
+
     }
 
 }

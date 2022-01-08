@@ -11,6 +11,7 @@ import com.weasleyclock.weasley.enmus.AppRoles
 import com.weasleyclock.weasley.enmus.UserTypes
 import com.weasleyclock.weasley.repository.TokenRepository
 import com.weasleyclock.weasley.repository.UserRepository
+import com.weasleyclock.weasley.service.TokenService
 import mu.KotlinLogging
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpMethod
@@ -44,7 +45,7 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         defaultFilterProcessesUrl: String,
         jwkUrl: String,
         userRepository: UserRepository,
-        tokenRepository: TokenRepository,
+        tokenService: TokenService,
         jwtKey: String
     ) : super(
         defaultFilterProcessesUrl
@@ -54,7 +55,7 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         this.userRepository = userRepository
         authenticationManager = NoOpAuthenticationManager()
         setAuthenticationFailureHandler(DomainFailureHandler())
-        setAuthenticationSuccessHandler(DomainSuccessHandler(jwtKey, tokenRepository))
+        setAuthenticationSuccessHandler(DomainSuccessHandler(jwtKey, tokenService))
     }
 
     @Throws(Exception::class)
