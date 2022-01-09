@@ -2,7 +2,7 @@ package com.weasleyclock.weasley.config.security
 
 import org.springframework.security.core.userdetails.User
 
-class DomainUserDetail : User {
+class DomainUserDetail(user: com.weasleyclock.weasley.domain.User?) : User(user?.email, "", user?.getAuthorities()) {
 
     var id: Long? = null
 
@@ -10,7 +10,7 @@ class DomainUserDetail : User {
 
     var userKey: String? = null
 
-    constructor(user: com.weasleyclock.weasley.domain.User?) : super(user?.email, "", user?.getAuthorities()) {
+    init {
         this.id = user?.id
         this.name = user?.name
         this.userKey = user?.userKey

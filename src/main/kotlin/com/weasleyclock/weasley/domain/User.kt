@@ -47,6 +47,11 @@ class User() : BaseEntity() {
         this.authSet = authSet
     }
 
+    constructor(email: String, name: String) : this() {
+        this.email = email
+        this.name = name
+    }
+
     constructor(
         email: String,
         name: String,

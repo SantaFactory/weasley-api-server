@@ -5,13 +5,8 @@ import com.auth0.jwk.UrlJwkProvider
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.weasleyclock.weasley.config.exception.IdTokenEmptyException
 import com.weasleyclock.weasley.config.exception.NotPostMethodException
-import com.weasleyclock.weasley.domain.Auth
-import com.weasleyclock.weasley.domain.User
-import com.weasleyclock.weasley.enmus.AppRoles
-import com.weasleyclock.weasley.enmus.UserTypes
-import com.weasleyclock.weasley.repository.TokenRepository
-import com.weasleyclock.weasley.repository.UserRepository
 import com.weasleyclock.weasley.service.TokenService
+import com.weasleyclock.weasley.service.UserService
 import mu.KotlinLogging
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpMethod
@@ -23,7 +18,6 @@ import org.springframework.security.jwt.crypto.sign.RsaVerifier
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
 import java.net.URL
 import java.security.interfaces.RSAPublicKey
-import java.util.*
 import java.util.stream.Collectors
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -33,26 +27,24 @@ import javax.servlet.http.HttpServletResponse
  * Google ID Token Filter
  * @constructor Create empty Open id connect filter
  */
-class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
+class OpenIdConnectFilter// NoAuth manager class
+    (
+    defaultFilterProcessesUrl: String,
+    jwkUrl: String,
+    userService: UserService,
+    tokenService: TokenService,
+    jwtKey: String
+) : AbstractAuthenticationProcessingFilter(
+    defaultFilterProcessesUrl
+) {
 
     private val log = KotlinLogging.logger {}
 
-    private var jwkUrl: String? = null
+    private var jwkUrl: String? = jwkUrl
 
-    private var userRepository: UserRepository? = null
+    private var userService: UserService? = userService
 
-    constructor(
-        defaultFilterProcessesUrl: String,
-        jwkUrl: String,
-        userRepository: UserRepository,
-        tokenService: TokenService,
-        jwtKey: String
-    ) : super(
-        defaultFilterProcessesUrl
-    ) {
-        // NoAuth manager class
-        this.jwkUrl = jwkUrl
-        this.userRepository = userRepository
+    init {
         authenticationManager = NoOpAuthenticationManager()
         setAuthenticationFailureHandler(DomainFailureHandler())
         setAuthenticationSuccessHandler(DomainSuccessHandler(jwtKey, tokenService))
@@ -91,19 +83,13 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
 
         log.info { "login user $userName" }
 
-        val userOptional = userRepository!!.findByEmail(userName)
+        val userOptional = userService!!.getByLoginUser(userName)
 
         if (userOptional.isEmpty) {
 
-            val name = authInfo["name"] as String
+            val newEntity = userService!!.createByNewUser(authInfo)
 
-            val sub = authInfo["sub"] as String
-
-            val newEntity = User(userName, name, UserTypes.GOOGLE, sub, linkedSetOf(Auth(AppRoles.USER.value)))
-
-            userRepository!!.save(newEntity)
-
-            val domainUserDetail = DomainUserDetail(newEntity)
+            val domainUserDetail = DomainUserDetail(newEntity!!)
 
             return UsernamePasswordAuthenticationToken(domainUserDetail, null, domainUserDetail.authorities)
 
@@ -114,12 +100,12 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         return UsernamePasswordAuthenticationToken(domainUserDetail, null, domainUserDetail.authorities)
     }
 
-    private fun getAdminAuthenticationToken(id: String): UsernamePasswordAuthenticationToken {
+    private fun getAdminAuthenticationToken(loginId: String): UsernamePasswordAuthenticationToken {
 
-        val adminUserOptional = userRepository!!.findByEmail(id)
+        val adminUserOptional = userService!!.getByLoginUser(loginId)
 
         if (adminUserOptional.isEmpty) {
-            throw UsernameNotFoundException("user not found name is $id")
+            throw UsernameNotFoundException("user not found name is $loginId")
         }
 
         val adminUser = adminUserOptional.get()
@@ -154,22 +140,6 @@ class OpenIdConnectFilter : AbstractAuthenticationProcessingFilter {
         val provider: JwkProvider = UrlJwkProvider(URL(jwkUrl))
         val jwk = provider[kid]
         return RsaVerifier(jwk.publicKey as RSAPublicKey)
-    }
-
-    /**
-     * Verify claims
-     *
-     * @param claims
-     * @param clientId
-     * @param issuer
-     */
-    private fun verifyClaims(claims: Map<*, *>, clientId: String, issuer: String) {
-        val exp = claims["exp"] as Int
-        val expireDate = Date(exp * 1000L)
-        val now = Date()
-        if (expireDate.before(now) || claims["iss"] != issuer || claims["aud"] != clientId) {
-            throw RuntimeException("Invalid claims")
-        }
     }
 
 }
