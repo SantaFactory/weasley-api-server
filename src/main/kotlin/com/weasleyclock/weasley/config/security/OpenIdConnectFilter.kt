@@ -34,8 +34,7 @@ class OpenIdConnectFilter// NoAuth manager class
     userService: UserService,
     tokenService: TokenService,
     jwtKey: String
-) : AbstractAuthenticationProcessingFilter(
-    defaultFilterProcessesUrl
+) : AbstractAuthenticationProcessingFilter( defaultFilterProcessesUrl
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -136,7 +135,7 @@ class OpenIdConnectFilter// NoAuth manager class
      * @return
      */
     @Throws(Exception::class)
-    private fun verifier(kid: String): RsaVerifier? {
+    private fun verifier(kid: String): RsaVerifier {
         val provider: JwkProvider = UrlJwkProvider(URL(jwkUrl))
         val jwk = provider[kid]
         return RsaVerifier(jwk.publicKey as RSAPublicKey)
