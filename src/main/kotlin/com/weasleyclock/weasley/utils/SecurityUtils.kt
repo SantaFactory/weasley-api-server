@@ -1,5 +1,6 @@
 package com.weasleyclock.weasley.utils
 
+import com.weasleyclock.weasley.config.security.AppProperties
 import com.weasleyclock.weasley.config.security.DomainUserDetail
 import com.weasleyclock.weasley.domain.User
 import org.apache.commons.lang3.ObjectUtils
@@ -26,7 +27,7 @@ class SecurityUtils {
             if (ObjectUtils.isEmpty(securityContext)) {
                 throw NullPointerException()
             } else if (ObjectUtils.isEmpty(securityContext.authentication)) {
-                return DomainUserDetail(User("SYSTEM", "SYSTEM"))
+                return DomainUserDetail(User(AppProperties.SYSTEM, AppProperties.SYSTEM))
             } else if (securityContext.authentication.principal is DomainUserDetail) {
                 return securityContext.authentication.principal as DomainUserDetail
             }

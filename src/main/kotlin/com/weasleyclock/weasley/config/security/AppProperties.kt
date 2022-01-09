@@ -4,7 +4,9 @@ class AppProperties {
 
     companion object {
 
-        val CONTENT_TYPE: String = "application/json"
+        const val CONTENT_TYPE = "application/json"
+
+        const val SYSTEM = "SYSTEM"
 
     }
 
