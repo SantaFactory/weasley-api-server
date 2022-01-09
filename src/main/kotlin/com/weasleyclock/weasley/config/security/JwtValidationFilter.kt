@@ -33,7 +33,7 @@ class JwtValidationFilter(jwtKey: String) : OncePerRequestFilter() {
 
             val authorization = request.getHeader(HttpHeaders.AUTHORIZATION)
 
-            val claims = JwtUtils.parseJwtToken(authorization, jwtKey!!)
+            val claims = JwtUtils.parseJwtToken(authorization, jwtKey!!, true)
 
             val id = (claims["id"] as Int).toLong()
 
@@ -55,8 +55,6 @@ class JwtValidationFilter(jwtKey: String) : OncePerRequestFilter() {
 
             filterChain.doFilter(request, response)
 
-        } catch (e: Exception) {
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.INTERNAL_SERVER_ERROR)
         } catch (e: UnsupportedJwtException) {
             // 예상하는 형식과 다른 형식이거나 구성의 JWT일 때
             setErrorResponse(HttpStatus.FORBIDDEN, response, e, ErrorTypes.JWT_UNSUPPORTED)
@@ -69,7 +67,10 @@ class JwtValidationFilter(jwtKey: String) : OncePerRequestFilter() {
         } catch (e: SignatureException) {
             // JWT의 기존 서명을 확인하지 못했을 때
             setErrorResponse(HttpStatus.GONE, response, e, ErrorTypes.JWT_SIGNATURE)
+        } catch (e: Exception) {
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.INTERNAL_SERVER_ERROR)
         }
+
 
     }
 

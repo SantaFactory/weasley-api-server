@@ -1,9 +1,6 @@
 package com.weasleyclock.weasley.domain
 
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.Table
+import javax.persistence.*
 
 @Table
 @Entity
@@ -12,8 +9,7 @@ class Token {
     @Id
     var userId: Long? = null
 
-    // todo : blob change
-    @Lob
+    @Column(name = "token_value" , columnDefinition="TEXT")
     var token: String? = null
 
     constructor()

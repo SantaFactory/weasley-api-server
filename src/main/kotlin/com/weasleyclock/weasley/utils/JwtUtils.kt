@@ -74,12 +74,20 @@ class JwtUtils {
          * @param secretKey
          * @return
          */
-        fun parseJwtToken(authorizationHeader: String, secretKey: String): Claims {
-            validationAuthorizationHeader(authorizationHeader)
-            val token = extractToken(authorizationHeader)
+        fun parseJwtToken(authorizationHeader: String, secretKey: String, isAccess: Boolean): Claims {
+
+            var passerToken = ""
+
+            if (isAccess) {
+                validationAuthorizationHeader(authorizationHeader)
+                passerToken = extractToken(authorizationHeader)
+            } else {
+                passerToken = authorizationHeader
+            }
+
             return Jwts.parser()
                 .setSigningKey(secretKey)
-                .parseClaimsJws(token)
+                .parseClaimsJws(passerToken)
                 .body
         }
 

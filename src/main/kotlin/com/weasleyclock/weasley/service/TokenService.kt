@@ -23,7 +23,7 @@ class TokenService(private val tokenRepository: TokenRepository) {
         val foundToken =
             tokenRepository.findByToken(refreshToken).orElseThrow { AppException(ErrorTypes.NOT_FOUND_TOKEN) }
 
-        val claims = JwtUtils.parseJwtToken(refreshToken, jwtKey!!)
+        val claims = JwtUtils.parseJwtToken(refreshToken, jwtKey!!, false)
 
         val id = (claims["id"] as Int).toLong()
 
@@ -38,6 +38,7 @@ class TokenService(private val tokenRepository: TokenRepository) {
         val authorities = claims["authorities"] as List<String>
 
         val accessToken = JwtUtils.createByAccessToken(jwtKey.toString(), id, email, name, authorities)
+
         val refreshToken = JwtUtils.createByRefreshToken(jwtKey.toString(), id, email, name, authorities)
 
         foundToken.token = refreshToken
