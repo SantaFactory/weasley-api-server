@@ -16,7 +16,7 @@ JVM Option
 - JPA & Hibernate 
 - gradle
 - h2 (local)
-- myssql (prod)
+- postgresql (prod)
 - aws
 
 ## Releases
