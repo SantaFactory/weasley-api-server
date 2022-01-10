@@ -16,17 +16,13 @@ class JwtUtils {
 
         private const val HEADER_PREFIX: String = "Bearer "
 
-        private val ACCESS_TOKEN_DATE = Date(Date().time + Duration.ofMinutes(30).toMillis())
-
-        private val REFRESH_TOKEN_DATE = Date(Date().time + Duration.ofMinutes(60).toMillis())
-
         fun createByAccessToken(
             secretKey: String,
             id: Long?,
             email: String?,
             name: String?,
             authorities: List<String>?
-        ): String? = createByToken(secretKey, id, email, name, authorities, ACCESS_TOKEN_DATE)
+        ): String? = createByToken(secretKey, id, email, name, authorities, Date(Date().time + Duration.ofMinutes(30).toMillis()))
 
         fun createByRefreshToken(
             secretKey: String,
@@ -34,7 +30,7 @@ class JwtUtils {
             email: String?,
             name: String?,
             authorities: List<String>?
-        ): String? = createByToken(secretKey, id, email, name, authorities, REFRESH_TOKEN_DATE)
+        ): String? = createByToken(secretKey, id, email, name, authorities, Date(Date().time + Duration.ofMinutes(60).toMillis()))
 
         /**
          * JWT 토큰 만들기
