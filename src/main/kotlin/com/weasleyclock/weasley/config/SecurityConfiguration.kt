@@ -1,9 +1,9 @@
 package com.weasleyclock.weasley.config
 
 import com.weasleyclock.weasley.config.security.CachingFilter
+import com.weasleyclock.weasley.config.security.JwtValidationExceptionFilter
 import com.weasleyclock.weasley.config.security.JwtValidationFilter
 import com.weasleyclock.weasley.config.security.OpenIdConnectFilter
-import com.weasleyclock.weasley.repository.UserRepository
 import com.weasleyclock.weasley.service.TokenService
 import com.weasleyclock.weasley.service.UserService
 import org.springframework.beans.factory.annotation.Value
@@ -49,6 +49,11 @@ class SecurityConfiguration(
                 JwtValidationFilter(jwtKey.toString()),
                 UsernamePasswordAuthenticationFilter::class.java
             )
+            .addFilterBefore(
+                JwtValidationExceptionFilter(),
+                JwtValidationFilter::class.java
+            )
+
     }
 
     override fun configure(web: WebSecurity?) {
