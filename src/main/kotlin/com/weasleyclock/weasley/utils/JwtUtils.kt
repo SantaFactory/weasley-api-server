@@ -72,13 +72,11 @@ class JwtUtils {
          */
         fun parseJwtToken(authorizationHeader: String, secretKey: String, isAccess: Boolean): Claims {
 
-            var passerToken = ""
-
-            if (isAccess) {
+            val passerToken = if (isAccess) {
                 validationAuthorizationHeader(authorizationHeader)
-                passerToken = extractToken(authorizationHeader)
+                extractToken(authorizationHeader)
             } else {
-                passerToken = authorizationHeader
+                authorizationHeader
             }
 
             return Jwts.parser()
