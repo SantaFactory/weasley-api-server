@@ -66,6 +66,9 @@ class BandDTO {
             fun getLongitude(): BigDecimal
             fun getIsCurrent(): Boolean
 
+            @Value("#{target.id.title}")
+            fun getWeasleyTitle(): String
+
             @Value("#{target.user.name}")
             fun getUserName(): String
         }
