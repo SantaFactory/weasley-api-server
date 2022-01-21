@@ -2,6 +2,7 @@ package com.weasleyclock.weasley.domain
 
 import com.weasleyclock.weasley.domain.convert.UserTypeConvert
 import com.weasleyclock.weasley.enmus.UserTypes
+import org.hibernate.Hibernate
 import org.springframework.beans.factory.support.ManagedSet
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -66,4 +67,14 @@ class User() : BaseEntity() {
         this.authSet = authSet
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        val anyOther = other as User
+        return anyOther.id!! == this.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 }

@@ -1,5 +1,6 @@
 package com.weasleyclock.weasley.domain.embedd
 
+import org.hibernate.Hibernate
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -27,4 +28,14 @@ class MemberKey : Serializable {
         this.bandId = bandId
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        val anyOther = other as MemberKey
+        return anyOther.bandId == this.bandId && anyOther.userId == this.userId
+    }
+
+    override fun hashCode(): Int {
+        return userId!!.toInt() + bandId!!.toInt()
+    }
 }

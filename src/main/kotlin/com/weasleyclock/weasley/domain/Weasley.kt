@@ -3,6 +3,7 @@ package com.weasleyclock.weasley.domain
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.weasleyclock.weasley.domain.embedd.WeasleyKey
 import org.apache.commons.lang3.ObjectUtils
+import org.hibernate.Hibernate
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -72,6 +73,17 @@ class Weasley() : BaseEntity() {
         if (ObjectUtils.isEmpty(isCurrent)) {
             isCurrent = false
         }
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode();
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        val anyOther = other as Weasley
+        return anyOther.id === this.id
     }
 
 }
