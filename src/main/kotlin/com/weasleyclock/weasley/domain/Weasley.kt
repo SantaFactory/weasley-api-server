@@ -1,15 +1,16 @@
 package com.weasleyclock.weasley.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.weasleyclock.weasley.domain.base.BaseTimeEntity
 import com.weasleyclock.weasley.domain.embedd.WeasleyKey
 import org.apache.commons.lang3.ObjectUtils
 import org.hibernate.Hibernate
 import java.math.BigDecimal
 import javax.persistence.*
 
-@Table(name = "band_weasley")
+@Table(name = "user_weasley")
 @Entity
-class Weasley() : BaseEntity() {
+class Weasley() : BaseTimeEntity() {
 
     @EmbeddedId
     var id: WeasleyKey? = null
@@ -19,12 +20,6 @@ class Weasley() : BaseEntity() {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @MapsId("userId")
     var user: User? = null
-
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "band_id", referencedColumnName = "id")
-    @MapsId("bandId")
-    var band: Band? = null
 
     // 위도
     @Column(nullable = false, columnDefinition = "decimal(19,2) not null default 0")
@@ -38,15 +33,13 @@ class Weasley() : BaseEntity() {
     var isCurrent: Boolean? = null
 
     constructor(
-        band: Band?,
         user: User?,
         title: String?,
         latitude: BigDecimal,
         longitude: BigDecimal
     ) : this() {
-        this.band = band
         this.user = user
-        this.id = WeasleyKey(user!!.id!!, band!!.id!!, title!!)
+        this.id = WeasleyKey(user!!.id!!, title!!)
         this.latitude = latitude
         this.longitude = longitude
     }

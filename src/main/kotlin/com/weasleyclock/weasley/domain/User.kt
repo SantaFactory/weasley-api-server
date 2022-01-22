@@ -1,5 +1,6 @@
 package com.weasleyclock.weasley.domain
 
+import com.weasleyclock.weasley.domain.base.BaseEntity
 import com.weasleyclock.weasley.domain.convert.UserTypeConvert
 import com.weasleyclock.weasley.enmus.UserTypes
 import org.hibernate.Hibernate
@@ -8,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import javax.persistence.*
 
-@Table(name = "weasley_user")
+@Table(name = "user")
 @Entity
 class User() : BaseEntity() {
 
@@ -36,6 +37,9 @@ class User() : BaseEntity() {
         inverseJoinColumns = [JoinColumn(name = "auth_name", referencedColumnName = "title")]
     )
     private var authSet: MutableSet<Auth> = ManagedSet()
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+    var weasleySet: MutableSet<Weasley> = ManagedSet()
 
     fun getAuthorities(): List<GrantedAuthority> {
         return authSet.map { auth -> SimpleGrantedAuthority(auth.title) }.toList()

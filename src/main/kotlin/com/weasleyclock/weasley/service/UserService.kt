@@ -21,13 +21,13 @@ class UserService(private val repository: UserRepository) {
     @Transactional
     fun createByNewUser(authInfo: MutableMap<*, *>): User? {
 
-        val userName = authInfo?.get("email") as String
+        val userName = authInfo["email"] as String
 
         val name = authInfo["name"] as String
 
         val sub = authInfo["sub"] as String
 
-        val newEntity = User(userName, name, UserTypes.GOOGLE, sub, linkedSetOf(Auth(AppRoles.USER.value)))
+        val newEntity = User(userName, name, UserTypes.GOOGLE, sub, linkedSetOf(Auth(AppRoles.USER.value!!)))
 
         repository.save(newEntity)
 

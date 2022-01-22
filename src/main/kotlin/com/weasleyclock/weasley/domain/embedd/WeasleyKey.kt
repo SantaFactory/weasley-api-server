@@ -14,17 +14,13 @@ class WeasleyKey : Serializable {
     @Column
     var userId: Long? = null
 
-    @Column
-    var bandId: Long? = null
-
     @Column(nullable = false)
     var title: String? = null
 
     constructor()
 
-    constructor(userId: Long, bandId: Long, title: String) {
+    constructor(userId: Long, title: String) {
         this.userId = userId
-        this.bandId = bandId
         this.title = title
     }
 
@@ -32,7 +28,11 @@ class WeasleyKey : Serializable {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
         val anyOther = other as WeasleyKey
-        return anyOther.bandId == this.bandId && anyOther.userId == this.userId && anyOther.title.equals(this.title)
+        return anyOther.userId == this.userId && anyOther.title.equals(this.title)
+    }
+
+    override fun hashCode(): Int {
+        return userId.hashCode() + title.hashCode();
     }
 
 }

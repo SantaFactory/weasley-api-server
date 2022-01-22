@@ -1,5 +1,6 @@
 package com.weasleyclock.weasley.domain
 
+import com.weasleyclock.weasley.domain.base.BaseEntity
 import org.hibernate.Hibernate
 import org.springframework.beans.factory.support.ManagedSet
 import javax.persistence.*
@@ -16,9 +17,6 @@ class Band : BaseEntity {
 
     @OneToMany(mappedBy = "band", cascade = [CascadeType.ALL])
     var memberSet: MutableSet<Member> = ManagedSet()
-
-    @OneToMany(mappedBy = "band", cascade = [CascadeType.ALL])
-    var weasleySet: MutableSet<Weasley> = ManagedSet()
 
     constructor(title: String) {
         this.title = title

@@ -5,6 +5,9 @@ import com.weasleyclock.weasley.domain.Band
 import com.weasleyclock.weasley.domain.BandRole
 import com.weasleyclock.weasley.domain.Member
 import com.weasleyclock.weasley.dto.BandDTO
+import com.weasleyclock.weasley.dto.projection.IBand
+import com.weasleyclock.weasley.dto.projection.IBandUserCount
+import com.weasleyclock.weasley.dto.projection.IOnlyBandUser
 import com.weasleyclock.weasley.enmus.BandRoles
 import com.weasleyclock.weasley.enmus.ErrorTypes
 import com.weasleyclock.weasley.repository.BandRepository
@@ -24,18 +27,18 @@ class BandService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getBandOne(id: Long): BandDTO.BandOne? = bandRepository.findBandById(id, BandDTO.BandOne::class.java)
+    fun getBandOne(id: Long): IBand? = bandRepository.findBandById(id, IBand::class.java)
 
     @Transactional(readOnly = true)
-    fun getAllByGroups(): List<BandDTO.BandUserCount>? = bandRepository.findBy(BandDTO.BandUserCount::class.java)
+    fun getAllByGroups(): List<IBandUserCount>? = bandRepository.findBy(IBandUserCount::class.java)
 
     @Transactional(readOnly = true)
-    fun getGroupsBySelf(): List<BandDTO.BandUserCount>? =
-        bandRepository.findByMemberSet_User_Id(getCurrentLoginUserId(), BandDTO.BandUserCount::class.java)
+    fun getGroupsBySelf(): List<IBandUserCount>? =
+        bandRepository.findByMemberSet_User_Id(getCurrentLoginUserId(), IBandUserCount::class.java)
 
     @Transactional(readOnly = true)
-    fun getGroupByUsers(groupId: Long): Set<BandDTO.OnlyBandUser.UserAndBandRole>? =
-        bandRepository.findById(groupId, BandDTO.OnlyBandUser::class.java)?.getMembers()?.toSet()
+    fun getGroupByUsers(groupId: Long): Set<IOnlyBandUser.UserAndBandRole>? =
+        bandRepository.findById(groupId, IOnlyBandUser::class.java)?.getMembers()?.toSet()
 
     @Transactional
     fun createByBand(dto: BandDTO.Created): Band? {
@@ -50,8 +53,6 @@ class BandService(
         val member = Member(saveEntity, leaderUser, BandRole(BandRoles.LEADER.name))
 
         saveEntity.memberSet = listOf(member).toSet() as MutableSet<Member>
-
-        saveEntity.weasleySet = dto.toWeasleyItems(member)
 
         return saveEntity
     }
