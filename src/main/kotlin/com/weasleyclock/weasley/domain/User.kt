@@ -1,6 +1,6 @@
 package com.weasleyclock.weasley.domain
 
-import com.weasleyclock.weasley.domain.base.BaseEntity
+import com.weasleyclock.weasley.domain.base.BaseTimeEntity
 import com.weasleyclock.weasley.domain.convert.UserTypeConvert
 import com.weasleyclock.weasley.enmus.UserTypes
 import org.hibernate.Hibernate
@@ -11,7 +11,7 @@ import javax.persistence.*
 
 @Table(name = "user")
 @Entity
-class User() : BaseEntity() {
+class User() : BaseTimeEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
