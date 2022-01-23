@@ -5,9 +5,9 @@ import com.weasleyclock.weasley.domain.Band
 import com.weasleyclock.weasley.domain.BandRole
 import com.weasleyclock.weasley.domain.Member
 import com.weasleyclock.weasley.dto.BandDTO
-import com.weasleyclock.weasley.dto.projection.IBand
-import com.weasleyclock.weasley.dto.projection.IBandUserCount
-import com.weasleyclock.weasley.dto.projection.IOnlyBandUser
+import com.weasleyclock.weasley.dto.BandOneDTO
+import com.weasleyclock.weasley.dto.IBandUserCount
+import com.weasleyclock.weasley.dto.IOnlyBandUser
 import com.weasleyclock.weasley.enmus.ErrorTypes
 import com.weasleyclock.weasley.enmus.RoleName
 import com.weasleyclock.weasley.repository.BandRepository
@@ -27,7 +27,7 @@ class BandService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getBandOne(id: Long): IBand? = bandRepository.selectBandOne(id)
+    fun getBandOne(id: Long): BandDTO.Grouping? = bandRepository.selectBandOne(id)
 
     @Transactional(readOnly = true)
     fun getAllByGroups(): List<IBandUserCount>? = bandRepository.findBy(IBandUserCount::class.java)

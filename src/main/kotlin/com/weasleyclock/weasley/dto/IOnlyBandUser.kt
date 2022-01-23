@@ -1,4 +1,4 @@
-package com.weasleyclock.weasley.dto.projection
+package com.weasleyclock.weasley.dto
 
 import org.springframework.beans.factory.annotation.Value
 
