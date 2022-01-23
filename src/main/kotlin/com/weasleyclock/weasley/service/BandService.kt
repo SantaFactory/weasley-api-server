@@ -27,7 +27,7 @@ class BandService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getBandOne(id: Long): IBand? = bandRepository.findBandById(id, IBand::class.java)
+    fun getBandOne(id: Long): IBand? = bandRepository.selectBandOne(id)
 
     @Transactional(readOnly = true)
     fun getAllByGroups(): List<IBandUserCount>? = bandRepository.findBy(IBandUserCount::class.java)
