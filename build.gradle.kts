@@ -8,6 +8,7 @@ plugins {
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
     kotlin("plugin.allopen") version "1.4.32"
+    kotlin("kapt") version "1.3.61"
 }
 
 allOpen {
@@ -51,7 +52,13 @@ dependencies {
     implementation("org.jboss.marshalling:jboss-marshalling-osgi:2.0.10.Final")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.postgresql:postgresql:42.2.23")
-    implementation("org.hibernate:hibernate-validator-annotation-processor:5.2.4.Final")
+    implementation("com.querydsl:querydsl-jpa")
+    kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
+    sourceSets.main {
+        withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {
+            kotlin.srcDir("$buildDir/generated/source/kapt/main")
+        }
+    }
 }
 
 tasks.withType<KotlinCompile> {
