@@ -1,6 +1,6 @@
 package com.weasleyclock.weasley.utils
 
-import com.weasleyclock.weasley.enmus.ApiTypes
+import com.weasleyclock.weasley.enmus.ApiType
 import org.springframework.http.HttpHeaders
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
@@ -36,12 +36,12 @@ class HeaderUtils {
             return headers
         }
 
-        private fun createByMessage(applicationName: String?, entityName: String, apiTypes: ApiTypes): String {
+        private fun createByMessage(applicationName: String?, entityName: String, apiType: ApiType): String {
 
-            val str = when (apiTypes) {
-                ApiTypes.CREATE -> ".created"
-                ApiTypes.UPDATE -> ".updated"
-                ApiTypes.DELETE -> ".deleted"
+            val str = when (apiType) {
+                ApiType.CREATE -> ".created"
+                ApiType.UPDATE -> ".updated"
+                ApiType.DELETE -> ".deleted"
                 else -> ""
             }
 
@@ -53,17 +53,17 @@ class HeaderUtils {
          * @param applicationName
          * @param entityName
          * @param param
-         * @param apiTypes
+         * @param apiType
          * @return HttpHeaders
          */
         fun createByAlert(
             applicationName: String?,
             entityName: String,
             param: String,
-            apiTypes: ApiTypes
+            apiType: ApiType
         ): HttpHeaders {
 
-            val message = "$applicationName, $entityName.${createByMessage(applicationName, entityName, apiTypes)}"
+            val message = "$applicationName, $entityName.${createByMessage(applicationName, entityName, apiType)}"
 
             return createByAlert(applicationName, message, param)
         }

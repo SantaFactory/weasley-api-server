@@ -3,6 +3,7 @@ package com.weasleyclock.weasley.service
 import com.weasleyclock.weasley.domain.Weasley
 import com.weasleyclock.weasley.dto.WeasleyDTO
 import com.weasleyclock.weasley.repository.WeasleyRepository
+import com.weasleyclock.weasley.utils.SecurityUtils
 import com.weasleyclock.weasley.utils.SecurityUtils.Companion.getCurrentLoginUserId
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -27,6 +28,18 @@ class WeasleyService(private val weasleyRepository: WeasleyRepository) {
             }
 
         return resultWeasleyList
+    }
+
+    @Transactional
+    fun saveWeasley(dto: WeasleyDTO.Store) : List<Weasley> {
+
+        val user = SecurityUtils.getCurrentUser();
+
+        val entities = dto.toEntities(user)
+
+        weasleyRepository.saveAll(entities)
+
+        return entities
     }
 
 }

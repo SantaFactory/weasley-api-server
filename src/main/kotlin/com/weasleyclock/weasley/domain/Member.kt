@@ -6,7 +6,6 @@ import org.hibernate.Hibernate
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
-import kotlin.system.measureNanoTime
 
 @Entity
 @DynamicInsert

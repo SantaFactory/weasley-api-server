@@ -1,6 +1,5 @@
 package com.weasleyclock.weasley.config.security
 
-import com.weasleyclock.weasley.domain.Token
 import com.weasleyclock.weasley.dto.AppMessageDTO
 import com.weasleyclock.weasley.dto.UserDTO
 import com.weasleyclock.weasley.service.TokenService
@@ -30,9 +29,7 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
     }
 
     override fun onAuthenticationSuccess(
-        request: HttpServletRequest?,
-        response: HttpServletResponse?,
-        authentication: Authentication?
+        request: HttpServletRequest?, response: HttpServletResponse?, authentication: Authentication?
     ) {
 
         try {
@@ -45,30 +42,23 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
             val email = userInfo.username
 
-            val userId = userInfo.id
+            val userId = userInfo.user!!.id
 
-            val userName = userInfo.name
+            val userName = userInfo.user!!.name
 
             val authorities = createByArrayToString(userInfo.authorities)
 
             val accessToken = JwtUtils.createByAccessToken(
-                jwtKey!!,
-                userId,
-                email,
-                userName,
-                authorities
+                jwtKey!!, userId, email, userName, authorities
             )
 
             val refreshToken = JwtUtils.createByRefreshToken(
-                jwtKey!!,
-                userId,
-                email,
-                userName,
-                authorities
+                jwtKey!!, userId, email, userName, authorities
             )
 
-            val message =
-                AppMessageDTO(HttpStatus.OK.value(), UserDTO.Info(email, userInfo.userKey, accessToken, refreshToken))
+            val message = AppMessageDTO(
+                HttpStatus.OK.value(), UserDTO.Info(email, userInfo.user!!.userKey, accessToken, refreshToken)
+            )
 
             tokenService!!.createByToken(userId, refreshToken)
 

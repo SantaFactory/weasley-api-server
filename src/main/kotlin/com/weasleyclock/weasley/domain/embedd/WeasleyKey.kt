@@ -28,7 +28,7 @@ class WeasleyKey : Serializable {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
         val anyOther = other as WeasleyKey
-        return anyOther.userId == this.userId && anyOther.title.equals(this.title)
+        return anyOther.userId == this.userId && anyOther.title!! == this.title
     }
 
     override fun hashCode(): Int {

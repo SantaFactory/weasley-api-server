@@ -2,14 +2,14 @@ package com.weasleyclock.weasley.domain
 
 import com.weasleyclock.weasley.domain.base.BaseTimeEntity
 import com.weasleyclock.weasley.domain.convert.UserTypeConvert
-import com.weasleyclock.weasley.enmus.UserTypes
+import com.weasleyclock.weasley.enmus.UserType
 import org.hibernate.Hibernate
 import org.springframework.beans.factory.support.ManagedSet
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import javax.persistence.*
 
-@Table(name = "user")
+@Table(name = "app_user")
 @Entity
 class User() : BaseTimeEntity() {
 
@@ -25,7 +25,7 @@ class User() : BaseTimeEntity() {
 
     @Convert(converter = UserTypeConvert::class)
     @Column(name = "login_type", nullable = false, length = 10)
-    var loginType: UserTypes? = null
+    var loginType: UserType? = null
 
     @Column(name = "user_key", nullable = false)
     var userKey: String? = null
@@ -60,7 +60,7 @@ class User() : BaseTimeEntity() {
     constructor(
         email: String,
         name: String,
-        loginType: UserTypes?,
+        loginType: UserType?,
         userKey: String,
         authSet: MutableSet<Auth>
     ) : this() {

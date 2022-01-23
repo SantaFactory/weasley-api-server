@@ -12,7 +12,8 @@ enum class ErrorTypes(val code: String, val message: String) {
     NOT_MATCH_ID("A003", "not match id value"),
     NOT_FOUND_TOKEN("A004" ,  "not found Token"),
 
-    NOT_USE_POST_METHOD("A003", "is login process use to post method"),
+    NOT_USE_POST_METHOD("A005", "is login process use to post method"),
+    NOT_LOGIN_USER("A006", "is login process use to post method"),
 
     // Member 관련 Error
     IS_NOT_READER("M001", "is not reader"),

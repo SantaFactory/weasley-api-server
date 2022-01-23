@@ -26,7 +26,6 @@ repositories {
 }
 
 dependencies {
-
     implementation("org.springframework.boot:spring-boot-starter-mustache")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -52,6 +51,7 @@ dependencies {
     implementation("org.jboss.marshalling:jboss-marshalling-osgi:2.0.10.Final")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.postgresql:postgresql:42.2.23")
+    implementation("org.hibernate:hibernate-validator-annotation-processor:5.2.4.Final")
 }
 
 tasks.withType<KotlinCompile> {

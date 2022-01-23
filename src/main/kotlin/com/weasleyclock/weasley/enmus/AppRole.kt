@@ -1,6 +1,6 @@
 package com.weasleyclock.weasley.enmus
 
-enum class AppRoles(value: String) {
+enum class AppRole(value: String) {
 
     ADMIN("ROLE_ADMIN"),
     GUEST("ROLE_GUEST"),

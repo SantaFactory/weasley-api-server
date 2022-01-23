@@ -29,9 +29,7 @@ class SecurityConfiguration(
     private var jwtKey: String? = null
 
     override fun configure(http: HttpSecurity?) {
-
         http!!
-            // todo : 나중에 풀기
             .cors()
             .disable()
             .csrf()
@@ -53,7 +51,6 @@ class SecurityConfiguration(
                 JwtValidationExceptionFilter(),
                 JwtValidationFilter::class.java
             )
-
     }
 
     override fun configure(web: WebSecurity?) {

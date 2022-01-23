@@ -9,15 +9,19 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/weasley")
+@RequestMapping("/api")
 class WeasleyResource(private val service: WeasleyService) : WeasleyDocs {
 
-    @PutMapping()
+    @PutMapping("/weasley")
     override fun modifyByMyWeasley(@RequestBody dto: WeasleyDTO.Current): ResponseEntity<AppMessageDTO> {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.updateByMyWeasley(dto))
-        return ResponseEntity.ok()
-            .body(body)
+        return ResponseEntity.ok().body(body)
     }
 
+    @PostMapping("/weasleies")
+    override fun createWeasleies(@RequestBody dto: WeasleyDTO.Store): ResponseEntity<AppMessageDTO> {
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.saveWeasley(dto))
+        return ResponseEntity.ok().body(body)
+    }
 
 }

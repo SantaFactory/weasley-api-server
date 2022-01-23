@@ -1,6 +1,6 @@
 package com.weasleyclock.weasley.enmus
 
-enum class ApiTypes {
+enum class ApiType {
     CREATE,
     UPDATE,
     DELETE,

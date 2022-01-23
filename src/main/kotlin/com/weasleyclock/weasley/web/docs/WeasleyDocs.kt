@@ -10,4 +10,6 @@ interface WeasleyDocs {
     @Operation(summary = "현재 위치 업데이트", description = "내위치 업데이트")
     fun modifyByMyWeasley(dto: WeasleyDTO.Current): ResponseEntity<AppMessageDTO>
 
+    @Operation(summary = "weasly item save", description = "weasly item save")
+    fun createWeasleies(dto: WeasleyDTO.Store): ResponseEntity<AppMessageDTO>
 }

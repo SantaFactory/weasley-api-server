@@ -8,8 +8,8 @@ import com.weasleyclock.weasley.dto.BandDTO
 import com.weasleyclock.weasley.dto.projection.IBand
 import com.weasleyclock.weasley.dto.projection.IBandUserCount
 import com.weasleyclock.weasley.dto.projection.IOnlyBandUser
-import com.weasleyclock.weasley.enmus.BandRoles
 import com.weasleyclock.weasley.enmus.ErrorTypes
+import com.weasleyclock.weasley.enmus.RoleName
 import com.weasleyclock.weasley.repository.BandRepository
 import com.weasleyclock.weasley.repository.MemberRepository
 import com.weasleyclock.weasley.repository.UserRepository
@@ -50,7 +50,7 @@ class BandService(
 
         bandRepository.save(saveEntity)
 
-        val member = Member(saveEntity, leaderUser, BandRole(BandRoles.LEADER.name))
+        val member = Member(saveEntity, leaderUser, BandRole(RoleName.LEADER.name))
 
         saveEntity.memberSet = listOf(member).toSet() as MutableSet<Member>
 
@@ -77,7 +77,7 @@ class BandService(
     fun saveByMember(bandId: Long, userId: Long): Member? {
         val band = bandRepository.findById(bandId).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
         val user = userRepository.findById(userId).orElseThrow { throw AppException(ErrorTypes.USER_NOT_FOUND) }
-        val entity = Member(band, user, BandRole(BandRoles.MEMBER.name))
+        val entity = Member(band, user, BandRole(RoleName.MEMBER.name))
         memberRepository.save(entity)
         return entity
     }
@@ -87,7 +87,7 @@ class BandService(
             memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(
                 bandId,
                 userId,
-                BandRoles.LEADER.name
+                RoleName.LEADER.name
             )
         )
 
