@@ -5,7 +5,7 @@
 create to jar file
 
 ```cmd
-./gradlew clean bootJar
+./gradlew clean jar
 ```
 
 move jar local to aws
