@@ -93,8 +93,17 @@ class BandResource(private val service: BandService) : BandDocs {
     }
 
     @PostMapping("/band/{bandId}/members")
-    fun test(@PathVariable bandId: Long): ResponseEntity<AppMessageDTO> {
+    fun exitBand(@PathVariable bandId: Long): ResponseEntity<AppMessageDTO> {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.exitBand(bandId))
+
+        return ResponseEntity
+            .ok()
+            .body(body)
+    }
+
+    @DeleteMapping("/band/{bandId}/member/{userId}")
+    fun exileBandMember(@PathVariable bandId: Long, @PathVariable userId: Long): ResponseEntity<AppMessageDTO> {
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.exileBandMember(bandId, userId))
 
         return ResponseEntity
             .ok()

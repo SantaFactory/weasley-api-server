@@ -95,13 +95,27 @@ class BandService(
             subLeader!!.changeBandRole(RoleName.LEADER)
         }
 
-        val nowMemberList = memberSet?.filter { member -> userId != member.user!!.id }!!.toMutableSet()
+        val nowMemberSet = removeBandMembers(memberSet, userId)
 
-        if (nowMemberList.isEmpty()) {
+        if (nowMemberSet.isEmpty()) {
             bandRepository.deleteById(bandId)
         } else {
-            band.changeBandMember(nowMemberList)
+            band.changeBandMember(memberSet)
         }
+
+        return band
+    }
+
+    @Transactional
+    fun exileBandMember(userId: Long, bandId: Long): Band? {
+
+        val band = bandRepository.findById(bandId).orElseThrow()
+
+        val memberSet = band.getMemberSet()
+
+        val nowMemberSet = removeBandMembers(memberSet, userId)
+
+        band.changeBandMember(nowMemberSet)
 
         return band
     }
@@ -124,5 +138,7 @@ class BandService(
             )
         )
 
+    private fun removeBandMembers(memberSet: MutableSet<Member>, removeUserId: Long) =
+        memberSet?.filter { member -> removeUserId != member.user!!.id }!!.toMutableSet()
 }
 
