@@ -86,12 +86,7 @@ class BandService(
             ?.orElseThrow()
 
         if (myMember?.isLeader() == true) {
-
-            val subLeader =
-                memberSet?.stream()?.filter { member -> RoleName.SUB_LEADER == member.bandRole!!.getTitle() }
-                    ?.findAny()
-                    ?.orElseThrow()
-
+            val subLeader = getSubLeader(memberSet)
             subLeader!!.changeBandRole(RoleName.LEADER)
         }
 
@@ -129,8 +124,7 @@ class BandService(
         return entity
     }
 
-    private fun isLeaderAble(bandId: Long, userId: Long): Boolean =
-        ObjectUtils.isNotEmpty(
+    private fun isLeaderAble(bandId: Long, userId: Long): Boolean = ObjectUtils.isNotEmpty(
             memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(
                 bandId,
                 userId,
@@ -140,5 +134,10 @@ class BandService(
 
     private fun removeBandMembers(memberSet: MutableSet<Member>, removeUserId: Long) =
         memberSet?.filter { member -> removeUserId != member.user!!.id }!!.toMutableSet()
+
+    private fun getSubLeader(memberSet: MutableSet<Member>) =
+        memberSet?.stream()?.filter { member -> RoleName.SUB_LEADER == member.bandRole!!.getTitle() }
+            ?.findAny()
+            ?.orElseThrow()
 }
 
