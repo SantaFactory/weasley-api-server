@@ -36,7 +36,7 @@ class BandService(
         bandRepository.findByMemberSet_User_Id(getCurrentLoginUserId(), IBandUserCount::class.java)
 
     @Transactional(readOnly = true)
-    fun getGroupByUsers(groupId: Long): Set<IOnlyBandUser.UserAndBandRole>? =
+    fun getBandByUsers(groupId: Long): Set<IOnlyBandUser.UserAndBandRole>? =
         bandRepository.findById(groupId, IOnlyBandUser::class.java)?.getMembers()?.toSet()
 
     @Transactional
@@ -49,22 +49,22 @@ class BandService(
 
         bandRepository.save(saveEntity)
 
-        val member = Member(saveEntity, leaderUser, BandRole(RoleName.LEADER.name))
+        val member = Member(saveEntity, leaderUser, BandRole(RoleName.LEADER))
 
-        saveEntity.memberSet = listOf(member).toSet() as MutableSet<Member>
+        saveEntity.changeBandMember(listOf(member).toSet() as MutableSet<Member>)
 
         return saveEntity
     }
 
     @Transactional
-    fun updateByGroup(id: Long, dto: BandDTO.Updated): Band? {
+    fun updateBand(id: Long, dto: BandDTO.Updated): Band? {
         val updateEntity = bandRepository.findById(id).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
-        updateEntity.title = dto.title
+        updateEntity.updateBandTitle(dto.title)
         return updateEntity
     }
 
     @Transactional
-    fun removeByGroup(id: Long): Long {
+    fun removeBand(id: Long): Long {
         if (isLeaderAble(id, getCurrentLoginUserId())) {
             bandRepository.deleteById(id)
             return id
@@ -73,10 +73,44 @@ class BandService(
     }
 
     @Transactional
+    fun exitBand(bandId: Long): Band? {
+
+        val band = bandRepository.findById(bandId).orElseThrow()
+
+        val userId = getCurrentLoginUserId()
+
+        val memberSet = band.getMemberSet()
+
+        val myMember = memberSet?.stream()?.filter { member -> userId == member.user!!.id }
+            ?.findAny()
+            ?.orElseThrow()
+
+        if (myMember?.isLeader() == true) {
+
+            val subLeader =
+                memberSet?.stream()?.filter { member -> RoleName.SUB_LEADER == member.bandRole!!.getTitle() }
+                    ?.findAny()
+                    ?.orElseThrow()
+
+            subLeader!!.changeBandRole(RoleName.LEADER)
+        }
+
+        val nowMemberList = memberSet?.filter { member -> userId != member.user!!.id }!!.toMutableSet()
+
+        if (nowMemberList.isEmpty()) {
+            bandRepository.deleteById(bandId)
+        } else {
+            band.changeBandMember(nowMemberList)
+        }
+
+        return band
+    }
+
+    @Transactional
     fun saveByMember(bandId: Long, userId: Long): Member? {
         val band = bandRepository.findById(bandId).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
         val user = userRepository.findById(userId).orElseThrow { throw AppException(ErrorTypes.USER_NOT_FOUND) }
-        val entity = Member(band, user, BandRole(RoleName.MEMBER.name))
+        val entity = Member(band, user, BandRole(RoleName.MEMBER))
         memberRepository.save(entity)
         return entity
     }

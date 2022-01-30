@@ -22,7 +22,7 @@ class BandResource(private val service: BandService) : BandDocs {
 
     @GetMapping("/{id}/users")
     override fun showBandByUsers(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
-        val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupByUsers(id))
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.getBandByUsers(id))
         return ResponseEntity
             .ok()
             .body(body)
@@ -61,7 +61,7 @@ class BandResource(private val service: BandService) : BandDocs {
         @RequestBody dto: BandDTO.Updated
     ): ResponseEntity<AppMessageDTO> {
 
-        val data = service.updateByGroup(id, dto)
+        val data = service.updateBand(id, dto)
 
         val body = AppMessageDTO(HttpStatus.OK.value(), data)
 
@@ -72,7 +72,7 @@ class BandResource(private val service: BandService) : BandDocs {
     @DeleteMapping("/{id}")
     override fun removeByBand(@PathVariable id: Long): ResponseEntity<AppMessageDTO> {
 
-        val data = service.removeByGroup(id)
+        val data = service.removeBand(id)
 
         val body = AppMessageDTO(HttpStatus.OK.value(), data)
 
@@ -92,4 +92,12 @@ class BandResource(private val service: BandService) : BandDocs {
             .body(body)
     }
 
+    @PostMapping("/band/{bandId}/members")
+    fun test(@PathVariable bandId: Long): ResponseEntity<AppMessageDTO> {
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.exitBand(bandId))
+
+        return ResponseEntity
+            .ok()
+            .body(body)
+    }
 }

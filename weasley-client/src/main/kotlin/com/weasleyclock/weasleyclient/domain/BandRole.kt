@@ -1,5 +1,6 @@
 package com.weasleyclock.weasleyclient.domain
 
+import com.weasleyclock.weasleyclient.enmus.RoleName
 import org.hibernate.Hibernate
 import org.jetbrains.annotations.NotNull
 import javax.persistence.Column
@@ -14,9 +15,9 @@ class BandRole() {
     @Id
     @NotNull
     @Column(nullable = false)
-    var title: String? = null
+    private var title: RoleName? = null
 
-    constructor(title: String) : this() {
+    constructor(title: RoleName) : this() {
         this.title = title
     }
 
@@ -28,7 +29,8 @@ class BandRole() {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
         val anyOther = other as BandRole
-        return anyOther.title.equals(other.title)
+        return anyOther.title!! == other.title
     }
 
+    fun getTitle() = this.title
 }

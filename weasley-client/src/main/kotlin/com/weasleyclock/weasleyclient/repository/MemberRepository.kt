@@ -17,4 +17,6 @@ interface MemberRepository : JpaRepository<Member, MemberKey> {
     @EntityGraph(attributePaths = ["band", "user"])
     fun findByBand_IdAndUser_IdAndBandRole_Title(bandId: Long, userId: Long, title: String): Member?
 
+    fun findByBand_Id(bandId: Long): List<Member>?
+
 }

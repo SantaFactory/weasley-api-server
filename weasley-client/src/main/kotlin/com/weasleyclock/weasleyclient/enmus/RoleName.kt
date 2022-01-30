@@ -1,5 +1,7 @@
 package com.weasleyclock.weasleyclient.enmus
 
 enum class RoleName {
-    LEADER, MEMBER
+    LEADER,
+    SUB_LEADER,
+    MEMBER
 }

@@ -1,5 +1,6 @@
 package com.weasleyclock.weasleyclient.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.weasleyclock.weasleyclient.domain.base.BaseEntity
 import org.hibernate.Hibernate
 import org.springframework.beans.factory.support.ManagedSet
@@ -10,13 +11,16 @@ import javax.persistence.*
 class Band : BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    private var id: Long? = null
 
     @Column(nullable = false)
-    var title: String? = null
+    private var title: String? = null
 
-    @OneToMany(mappedBy = "band", cascade = [CascadeType.ALL])
-    var memberSet: MutableSet<Member> = ManagedSet()
+    @JsonIgnore
+    @OneToMany(
+        mappedBy = "band", fetch = FetchType.LAZY, cascade = [CascadeType.ALL]
+    )
+    private var memberSet: MutableSet<Member> = ManagedSet()
 
     constructor(title: String) {
         this.title = title
@@ -34,5 +38,22 @@ class Band : BaseEntity {
     override fun hashCode(): Int {
         return id!!.toInt()
     }
+
+    @Transient
+    fun updateBandTitle(title: String) {
+        this.title = title
+    }
+
+    @Transient
+    fun changeBandMember(memberSet: MutableSet<Member>) {
+        this.memberSet = memberSet
+    }
+
+    @Transient
+    fun getId() = this.id
+
+    @Transient
+    fun getMemberSet () = this.memberSet
+
 
 }

@@ -7,18 +7,18 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface BandRepository : JpaRepository<Band, Long> , BandQuerydsl {
+interface BandRepository : JpaRepository<Band, Long>, BandQuerydsl {
 
     @EntityGraph(attributePaths = ["memberSet"])
     fun <T> findBy(type: Class<T>): List<T>
 
-    @EntityGraph(attributePaths = ["memberSet", "memberSet.user"])
+    @EntityGraph(attributePaths = ["memberSet"])
     fun <T> findByMemberSet_User_Id(userId: Long, type: Class<T>): List<T>
 
-    @EntityGraph(attributePaths = ["memberSet", "memberSet.user", "weasleySet"])
+    @EntityGraph(attributePaths = ["memberSet"])
     fun <T> findById(id: Long, type: Class<T>): T?
 
-    @EntityGraph(attributePaths = ["weasleySet", "weasleySet.user"])
+    @EntityGraph(attributePaths = ["memberSet"])
     fun <T> findBandById(id: Long, type: Class<T>): T?
 
 }
