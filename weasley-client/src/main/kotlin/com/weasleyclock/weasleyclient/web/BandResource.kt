@@ -92,7 +92,7 @@ class BandResource(private val service: BandService) : BandDocs {
             .body(body)
     }
 
-    @PostMapping("/band/{bandId}/members")
+    @PutMapping("/band/{bandId}/members")
     fun exitBand(@PathVariable bandId: Long): ResponseEntity<AppMessageDTO> {
         val body = AppMessageDTO(HttpStatus.OK.value(), service.exitBand(bandId))
 
