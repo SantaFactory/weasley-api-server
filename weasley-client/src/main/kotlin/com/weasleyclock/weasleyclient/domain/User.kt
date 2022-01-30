@@ -15,20 +15,20 @@ class User() : BaseTimeEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    private var id: Long? = null
 
     @Column(nullable = false, length = 300)
-    var email: String? = null
+    private var email: String? = null
 
     @Column(nullable = false, length = 300)
-    var name: String? = null
+    private var name: String? = null
 
     @Convert(converter = UserTypeConvert::class)
     @Column(name = "login_type", nullable = false, length = 10)
-    var loginType: UserType? = null
+    private var loginType: UserType? = null
 
     @Column(name = "user_key", nullable = false)
-    var userKey: String? = null
+    private var userKey: String? = null
 
     @OneToMany
     @JoinTable(
@@ -39,7 +39,7 @@ class User() : BaseTimeEntity() {
     private var authSet: MutableSet<Auth> = ManagedSet()
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
-    var weasleySet: MutableSet<Weasley> = ManagedSet()
+    private var weasleySet: MutableSet<Weasley> = ManagedSet()
 
     fun getAuthorities(): List<GrantedAuthority> {
         return authSet.map { auth -> SimpleGrantedAuthority(auth.title) }.toList()
@@ -81,4 +81,16 @@ class User() : BaseTimeEntity() {
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
+    @Transient
+    fun getId() = this.id!!.toLong()
+
+    @Transient
+    fun getEmail() = this.email
+
+    @Transient
+    fun getName() = this.name
+
+    @Transient
+    fun getUserKey() = this.userKey
 }

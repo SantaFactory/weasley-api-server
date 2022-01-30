@@ -43,9 +43,9 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
 
             val email = userInfo.username
 
-            val userId = userInfo.user!!.id
+            val userId = userInfo.user!!.getId()
 
-            val userName = userInfo.user!!.name
+            val userName = userInfo.user!!.getName()
 
             val authorities = createByArrayToString(userInfo.authorities)
 
@@ -58,7 +58,7 @@ class DomainSuccessHandler : AuthenticationSuccessHandler {
             )
 
             val message = AppMessageDTO(
-                HttpStatus.OK.value(), UserDTO.Info(email, userInfo.user!!.userKey, accessToken, refreshToken)
+                HttpStatus.OK.value(), UserDTO.Info(email, userInfo.user!!.getUserKey(), accessToken, refreshToken)
             )
 
             tokenService!!.createByToken(userId, refreshToken)

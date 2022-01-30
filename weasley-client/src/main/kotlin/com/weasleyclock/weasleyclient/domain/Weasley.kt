@@ -39,7 +39,7 @@ class Weasley() : BaseTimeEntity() {
         longitude: BigDecimal
     ) : this() {
         this.user = user
-        this.id = WeasleyKey(user!!.id!!, title!!)
+        this.id = WeasleyKey(user!!.getId(), title!!)
         this.latitude = latitude
         this.longitude = longitude
     }

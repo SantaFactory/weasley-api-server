@@ -10,19 +10,9 @@ class BandDTO {
     data class Created(
         val title: String, val weasley: Set<WeasleyDTO.Base>
     ) {
-
         fun toEntity(): Band {
             return Band(this.title)
         }
-
-        fun toWeasleyItems(member: Member): MutableSet<Weasley> {
-            return weasley.map { weasleyItem ->
-                Weasley(
-                    member.user, weasleyItem.title, weasleyItem.latitude, weasleyItem.longitude
-                )
-            }.toSet() as MutableSet<Weasley>
-        }
-
     }
 
     data class Updated(val title: String)

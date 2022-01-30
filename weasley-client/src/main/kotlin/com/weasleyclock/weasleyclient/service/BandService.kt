@@ -21,8 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(rollbackFor = [Exception::class])
 class BandService(
     private val bandRepository: BandRepository,
-    private val userRepository: UserRepository,
-    private val memberRepository: MemberRepository,
+    private val userRepository: UserRepository, private val memberRepository: MemberRepository,
 ) {
 
     @Transactional(readOnly = true)
@@ -81,7 +80,7 @@ class BandService(
 
         val memberSet = band.getMemberSet()
 
-        val myMember = memberSet?.stream()?.filter { member -> userId == member.user!!.id }
+        val myMember = memberSet?.stream()?.filter { member -> userId == member.getUser()!!.getId() }
             ?.findAny()
             ?.orElseThrow()
 
@@ -125,18 +124,18 @@ class BandService(
     }
 
     private fun isLeaderAble(bandId: Long, userId: Long): Boolean = ObjectUtils.isNotEmpty(
-            memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(
-                bandId,
-                userId,
-                RoleName.LEADER.name
-            )
+        memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(
+            bandId,
+            userId,
+            RoleName.LEADER.name
         )
+    )
 
     private fun removeBandMembers(memberSet: MutableSet<Member>, removeUserId: Long) =
-        memberSet?.filter { member -> removeUserId != member.user!!.id }!!.toMutableSet()
+        memberSet?.filter { member -> removeUserId != member.getUser()!!.getId() }!!.toMutableSet()
 
     private fun getSubLeader(memberSet: MutableSet<Member>) =
-        memberSet?.stream()?.filter { member -> RoleName.SUB_LEADER == member.bandRole!!.getTitle() }
+        memberSet?.stream()?.filter { member -> RoleName.SUB_LEADER == member.getBandRoleTitle() }
             ?.findAny()
             ?.orElseThrow()
 }

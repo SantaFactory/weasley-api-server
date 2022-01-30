@@ -16,30 +16,30 @@ import javax.persistence.*
 class Member() {
 
     @EmbeddedId
-    var id: MemberKey? = null
+    private var id: MemberKey? = null
 
     @OneToOne
-    var bandRole: BandRole? = null
+    private var bandRole: BandRole? = null
 
     @JsonIgnore
     @BatchSize(size = 10)
     @MapsId(value = "userId")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    var user: User? = null
+    private var user: User? = null
 
     @JsonIgnore
     @BatchSize(size = 10)
     @MapsId(value = "bandId")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "band_id", referencedColumnName = "id")
-    var band: Band? = null
+    private var band: Band? = null
 
     constructor(band: Band, user: User, bandRole: BandRole) : this() {
         this.band = band
         this.user = user
         this.bandRole = bandRole
-        this.id = MemberKey(user.id!!, band.getId())
+        this.id = MemberKey(user.getId(), band.getId())
     }
 
     constructor(band: Band, user: User, id: MemberKey, bandRole: BandRole) : this() {
@@ -67,5 +67,11 @@ class Member() {
 
     @Transient
     fun isLeader() = RoleName.LEADER == this.bandRole!!.getTitle()
+
+    @Transient
+    fun getUser() = this.user
+
+    @Transient
+    fun getBandRoleTitle() = this.bandRole!!.getTitle()
 
 }

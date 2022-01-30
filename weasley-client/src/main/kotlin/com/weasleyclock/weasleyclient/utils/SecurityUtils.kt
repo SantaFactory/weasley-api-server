@@ -15,13 +15,13 @@ class SecurityUtils {
     companion object {
 
         fun getCurrentLoginUserId(): Long =
-            getCurrentLoginUser().orElseThrow { throw AppException(ErrorTypes.NOT_LOGIN_USER) }.user!!.id!!
+            getCurrentLoginUser().orElseThrow { throw AppException(ErrorTypes.NOT_LOGIN_USER) }.user!!.getId()!!
 
         fun getCurrentLoginEmail(): String =
-            getCurrentLoginUser().orElseThrow { throw AppException(ErrorTypes.NOT_LOGIN_USER) }.user!!.email!!
+            getCurrentLoginUser().orElseThrow { throw AppException(ErrorTypes.NOT_LOGIN_USER) }.user!!.getEmail()!!
 
         fun getCurrentLoginUserName(): String =
-            getCurrentLoginUser().orElseThrow { throw AppException(ErrorTypes.NOT_LOGIN_USER) }.user!!.name!!
+            getCurrentLoginUser().orElseThrow { throw AppException(ErrorTypes.NOT_LOGIN_USER) }.user!!.getName()!!
 
         fun getCurrentUser() : User = getCurrentLoginUser().orElseThrow { throw AppException(ErrorTypes.NOT_LOGIN_USER) }.user!!
 
