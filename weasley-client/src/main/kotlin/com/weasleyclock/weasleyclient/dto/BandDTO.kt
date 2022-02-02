@@ -42,6 +42,7 @@ class BandDTO {
                 WeasleyItem(it.userId, it.itemTitle, it.userName, it.latitude, it.longitude, it.isCurrent)
             }.toList()
 
+        override fun hashCode(): Int = id.toInt()
     }
 
 

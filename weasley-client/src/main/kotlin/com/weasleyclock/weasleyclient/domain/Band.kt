@@ -53,7 +53,15 @@ class Band : BaseEntity {
     fun getId() = this.id
 
     @Transient
-    fun getMemberSet () = this.memberSet
+    fun getTitle() = this.title
 
+    @Transient
+    fun getMemberSet() = this.memberSet
+
+    @Transient
+    fun setId(id: Long): Band {
+        this.id = id
+        return this
+    }
 
 }

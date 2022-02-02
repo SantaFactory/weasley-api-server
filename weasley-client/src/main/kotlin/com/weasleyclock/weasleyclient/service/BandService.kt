@@ -21,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(rollbackFor = [Exception::class])
 class BandService(
     private val bandRepository: BandRepository,
-    private val userRepository: UserRepository, private val memberRepository: MemberRepository,
+    private val userRepository: UserRepository,
+    private val memberRepository: MemberRepository,
 ) {
 
     @Transactional(readOnly = true)
