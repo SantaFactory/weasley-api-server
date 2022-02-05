@@ -40,10 +40,7 @@ class ExceptionHandler {
         createByResponseBody(e, response, ErrorTypes.NOT_FOUND_ERROR, HttpStatus.NOT_FOUND)
 
     private fun createByResponseBody(
-        e: Exception,
-        response: HttpServletResponse,
-        errorTypes: ErrorTypes,
-        status: HttpStatus
+        e: Exception, response: HttpServletResponse, errorTypes: ErrorTypes, status: HttpStatus
     ): ResponseEntity<ErrorDTO> {
 
         val detailMessage = ExceptionUtils.getStackTrace(e)

@@ -60,11 +60,7 @@ class User() : BaseTimeEntity() {
     }
 
     constructor(
-        email: String,
-        name: String,
-        loginType: UserType?,
-        userKey: String,
-        authoritySet: MutableSet<Authority>
+        email: String, name: String, loginType: UserType?, userKey: String, authoritySet: MutableSet<Authority>
     ) : this() {
         this.email = email
         this.name = name

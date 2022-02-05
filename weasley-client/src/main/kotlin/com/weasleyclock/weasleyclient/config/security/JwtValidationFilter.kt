@@ -29,7 +29,7 @@ class JwtValidationFilter(jwtKey: String) : OncePerRequestFilter() {
         val id = (claims["id"] as Int).toLong()
 
         val email = claims["email"] as String
-        
+
         val name = claims["name"] as String
 
         val authorities = (claims["authorities"] as List<String>).map { title -> Authority(title) }.toMutableSet()

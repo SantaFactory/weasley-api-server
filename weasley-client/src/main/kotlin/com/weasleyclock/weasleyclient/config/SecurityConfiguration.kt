@@ -18,8 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
-    private val userService: UserService,
-    private val tokenService: TokenService
+    private val userService: UserService, private val tokenService: TokenService
 ) : WebSecurityConfigurerAdapter() {
 
     @Value("\${google.jwkUrl}")
@@ -29,27 +28,15 @@ class SecurityConfiguration(
     private var jwtKey: String? = null
 
     override fun configure(http: HttpSecurity?) {
-        http!!
-            .cors()
-            .disable()
-            .csrf()
-            .disable()
-            .addFilterBefore(
-                AddFilterExceptionFilter(),
-                UsernamePasswordAuthenticationFilter::class.java
-            )
-            .addFilterBefore(
-                CachingFilter(),
-                UsernamePasswordAuthenticationFilter::class.java
-            )
-            .addFilterBefore(
-                openIdConnectFilter(),
-                UsernamePasswordAuthenticationFilter::class.java
-            )
-            .addFilterBefore(
-                JwtValidationFilter(jwtKey.toString()),
-                UsernamePasswordAuthenticationFilter::class.java
-            )
+        http!!.cors().disable().csrf().disable().addFilterBefore(
+            AddFilterExceptionFilter(), UsernamePasswordAuthenticationFilter::class.java
+        ).addFilterBefore(
+            CachingFilter(), UsernamePasswordAuthenticationFilter::class.java
+        ).addFilterBefore(
+            openIdConnectFilter(), UsernamePasswordAuthenticationFilter::class.java
+        ).addFilterBefore(
+            JwtValidationFilter(jwtKey.toString()), UsernamePasswordAuthenticationFilter::class.java
+        )
     }
 
     override fun configure(web: WebSecurity?) {
@@ -58,11 +45,7 @@ class SecurityConfiguration(
     @Bean
     fun openIdConnectFilter(): OpenIdConnectFilter {
         return OpenIdConnectFilter(
-            "/login-process",
-            jwkUrl.toString(),
-            userService,
-            tokenService,
-            jwtKey.toString()
+            "/login-process", jwkUrl.toString(), userService, tokenService, jwtKey.toString()
         )
     }
 

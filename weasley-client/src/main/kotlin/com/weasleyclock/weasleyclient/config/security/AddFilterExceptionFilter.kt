@@ -18,14 +18,11 @@ import org.springframework.http.HttpStatus
 class AddFilterExceptionFilter : OncePerRequestFilter() {
 
     override fun doFilterInternal(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        filterChain: FilterChain
+        request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain
     ) {
         try {
             filterChain.doFilter(request, response)
-        }
-        catch (e: IdTokenEmptyException) {
+        } catch (e: IdTokenEmptyException) {
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.IS_EMPTY_TOKEN)
         } catch (e: NotPostMethodException) {
             setErrorResponse(HttpStatus.NOT_FOUND, response, e, ErrorTypes.NOT_USE_POST_METHOD)
