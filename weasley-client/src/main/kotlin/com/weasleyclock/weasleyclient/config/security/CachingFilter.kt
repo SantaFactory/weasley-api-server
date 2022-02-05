@@ -3,8 +3,8 @@ package com.weasleyclock.weasleyclient.config.security
 import com.auth0.jwk.SigningKeyNotFoundException
 import com.weasleyclock.weasleyclient.enmus.ErrorTypes
 import com.weasleyclock.weasleyclient.utils.HttpUtils.Companion.setErrorResponse
-import com.weasleyclock.weasleyclientclient.config.exception.IdTokenEmptyException
-import com.weasleyclock.weasleyclientclient.config.exception.NotPostMethodException
+import com.weasleyclock.weasleyclient.config.exception.IdTokenEmptyException
+import com.weasleyclock.weasleyclient.config.exception.NotPostMethodException
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.web.filter.OncePerRequestFilter

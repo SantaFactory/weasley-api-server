@@ -3,6 +3,7 @@ package com.weasleyclock.weasleyclient.enmus
 enum class ErrorTypes(val code: String, val message: String) {
 
     INTERNAL_SERVER_ERROR("S001", "internal server error"),
+    NOT_FOUND_ERROR("S002", "data not found server error"),
 
     // 인증 관련
     NOT_FOUND_KEY("A001", "not found google decode key"),
@@ -10,7 +11,7 @@ enum class ErrorTypes(val code: String, val message: String) {
 
     // refresh token
     NOT_MATCH_ID("A003", "not match id value"),
-    NOT_FOUND_TOKEN("A004" ,  "not found Token"),
+    NOT_FOUND_TOKEN("A004", "not found Token"),
 
     NOT_USE_POST_METHOD("A005", "is login process use to post method"),
     NOT_LOGIN_USER("A006", "is login process use to post method"),
@@ -24,11 +25,5 @@ enum class ErrorTypes(val code: String, val message: String) {
     JWT_EXPIRED("J003", "jwt expired"),
 
     JWT_SIGNATURE("J003", "jwt signature"),
-
-    // user
-    USER_NOT_FOUND("U001", "user not found data"),
-
-    // band
-    BAND_NOT_FOUND("B001", "band not found data")
 
 }

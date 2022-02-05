@@ -3,6 +3,7 @@ package com.weasleyclock.weasleyclient.config
 import com.weasleyclock.weasleyclient.dto.ErrorDTO
 import com.weasleyclock.weasleyclient.enmus.ErrorTypes
 import com.weasleyclock.weasleyclient.config.exception.AppException
+import com.weasleyclock.weasleyclient.config.exception.NotFoundDataException
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,47 +14,36 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import javax.servlet.http.HttpServletResponse
 
 /**
- * Global Exception Handler to Controller Layer
+ * Exception handler
+ * 예외 처리 핸들러
+ * @constructor Create empty Exception handler
  */
 @ControllerAdvice
-class GlobalControllerAdvice {
+class ExceptionHandler {
 
-    /**
-     * Controller advice By Exception </br>
-     * @param e
-     * @param response
-     * @return
-     */
     @ResponseBody
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun controllerAdvice(e: Exception, response: HttpServletResponse): ResponseEntity<ErrorDTO> =
-        createByResponseBody(e, response, ErrorTypes.INTERNAL_SERVER_ERROR)
+        createByResponseBody(e, response, ErrorTypes.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR)
 
-    /**
-     * Controller advice By AppException </br>
-     * @param e
-     * @param response
-     * @return
-     */
     @ResponseBody
     @ExceptionHandler(AppException::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun controllerAdvice(e: AppException, response: HttpServletResponse): ResponseEntity<ErrorDTO> =
-        createByResponseBody(e, response, e.getErrorTypes()!!)
+        createByResponseBody(e, response, e.getErrorTypes()!!, HttpStatus.INTERNAL_SERVER_ERROR)
 
+    @ResponseBody
+    @ExceptionHandler(AppException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun controllerAdvice(e: NotFoundDataException, response: HttpServletResponse): ResponseEntity<ErrorDTO> =
+        createByResponseBody(e, response, ErrorTypes.NOT_FOUND_ERROR, HttpStatus.NOT_FOUND)
 
-    /**
-     * Create by Error response body </br>
-     * @param e
-     * @param response
-     * @param errorTypes
-     * @return
-     */
     private fun createByResponseBody(
         e: Exception,
         response: HttpServletResponse,
-        errorTypes: ErrorTypes
+        errorTypes: ErrorTypes,
+        status: HttpStatus
     ): ResponseEntity<ErrorDTO> {
 
         val detailMessage = ExceptionUtils.getStackTrace(e)
@@ -64,9 +54,7 @@ class GlobalControllerAdvice {
 
         response.reset()
 
-        return ResponseEntity
-            .ok()
-            .body(body)
+        return ResponseEntity.status(status.value()).body(body)
     }
 
 }

@@ -1,6 +1,7 @@
 package com.weasleyclock.weasleyclient.service
 
 import com.weasleyclock.weasleyclient.config.exception.AppException
+import com.weasleyclock.weasleyclient.config.exception.NotFoundDataException
 import com.weasleyclock.weasleyclient.domain.Band
 import com.weasleyclock.weasleyclient.domain.BandRole
 import com.weasleyclock.weasleyclient.domain.Member
@@ -44,8 +45,7 @@ class BandService(
 
         val saveEntity = dto.toEntity()
 
-        val leaderUser = userRepository.findById(getCurrentLoginUserId())
-            .orElseThrow { throw AppException(ErrorTypes.USER_NOT_FOUND) }
+        val leaderUser = userRepository.findById(getCurrentLoginUserId()).orElseThrow { throw NotFoundDataException() }
 
         bandRepository.save(saveEntity)
 
@@ -58,7 +58,7 @@ class BandService(
 
     @Transactional
     fun updateBand(id: Long, dto: BandDTO.Updated): Band? {
-        val updateEntity = bandRepository.findById(id).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
+        val updateEntity = bandRepository.findById(id).orElseThrow { throw NotFoundDataException() }
         updateEntity.updateBandTitle(dto.title)
         return updateEntity
     }
@@ -75,7 +75,7 @@ class BandService(
     @Transactional
     fun exitBand(bandId: Long): Band? {
 
-        val band = bandRepository.findById(bandId).orElseThrow()
+        val band = bandRepository.findById(bandId).orElseThrow { throw NotFoundDataException() }
 
         val userId = getCurrentLoginUserId()
 
@@ -104,7 +104,7 @@ class BandService(
     @Transactional
     fun exileBandMember(userId: Long, bandId: Long): Band? {
 
-        val band = bandRepository.findById(bandId).orElseThrow()
+        val band = bandRepository.findById(bandId).orElseThrow { throw NotFoundDataException() }
 
         val memberSet = band.getMemberSet()
 
@@ -117,8 +117,8 @@ class BandService(
 
     @Transactional
     fun saveByMember(bandId: Long, userId: Long): Member? {
-        val band = bandRepository.findById(bandId).orElseThrow { throw AppException(ErrorTypes.BAND_NOT_FOUND) }
-        val user = userRepository.findById(userId).orElseThrow { throw AppException(ErrorTypes.USER_NOT_FOUND) }
+        val band = bandRepository.findById(bandId).orElseThrow { throw NotFoundDataException() }
+        val user = userRepository.findById(userId).orElseThrow { throw NotFoundDataException() }
         val entity = Member(band, user, BandRole(RoleName.MEMBER))
         memberRepository.save(entity)
         return entity
@@ -138,6 +138,6 @@ class BandService(
     private fun getSubLeader(memberSet: MutableSet<Member>) =
         memberSet?.stream()?.filter { member -> RoleName.SUB_LEADER == member.getBandRoleTitle() }
             ?.findAny()
-            ?.orElseThrow()
+            ?.orElseThrow { throw NotFoundDataException() }
 }
 

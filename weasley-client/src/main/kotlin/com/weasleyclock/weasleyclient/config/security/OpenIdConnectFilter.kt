@@ -5,8 +5,8 @@ import com.auth0.jwk.UrlJwkProvider
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.weasleyclock.weasleyclient.service.TokenService
 import com.weasleyclock.weasleyclient.service.UserService
-import com.weasleyclock.weasleyclientclient.config.exception.IdTokenEmptyException
-import com.weasleyclock.weasleyclientclient.config.exception.NotPostMethodException
+import com.weasleyclock.weasleyclient.config.exception.IdTokenEmptyException
+import com.weasleyclock.weasleyclient.config.exception.NotPostMethodException
 import mu.KotlinLogging
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpMethod

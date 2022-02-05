@@ -1,4 +1,4 @@
-package com.weasleyclock.weasleyclientclient.config.exception
+package com.weasleyclock.weasleyclient.config.exception
 
 import java.lang.RuntimeException
 

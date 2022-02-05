@@ -1,4 +1,4 @@
-package com.weasleyclock.weasleyclientclient.config
+package com.weasleyclock.weasleyclient.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -15,7 +15,6 @@ class DateTimeFormatConfiguration : WebMvcConfigurer {
         dateTimeFormatterRegistrar.setUseIsoFormat(true)
 
         dateTimeFormatterRegistrar.registerFormatters(registry)
-
     }
 
 }
