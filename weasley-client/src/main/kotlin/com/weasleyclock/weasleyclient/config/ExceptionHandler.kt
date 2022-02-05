@@ -34,7 +34,7 @@ class ExceptionHandler {
         createByResponseBody(e, response, e.getErrorTypes()!!, HttpStatus.INTERNAL_SERVER_ERROR)
 
     @ResponseBody
-    @ExceptionHandler(AppException::class)
+    @ExceptionHandler(NotFoundDataException::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun controllerAdvice(e: NotFoundDataException, response: HttpServletResponse): ResponseEntity<ErrorDTO> =
         createByResponseBody(e, response, ErrorTypes.NOT_FOUND_ERROR, HttpStatus.NOT_FOUND)
