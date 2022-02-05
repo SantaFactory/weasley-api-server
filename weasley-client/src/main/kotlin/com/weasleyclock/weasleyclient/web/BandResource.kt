@@ -30,7 +30,7 @@ class BandResource(private val service: BandService) : BandDocs {
 
     @GetMapping("/self")
     override fun showBandByUser(): ResponseEntity<AppMessageDTO> {
-        val body = AppMessageDTO(HttpStatus.OK.value(), service.getGroupsBySelf())
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.getMyBands())
         return ResponseEntity
             .ok()
             .body(body)

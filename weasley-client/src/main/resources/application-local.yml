@@ -4,7 +4,6 @@ spring:
       mode: always
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    ## Data.sql insert
     defer-datasource-initialization: true
   datasource:
     jdbc-url: jdbc:h2:tcp://localhost:9095/mem:testdb

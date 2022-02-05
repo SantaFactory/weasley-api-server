@@ -2,10 +2,6 @@ server:
   port: 5050
 
 spring:
-### H2-Console
-#  h2:
-#    console:
-#      enabled: true
   application:
     name: weasley
   jpa:
@@ -25,10 +21,6 @@ spring:
 logging:
   level:
     org:
-      #      # Statistics Logger
-      #      hibernate.stat: DEBUG
-      #      # Parameter Trace
-      #      hibernate.type: TRACE
       hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 google:

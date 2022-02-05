@@ -32,7 +32,7 @@ class BandService(
     fun getAllByBands(): List<IBandUserCount>? = bandRepository.findBy(IBandUserCount::class.java)
 
     @Transactional(readOnly = true)
-    fun getGroupsBySelf(): List<IBandUserCount>? =
+    fun getMyBands(): List<IBandUserCount>? =
         bandRepository.findByMemberSet_User_Id(getCurrentLoginUserId(), IBandUserCount::class.java)
 
     @Transactional(readOnly = true)
