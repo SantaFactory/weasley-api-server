@@ -29,7 +29,7 @@ class BandService(
     fun getBandOne(id: Long): BandDTO.Grouping? = bandRepository.selectBandOne(id)
 
     @Transactional(readOnly = true)
-    fun getAllByGroups(): List<IBandUserCount>? = bandRepository.findBy(IBandUserCount::class.java)
+    fun getAllByBands(): List<IBandUserCount>? = bandRepository.findBy(IBandUserCount::class.java)
 
     @Transactional(readOnly = true)
     fun getGroupsBySelf(): List<IBandUserCount>? =

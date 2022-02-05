@@ -38,7 +38,7 @@ class BandResource(private val service: BandService) : BandDocs {
 
     @GetMapping("")
     override fun showByAllBands(): ResponseEntity<AppMessageDTO> {
-        val body = AppMessageDTO(HttpStatus.OK.value(), service.getAllByGroups())
+        val body = AppMessageDTO(HttpStatus.OK.value(), service.getAllByBands())
         return ResponseEntity
             .ok()
             .body(body)

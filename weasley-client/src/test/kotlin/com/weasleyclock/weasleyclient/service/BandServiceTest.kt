@@ -3,6 +3,8 @@ package com.weasleyclock.weasleyclient.service
 import com.mysema.commons.lang.Assert.assertThat
 import com.weasleyclock.weasleyclient.domain.Band
 import com.weasleyclock.weasleyclient.dto.BandDTO
+import com.weasleyclock.weasleyclient.dto.IBandUserCount
+import com.weasleyclock.weasleyclient.mock.BandUserCount
 import com.weasleyclock.weasleyclient.repository.BandRepository
 import com.weasleyclock.weasleyclient.repository.MemberRepository
 import com.weasleyclock.weasleyclient.repository.UserRepository
@@ -64,9 +66,25 @@ internal class BandServiceTest {
 
     }
 
-
     @Test
-    fun getAllByGroups() {
+    fun `전체 밴드 조회`() {
+
+        val list = listOf(BandUserCount(1L, "test", 1))
+
+        every {
+            bandRepository.findBy(IBandUserCount::class.java)
+        } returns list
+
+        val whenData = bandService.getAllByBands()
+
+        assertThat(list).isEqualTo(whenData)
+
+        verify {
+            bandRepository.findBy(IBandUserCount::class.java)
+        }
+        
+        confirmVerified(bandRepository)
+
     }
 
     @Test
