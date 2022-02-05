@@ -6,9 +6,9 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 
-@Table
+@Table(name = "auth")
 @Entity
-class Auth {
+class Authority {
 
     @Id
     var title: String? = null
@@ -19,15 +19,15 @@ class Auth {
         this.title = title
     }
 
-    public override fun hashCode(): Int {
+    override fun hashCode(): Int {
         return title.hashCode();
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val auth = other as Auth
-        return auth.title.equals(this.title)
+        val authority = other as Authority
+        return authority.title.equals(this.title)
     }
 
 }

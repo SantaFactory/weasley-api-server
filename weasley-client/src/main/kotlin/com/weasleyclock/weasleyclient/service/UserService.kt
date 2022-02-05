@@ -1,10 +1,9 @@
 package com.weasleyclock.weasleyclient.service
 
-import com.weasleyclock.weasleyclient.domain.Auth
+import com.weasleyclock.weasleyclient.domain.Authority
 import com.weasleyclock.weasleyclient.domain.User
 import com.weasleyclock.weasleyclient.enmus.AppRole
 import com.weasleyclock.weasleyclient.repository.UserRepository
-import org.hibernate.usertype.UserType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -27,7 +26,7 @@ class UserService(private val repository: UserRepository) {
 
         val sub = authInfo["sub"] as String
 
-        val newEntity = User(userName, name, com.weasleyclock.weasleyclient.enmus.UserType.GOOGLE, sub, linkedSetOf(Auth(AppRole.USER.value!!)))
+        val newEntity = User(userName, name, com.weasleyclock.weasleyclient.enmus.UserType.GOOGLE, sub, linkedSetOf(Authority(AppRole.USER.value!!)))
 
         repository.save(newEntity)
 

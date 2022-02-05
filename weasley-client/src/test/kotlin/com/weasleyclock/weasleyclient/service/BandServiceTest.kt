@@ -1,7 +1,7 @@
 package com.weasleyclock.weasleyclient.service
 
 import com.weasleyclock.weasleyclient.config.security.DomainUserDetail
-import com.weasleyclock.weasleyclient.domain.Auth
+import com.weasleyclock.weasleyclient.domain.Authority
 import com.weasleyclock.weasleyclient.domain.User
 import com.weasleyclock.weasleyclient.dto.BandDTO
 import com.weasleyclock.weasleyclient.dto.IBandUserCount
@@ -46,9 +46,9 @@ internal class BandServiceTest {
 
     private val DEFAULT_TITLE = "test"
 
-    private val authSet = listOf(Auth(AppRole.ADMIN.name)).toMutableSet()
+    private val authoritySet = listOf(Authority(AppRole.ADMIN.name)).toMutableSet()
 
-    private val user = User(1, "admin", "admin", authSet)
+    private val user = User(1, "admin", "admin", authoritySet)
 
     private fun setUpUser() {
 

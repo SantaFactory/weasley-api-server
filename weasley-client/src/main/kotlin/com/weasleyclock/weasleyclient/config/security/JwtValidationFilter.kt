@@ -1,6 +1,6 @@
 package com.weasleyclock.weasleyclient.config.security
 
-import com.weasleyclock.weasleyclient.domain.Auth
+import com.weasleyclock.weasleyclient.domain.Authority
 import com.weasleyclock.weasleyclient.domain.User
 import com.weasleyclock.weasleyclient.utils.JwtUtils
 import org.springframework.http.HttpHeaders
@@ -30,7 +30,7 @@ class JwtValidationFilter(jwtKey: String) : OncePerRequestFilter() {
 
         val email = claims["email"] as String
         val name = claims["name"] as String
-        val authorities = (claims["authorities"] as List<String>).map { title -> Auth(title) }.toMutableSet()
+        val authorities = (claims["authorities"] as List<String>).map { title -> Authority(title) }.toMutableSet()
 
         val jwtLoginUser = User(id, email, name, authorities)
 
