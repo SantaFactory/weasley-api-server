@@ -1,30 +1,29 @@
 package com.weasleyclock.weasleyclient.service
 
-import com.mysema.commons.lang.Assert.assertThat
 import com.weasleyclock.weasleyclient.config.security.DomainUserDetail
 import com.weasleyclock.weasleyclient.domain.Auth
-import com.weasleyclock.weasleyclient.domain.Band
 import com.weasleyclock.weasleyclient.domain.User
 import com.weasleyclock.weasleyclient.dto.BandDTO
 import com.weasleyclock.weasleyclient.dto.IBandUserCount
+import com.weasleyclock.weasleyclient.dto.IOnlyBandUser
 import com.weasleyclock.weasleyclient.enmus.AppRole
 import com.weasleyclock.weasleyclient.mock.BandUserCount
+import com.weasleyclock.weasleyclient.mock.OnlyBandUser
+import com.weasleyclock.weasleyclient.mock.UserAndBandRole
 import com.weasleyclock.weasleyclient.repository.BandRepository
 import com.weasleyclock.weasleyclient.repository.MemberRepository
 import com.weasleyclock.weasleyclient.repository.UserRepository
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
-import io.mockk.confirmVerified
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 
@@ -43,15 +42,15 @@ internal class BandServiceTest {
     @MockK
     private lateinit var memberRepository: MemberRepository
 
-    private final val DEFAULT_ID = 1L
+    private val DEFAULT_ID = 1L
 
-    private final val DEFAULT_TITLE = "test"
+    private val DEFAULT_TITLE = "test"
+
+    private val authSet = listOf(Auth(AppRole.ADMIN.name)).toMutableSet()
+
+    private val user = User(1, "admin", "admin", authSet)
 
     private fun setUpUser() {
-
-        val authSet = listOf(Auth(AppRole.ADMIN.name)).toMutableSet()
-
-        val user = User(1, "admin", "admin", authSet)
 
         val jwtUser = DomainUserDetail(user)
 
@@ -136,7 +135,31 @@ internal class BandServiceTest {
     }
 
     @Test
-    fun getBandByUsers() {
+    fun `하나의 밴드 안에 유저 리스트 출력`() {
+
+        val userBandRoleSet = listOf(
+            UserAndBandRole(
+                user.getId(),
+                user.getEmail().toString(),
+                AppRole.ADMIN.name
+            ) as IOnlyBandUser.UserAndBandRole
+        ).toMutableSet()
+
+        val givenData = OnlyBandUser(userBandRoleSet)
+
+        every {
+            bandRepository.findById(DEFAULT_ID , IOnlyBandUser::class.java)
+        } returns givenData
+
+        val whenData = bandService.getBandByUsers(DEFAULT_ID)
+
+        assertThat(whenData).isEqualTo(givenData.getMembers())
+
+        verify {
+            bandRepository.findById(DEFAULT_ID , IOnlyBandUser::class.java)
+        }
+        confirmVerified(bandRepository)
+
     }
 
     @Test

@@ -82,15 +82,11 @@ class User() : BaseTimeEntity() {
         return id.hashCode()
     }
 
-    @Transient
     fun getId() = this.id!!.toLong()
 
-    @Transient
     fun getEmail() = this.email
 
-    @Transient
     fun getName() = this.name
 
-    @Transient
     fun getUserKey() = this.userKey
 }
