@@ -15,18 +15,15 @@ import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureException
 import org.springframework.http.HttpStatus
 
-class JwtValidationExceptionFilter : OncePerRequestFilter() {
+class AddFilterExceptionFilter : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-
         try {
-
             filterChain.doFilter(request, response)
-
         }
         catch (e: IdTokenEmptyException) {
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.IS_EMPTY_TOKEN)

@@ -1,6 +1,6 @@
 package com.weasleyclock.weasleyclient.config
 
-import com.weasleyclock.weasleyclient.config.security.JwtValidationExceptionFilter
+import com.weasleyclock.weasleyclient.config.security.AddFilterExceptionFilter
 import com.weasleyclock.weasleyclient.config.security.JwtValidationFilter
 import com.weasleyclock.weasleyclient.config.security.OpenIdConnectFilter
 import com.weasleyclock.weasleyclient.service.TokenService
@@ -35,7 +35,7 @@ class SecurityConfiguration(
             .csrf()
             .disable()
             .addFilterBefore(
-                JwtValidationExceptionFilter(),
+                AddFilterExceptionFilter(),
                 UsernamePasswordAuthenticationFilter::class.java
             )
             .addFilterBefore(
