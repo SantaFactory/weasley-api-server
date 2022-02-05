@@ -1,5 +1,8 @@
 package com.weasleyclock.weasleyclient.config.security
 
+import com.auth0.jwk.SigningKeyNotFoundException
+import com.weasleyclock.weasleyclient.config.exception.IdTokenEmptyException
+import com.weasleyclock.weasleyclient.config.exception.NotPostMethodException
 import com.weasleyclock.weasleyclient.enmus.ErrorTypes
 import io.jsonwebtoken.UnsupportedJwtException
 import org.springframework.web.filter.OncePerRequestFilter
@@ -24,6 +27,13 @@ class JwtValidationExceptionFilter : OncePerRequestFilter() {
 
             filterChain.doFilter(request, response)
 
+        }
+        catch (e: IdTokenEmptyException) {
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.IS_EMPTY_TOKEN)
+        } catch (e: NotPostMethodException) {
+            setErrorResponse(HttpStatus.NOT_FOUND, response, e, ErrorTypes.NOT_USE_POST_METHOD)
+        } catch (e: SigningKeyNotFoundException) {
+            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, e, ErrorTypes.NOT_FOUND_KEY)
         } catch (e: UnsupportedJwtException) {
             // 예상하는 형식과 다른 형식이거나 구성의 JWT일 때
             setErrorResponse(HttpStatus.FORBIDDEN, response, e, ErrorTypes.JWT_UNSUPPORTED)

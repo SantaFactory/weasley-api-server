@@ -34,7 +34,10 @@ class SecurityConfiguration(
             .disable()
             .csrf()
             .disable()
-            // login filter
+            .addFilterBefore(
+                JwtValidationExceptionFilter(),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
             .addFilterBefore(
                 CachingFilter(),
                 UsernamePasswordAuthenticationFilter::class.java
@@ -46,10 +49,6 @@ class SecurityConfiguration(
             .addFilterBefore(
                 JwtValidationFilter(jwtKey.toString()),
                 UsernamePasswordAuthenticationFilter::class.java
-            )
-            .addFilterBefore(
-                JwtValidationExceptionFilter(),
-                JwtValidationFilter::class.java
             )
     }
 
