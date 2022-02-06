@@ -79,7 +79,9 @@ class Member() {
 
     fun getId() = this.id
 
+    @Transient
     fun eqUserId(userId: Long) = userId == this.id!!.getUserId()
 
+    @Transient
     fun notEqUserId(userId: Long) = userId !== this.id!!.getUserId()
 }
