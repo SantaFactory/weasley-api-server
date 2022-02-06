@@ -2,6 +2,7 @@ package com.weasleyclock.weasleyclient.service
 
 import com.weasleyclock.weasleyclient.config.security.DomainUserDetail
 import com.weasleyclock.weasleyclient.domain.Authority
+import com.weasleyclock.weasleyclient.domain.Band
 import com.weasleyclock.weasleyclient.domain.User
 import com.weasleyclock.weasleyclient.dto.BandDTO
 import com.weasleyclock.weasleyclient.dto.IBandUserCount
@@ -20,12 +21,14 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import java.util.*
 
 @ExtendWith(MockKExtension::class)
 internal class BandServiceTest {
@@ -148,7 +151,7 @@ internal class BandServiceTest {
         val givenData = OnlyBandUser(userBandRoleSet)
 
         every {
-            bandRepository.findById(DEFAULT_ID , IOnlyBandUser::class.java)
+            bandRepository.findById(DEFAULT_ID, IOnlyBandUser::class.java)
         } returns givenData
 
         val whenData = bandService.getBandByUsers(DEFAULT_ID)
@@ -156,7 +159,7 @@ internal class BandServiceTest {
         assertThat(whenData).isEqualTo(givenData.getMembers())
 
         verify {
-            bandRepository.findById(DEFAULT_ID , IOnlyBandUser::class.java)
+            bandRepository.findById(DEFAULT_ID, IOnlyBandUser::class.java)
         }
         confirmVerified(bandRepository)
 
@@ -167,7 +170,27 @@ internal class BandServiceTest {
     }
 
     @Test
-    fun updateBand() {
+    fun `밴드 업데이트`() {
+
+        val band = Optional.of(Band(DEFAULT_TITLE).id(DEFAULT_ID))
+
+        every {
+            bandRepository.findById(DEFAULT_ID)
+        } returns band
+
+        val dto = BandDTO.Updated(DEFAULT_TITLE + "_1")
+
+        val value = bandService.updateBand(DEFAULT_ID, dto)
+
+        assertThat(value).isEqualTo(band.orElseThrow())
+
+        Assertions.assertEquals(value!!.getTitle(), band.get().getTitle())
+
+        verify {
+            bandRepository.findById(DEFAULT_ID)
+        }
+        confirmVerified(bandRepository)
+
     }
 
     @Test

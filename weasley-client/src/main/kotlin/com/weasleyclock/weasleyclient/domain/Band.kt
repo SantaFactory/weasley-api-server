@@ -64,4 +64,8 @@ class Band : BaseEntity {
         return this
     }
 
+    fun id(id: Long): Band {
+        this.id = id
+        return this
+    }
 }
