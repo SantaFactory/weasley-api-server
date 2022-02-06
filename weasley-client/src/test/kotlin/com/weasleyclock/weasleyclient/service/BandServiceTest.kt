@@ -17,12 +17,12 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
@@ -31,6 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
+@DisplayName("밴드 서비스 테스트 코드")
 @ExtendWith(MockKExtension::class)
 internal open class BandServiceTest {
 
@@ -53,6 +54,13 @@ internal open class BandServiceTest {
     private val authoritySet = listOf(Authority(AppRole.ADMIN.name)).toMutableSet()
 
     private val user = User(1, "admin", "admin", authoritySet)
+
+    private val members = listOf(
+        Member(user.getId(), DEFAULT_ID, BandRole(RoleName.LEADER)),
+        Member(2, DEFAULT_ID, BandRole(RoleName.SUB_LEADER)),
+    ).toMutableSet()
+
+    private val bandOptional = Optional.of(Band(DEFAULT_TITLE).id(DEFAULT_ID).memberSet(members))
 
     private fun setUpUser() {
 
@@ -173,19 +181,17 @@ internal open class BandServiceTest {
     @Test
     fun `밴드 업데이트`() {
 
-        val band = Optional.of(Band(DEFAULT_TITLE).id(DEFAULT_ID))
-
         every {
             bandRepository.findById(DEFAULT_ID)
-        } returns band
+        } returns bandOptional
 
         val dto = BandDTO.Updated(DEFAULT_TITLE + "_1")
 
         val value = bandService.updateBand(DEFAULT_ID, dto)
 
-        assertThat(value).isEqualTo(band.orElseThrow())
+        assertThat(value).isEqualTo(bandOptional.orElseThrow())
 
-        Assertions.assertEquals(value!!.getTitle(), band.get().getTitle())
+        Assertions.assertEquals(value!!.getTitle(), bandOptional.get().getTitle())
 
         verify {
             bandRepository.findById(DEFAULT_ID)
@@ -231,13 +237,6 @@ internal open class BandServiceTest {
     @Test
     fun `밴드 나가기`() {
 
-        val members = listOf(
-            Member(user.getId(), DEFAULT_ID, BandRole(RoleName.LEADER)),
-            Member(2, DEFAULT_ID, BandRole(RoleName.SUB_LEADER)),
-        ).toMutableSet()
-
-        val bandOptional = Optional.of(Band(DEFAULT_TITLE).id(DEFAULT_ID).memberSet(members))
-
         every {
             bandRepository.findById(DEFAULT_ID)
         } returns bandOptional
@@ -253,6 +252,8 @@ internal open class BandServiceTest {
 
     @Test
     fun exileBandMember() {
+
+
     }
 
     @Test
