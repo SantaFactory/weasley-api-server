@@ -12,10 +12,10 @@ class MemberKey : Serializable {
     private val serialVersionUID = 1L
 
     @Column
-    var userId: Long? = null
+    private var userId: Long? = null
 
     @Column
-    var bandId: Long? = null
+    private var bandId: Long? = null
 
     constructor()
 
@@ -38,4 +38,9 @@ class MemberKey : Serializable {
     override fun hashCode(): Int {
         return userId!!.toInt() + bandId!!.toInt()
     }
+
+    fun getUserId() = this.userId
+
+    fun getBandId() = this.bandId
+
 }

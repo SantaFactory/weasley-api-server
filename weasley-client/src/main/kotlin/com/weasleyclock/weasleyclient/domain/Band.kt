@@ -68,4 +68,9 @@ class Band : BaseEntity {
         this.id = id
         return this
     }
+
+    fun memberSet(memberSet: MutableSet<Member>): Band {
+        this.memberSet = memberSet
+        return this
+    }
 }

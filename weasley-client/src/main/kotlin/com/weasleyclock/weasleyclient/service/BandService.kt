@@ -75,13 +75,13 @@ class BandService(
     @Transactional
     fun exitBand(bandId: Long): Band? {
 
-        val band = bandRepository.findById(bandId).orElseThrow { throw NotFoundDataException() }
-
         val userId = getCurrentLoginUserId()
+
+        val band = bandRepository.findById(bandId).orElseThrow { throw NotFoundDataException() }
 
         val memberSet = band.getMemberSet()
 
-        val myMember = memberSet?.stream()?.filter { member -> userId == member.getUser()!!.getId() }
+        val myMember = memberSet?.stream()?.filter { member -> member.eqUserId(userId) }
             ?.findAny()
             ?.orElseThrow()
 
@@ -133,7 +133,7 @@ class BandService(
     )
 
     private fun removeBandMembers(memberSet: MutableSet<Member>, removeUserId: Long) =
-        memberSet?.filter { member -> removeUserId != member.getUser()!!.getId() }!!.toMutableSet()
+        memberSet?.filter { member -> member.notEqUserId(removeUserId) }!!.toMutableSet()
 
     private fun getSubLeader(memberSet: MutableSet<Member>) =
         memberSet?.stream()?.filter { member -> RoleName.SUB_LEADER == member.getBandRoleTitle() }

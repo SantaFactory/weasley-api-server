@@ -229,7 +229,26 @@ internal open class BandServiceTest {
     }
 
     @Test
-    fun exitBand() {
+    fun `밴드 나가기`() {
+
+        val members = listOf(
+            Member(user.getId(), DEFAULT_ID, BandRole(RoleName.LEADER)),
+            Member(2, DEFAULT_ID, BandRole(RoleName.SUB_LEADER)),
+        ).toMutableSet()
+
+        val bandOptional = Optional.of(Band(DEFAULT_TITLE).id(DEFAULT_ID).memberSet(members))
+
+        every {
+            bandRepository.findById(DEFAULT_ID)
+        } returns bandOptional
+
+        val whenData = bandService.exitBand(DEFAULT_ID)
+
+        assertThat(bandOptional.get()).isEqualTo(whenData)
+
+        verify { bandRepository.findById(DEFAULT_ID) }
+        confirmVerified(bandRepository)
+
     }
 
     @Test

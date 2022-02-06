@@ -77,4 +77,9 @@ class Member() {
 
     fun getBandRoleTitle() = this.bandRole!!.getTitle()
 
+    fun getId() = this.id
+
+    fun eqUserId(userId: Long) = userId == this.id!!.getUserId()
+
+    fun notEqUserId(userId: Long) = userId !== this.id!!.getUserId()
 }
