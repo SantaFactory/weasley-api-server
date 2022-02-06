@@ -151,9 +151,7 @@ internal open class BandServiceTest {
 
         val userBandRoleSet = listOf(
             UserAndBandRole(
-                user.getId(),
-                user.getEmail().toString(),
-                AppRole.ADMIN.name
+                user.getId(), user.getEmail().toString(), AppRole.ADMIN.name
             ) as IOnlyBandUser.UserAndBandRole
         ).toMutableSet()
 
@@ -251,8 +249,24 @@ internal open class BandServiceTest {
     }
 
     @Test
-    fun exileBandMember() {
+    fun `밴드에서 추방하기`() {
 
+        val removeUserId = 2L
+
+        every {
+            bandRepository.findById(DEFAULT_ID)
+        } returns bandOptional
+
+        val whenData = bandService.exileBandMember(removeUserId, DEFAULT_ID)
+
+        assertThat(whenData).isEqualTo(bandOptional.get())
+
+        Assertions.assertEquals(whenData!!.getMemberSet().size, bandOptional.get().getMemberSet().size)
+
+        verify {
+            bandRepository.findById(DEFAULT_ID)
+        }
+        confirmVerified(bandRepository)
 
     }
 

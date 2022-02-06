@@ -102,13 +102,13 @@ class BandService(
     }
 
     @Transactional
-    fun exileBandMember(userId: Long, bandId: Long): Band? {
+    fun exileBandMember(removeUserId: Long, bandId: Long): Band? {
 
         val band = bandRepository.findById(bandId).orElseThrow { throw NotFoundDataException() }
 
         val memberSet = band.getMemberSet()
 
-        val nowMemberSet = removeBandMembers(memberSet, userId)
+        val nowMemberSet = removeBandMembers(memberSet, removeUserId)
 
         band.changeBandMember(nowMemberSet)
 
