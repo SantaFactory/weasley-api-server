@@ -184,7 +184,7 @@ internal class BandServiceTest {
 
         assertThat(value).isEqualTo(band.orElseThrow())
 
-        Assertions.assertEquals(value#42!!.getTitle(), band.get().getTitle())
+        Assertions.assertEquals(value!!.getTitle(), band.get().getTitle())
 
         verify {
             bandRepository.findById(DEFAULT_ID)
