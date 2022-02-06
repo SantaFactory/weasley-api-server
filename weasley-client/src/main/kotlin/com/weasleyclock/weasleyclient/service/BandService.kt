@@ -128,7 +128,7 @@ class BandService(
         memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(
             bandId,
             userId,
-            RoleName.LEADER.name
+            RoleName.LEADER
         )
     )
 

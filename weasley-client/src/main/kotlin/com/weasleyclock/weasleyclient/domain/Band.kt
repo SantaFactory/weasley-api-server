@@ -18,7 +18,7 @@ class Band : BaseEntity {
 
     @JsonIgnore
     @OneToMany(
-        mappedBy = "band", fetch = FetchType.LAZY, cascade = [CascadeType.ALL]
+        mappedBy = "band", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST, CascadeType.REMOVE]
     )
     private var memberSet: MutableSet<Member> = ManagedSet()
 

@@ -1,13 +1,12 @@
 package com.weasleyclock.weasleyclient.service
 
 import com.weasleyclock.weasleyclient.config.security.DomainUserDetail
-import com.weasleyclock.weasleyclient.domain.Authority
-import com.weasleyclock.weasleyclient.domain.Band
-import com.weasleyclock.weasleyclient.domain.User
+import com.weasleyclock.weasleyclient.domain.*
 import com.weasleyclock.weasleyclient.dto.BandDTO
 import com.weasleyclock.weasleyclient.dto.IBandUserCount
 import com.weasleyclock.weasleyclient.dto.IOnlyBandUser
 import com.weasleyclock.weasleyclient.enmus.AppRole
+import com.weasleyclock.weasleyclient.enmus.RoleName
 import com.weasleyclock.weasleyclient.mock.BandUserCount
 import com.weasleyclock.weasleyclient.mock.OnlyBandUser
 import com.weasleyclock.weasleyclient.mock.UserAndBandRole
@@ -18,6 +17,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -28,10 +28,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @ExtendWith(MockKExtension::class)
-internal class BandServiceTest {
+internal open class BandServiceTest {
 
     @InjectMockKs
     lateinit var bandService: BandService
@@ -194,7 +195,37 @@ internal class BandServiceTest {
     }
 
     @Test
-    fun removeBand() {
+    @Transactional
+    open fun `밴드 삭제`() {
+
+        val removeId = DEFAULT_ID
+
+        val bandRole = BandRole(RoleName.LEADER)
+
+        val member = Member(user.getId(), removeId, bandRole)
+
+        every {
+            memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(removeId, user.getId(), RoleName.LEADER)
+        } returns member
+
+        every {
+            bandRepository.deleteById(removeId)
+        } returns Unit
+
+        val mock = bandService.removeBand(removeId)
+
+        assertThat(mock).isEqualTo(removeId)
+
+        verify {
+            memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(removeId, user.getId(), RoleName.LEADER)
+        }
+        confirmVerified(memberRepository)
+
+        verify {
+            bandRepository.deleteById(removeId)
+        }
+        confirmVerified(bandRepository)
+
     }
 
     @Test

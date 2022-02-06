@@ -49,6 +49,11 @@ class Member() {
         this.id = id
     }
 
+    constructor(userId: Long, bandId: Long, bandRole: BandRole) : this() {
+        this.id = MemberKey(userId, bandId)
+        this.bandRole = bandRole
+    }
+
     override fun equals(other: Any?): Boolean {
         if (other == this) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
@@ -68,10 +73,8 @@ class Member() {
     @Transient
     fun isLeader() = RoleName.LEADER == this.bandRole!!.getTitle()
 
-    @Transient
     fun getUser() = this.user
 
-    @Transient
     fun getBandRoleTitle() = this.bandRole!!.getTitle()
 
 }
