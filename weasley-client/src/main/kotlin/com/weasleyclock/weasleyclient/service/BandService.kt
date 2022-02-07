@@ -116,7 +116,7 @@ class BandService(
     }
 
     @Transactional
-    fun saveByMember(bandId: Long, userId: Long): Member? {
+    fun saveMember(bandId: Long, userId: Long): Member? {
         val band = bandRepository.findById(bandId).orElseThrow { throw NotFoundDataException() }
         val user = userRepository.findById(userId).orElseThrow { throw NotFoundDataException() }
         val entity = Member(band, user, BandRole(RoleName.MEMBER))

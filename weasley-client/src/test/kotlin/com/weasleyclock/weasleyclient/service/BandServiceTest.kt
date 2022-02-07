@@ -55,6 +55,8 @@ internal open class BandServiceTest {
 
     private val user = User(1, "admin", "admin", authoritySet)
 
+    private val otherUser = User(2, "otherUser", "otherUser", authoritySet)
+
     private val members = listOf(
         Member(user.getId(), DEFAULT_ID, BandRole(RoleName.LEADER)),
         Member(2, DEFAULT_ID, BandRole(RoleName.SUB_LEADER)),
@@ -271,6 +273,23 @@ internal open class BandServiceTest {
     }
 
     @Test
-    fun saveByMember() {
+    fun `맴버 추가`() {
+
+        every {
+            bandRepository.findById(DEFAULT_ID)
+        } returns bandOptional
+
+        every {
+            userRepository.findById(2L)
+        } returns Optional.of(otherUser)
+
+        val member = Member(bandOptional.get(), otherUser, BandRole(RoleName.MEMBER))
+
+        every {
+            memberRepository.save(member)
+        } returns member
+
+        val whenData = bandService.saveMember(DEFAULT_ID, 2L)
+
     }
 }
