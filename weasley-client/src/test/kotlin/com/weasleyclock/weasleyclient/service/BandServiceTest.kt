@@ -1,7 +1,7 @@
 package com.weasleyclock.weasleyclient.service
 
-import com.weasleyclock.weasleyclient.config.security.DomainUserDetail
-import com.weasleyclock.weasleyclient.domain.*
+import com.weasleyclock.weasleyclient.domain.BandRole
+import com.weasleyclock.weasleyclient.domain.Member
 import com.weasleyclock.weasleyclient.dto.BandDTO
 import com.weasleyclock.weasleyclient.dto.IBandUserCount
 import com.weasleyclock.weasleyclient.dto.IOnlyBandUser
@@ -10,6 +10,13 @@ import com.weasleyclock.weasleyclient.enmus.RoleName
 import com.weasleyclock.weasleyclient.mock.BandUserCount
 import com.weasleyclock.weasleyclient.mock.OnlyBandUser
 import com.weasleyclock.weasleyclient.mock.UserAndBandRole
+import com.weasleyclock.weasleyclient.mock.UserMock.Companion.DEFAULT_ID
+import com.weasleyclock.weasleyclient.mock.UserMock.Companion.DEFAULT_TITLE
+import com.weasleyclock.weasleyclient.mock.UserMock.Companion.bandOne
+import com.weasleyclock.weasleyclient.mock.UserMock.Companion.bandOptional
+import com.weasleyclock.weasleyclient.mock.UserMock.Companion.otherUser
+import com.weasleyclock.weasleyclient.mock.UserMock.Companion.setUpUser
+import com.weasleyclock.weasleyclient.mock.UserMock.Companion.user
 import com.weasleyclock.weasleyclient.repository.BandRepository
 import com.weasleyclock.weasleyclient.repository.MemberRepository
 import com.weasleyclock.weasleyclient.repository.UserRepository
@@ -26,8 +33,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
@@ -47,32 +52,6 @@ internal open class BandServiceTest {
     @MockK
     private lateinit var memberRepository: MemberRepository
 
-    private val DEFAULT_ID = 1L
-
-    private val DEFAULT_TITLE = "test"
-
-    private val authoritySet = listOf(Authority(AppRole.ADMIN.name)).toMutableSet()
-
-    private val user = User(1, "admin", "admin", authoritySet)
-
-    private val otherUser = User(2, "otherUser", "otherUser", authoritySet)
-
-    private val members = listOf(
-        Member(user.getId(), DEFAULT_ID, BandRole(RoleName.LEADER)),
-        Member(2, DEFAULT_ID, BandRole(RoleName.SUB_LEADER)),
-    ).toMutableSet()
-
-    private val bandOptional = Optional.of(Band(DEFAULT_TITLE).id(DEFAULT_ID).memberSet(members))
-
-    private fun setUpUser() {
-
-        val jwtUser = DomainUserDetail(user)
-
-        val userToken = UsernamePasswordAuthenticationToken(jwtUser, null, jwtUser.authorities)
-
-        SecurityContextHolder.getContext().authentication = userToken
-    }
-
     @BeforeEach
     fun `셋업`() {
         MockitoAnnotations.openMocks(this)
@@ -81,9 +60,6 @@ internal open class BandServiceTest {
 
     @Test
     fun `하나의 밴드 조회`() {
-
-        // given
-        val bandOne: BandDTO.Grouping = BandDTO.Grouping(DEFAULT_ID, DEFAULT_TITLE)
 
         every {
             bandRepository.selectBandOne(1L)
