@@ -40,10 +40,10 @@ internal class BandResourceTest {
     @BeforeEach
     fun `셋업`() {
 
-        mvc = MockMvcBuilders
-            .webAppContextSetup(context)
-            .apply<DefaultMockMvcBuilder>(springSecurity())
-            .build()
+//        mvc = MockMvcBuilders
+//            .webAppContextSetup(context)
+//            .apply<DefaultMockMvcBuilder>(springSecurity())
+//            .build()
     }
 
     @Test
