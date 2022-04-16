@@ -71,7 +71,7 @@ project("core") {
     }
 }
 
-project("weasley-client") {
+project("client") {
 
     dependencies {
         implementation(project(":core"))
