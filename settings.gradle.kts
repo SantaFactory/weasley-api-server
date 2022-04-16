@@ -1,5 +1,6 @@
 rootProject.name = "weasley"
 
 include(
-    "weasley-client"
+    "weasley-client",
+    "weasley-location"
 )

@@ -1,0 +1,18 @@
+# DataBase Connection
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    database: postgresql
+
+  datasource:
+    url: ENC(HiNJzyTM5DpvW2lSHLljUy6y/V5b/HgkfibNiqnJaxjg5OCMa9rm+iUXnUghnuITL8wov8VFLrdQan90G6OrRjWzbRI8wpbFn5pgrX5IAPegWaXDIVH3Jc3WPmZMOJGG)
+    username: ENC(lAevW7+4dOwAHXZrLEtEj7cJ3C6mTTbV)
+    password: ENC(dBCMjotzAbEltEZP7Tq2xMlVE1vSdiGz)
+    driver-class-name: org.postgresql.Driver
+
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator

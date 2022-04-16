@@ -53,14 +53,31 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
-        implementation("com.h2database:h2")
-        runtimeOnly("com.h2database:h2")
+
+        implementation("org.springframework.boot:spring-boot-starter-mustache")
+        runtimeOnly("org.springframework.boot:spring-boot-devtools")
+        implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
+        implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
+        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+        implementation("org.apache.commons:commons-lang3:3.9")
+        implementation("org.springframework.boot:spring-boot-starter-aop")
+        implementation("org.postgresql:postgresql:42.2.23")
+        testImplementation("io.mockk:mockk:1.12.0")
     }
 }
 
-project("weasley-client"){
+project("weasley-client") {
 
     dependencies {
-        testImplementation("io.mockk:mockk:1.12.0")
+        implementation("com.h2database:h2")
+        implementation("io.springfox:springfox-boot-starter:3.0.0")
+        implementation("org.springframework.boot:spring-boot-starter-web")
+    }
+}
+
+project("weasley-location") {
+
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-web")
     }
 }
