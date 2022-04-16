@@ -55,7 +55,6 @@ class Member() {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other == this) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
         val anyOther = other as Member
         return anyOther.id!! == this.id

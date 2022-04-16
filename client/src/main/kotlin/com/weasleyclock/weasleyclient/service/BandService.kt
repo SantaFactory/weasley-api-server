@@ -81,7 +81,7 @@ class BandService(
 
         val memberSet = band.getMemberSet()
 
-        val myMember = memberSet?.stream()?.filter { member -> member.eqUserId(userId) }
+        val myMember = memberSet.stream().filter { member -> member.eqUserId(userId) }
             ?.findAny()
             ?.orElseThrow()
 
@@ -133,10 +133,10 @@ class BandService(
     )
 
     private fun removeBandMembers(memberSet: MutableSet<Member>, removeUserId: Long) =
-        memberSet?.filter { member -> member.notEqUserId(removeUserId) }!!.toMutableSet()
+        memberSet.filter { member -> member.notEqUserId(removeUserId) }.toMutableSet()
 
     private fun getSubLeader(memberSet: MutableSet<Member>) =
-        memberSet?.stream()?.filter { member -> RoleName.SUB_LEADER == member.getBandRoleTitle() }
+        memberSet.stream().filter { member -> RoleName.SUB_LEADER == member.getBandRoleTitle() }
             ?.findAny()
             ?.orElseThrow { throw NotFoundDataException() }
 }

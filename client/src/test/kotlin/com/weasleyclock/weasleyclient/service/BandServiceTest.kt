@@ -1,5 +1,6 @@
 package com.weasleyclock.weasleyclient.service
 
+import com.weasleyclock.weasleyclient.config.JpaConfiguration
 import com.weasleyclock.weasleyclient.domain.BandRole
 import com.weasleyclock.weasleyclient.domain.Member
 import com.weasleyclock.weasleyclient.dto.BandDTO
@@ -33,11 +34,13 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
+import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @DisplayName("밴드 서비스 테스트 코드")
 @ExtendWith(MockKExtension::class)
+@Import(value = [JpaConfiguration::class])
 internal open class BandServiceTest {
 
     @InjectMockKs
