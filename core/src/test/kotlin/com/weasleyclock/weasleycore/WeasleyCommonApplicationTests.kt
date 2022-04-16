@@ -1,4 +1,4 @@
-package com.weasleyclock.weasleycommon
+package com.weasleyclock.weasleycore
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
