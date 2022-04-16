@@ -53,7 +53,7 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
-
+        implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-mustache")
         runtimeOnly("org.springframework.boot:spring-boot-devtools")
         implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
@@ -66,18 +66,23 @@ subprojects {
     }
 }
 
+project("core") {
+    dependencies {
+    }
+}
+
 project("weasley-client") {
 
     dependencies {
+        implementation(project(":core"))
         implementation("com.h2database:h2")
         implementation("io.springfox:springfox-boot-starter:3.0.0")
-        implementation("org.springframework.boot:spring-boot-starter-web")
     }
 }
 
-project("weasley-location") {
-
+project("location") {
     dependencies {
-        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation(project(":core"))
     }
 }
+
