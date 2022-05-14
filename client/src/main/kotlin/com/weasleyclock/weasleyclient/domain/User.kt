@@ -1,7 +1,6 @@
 package com.weasleyclock.weasleyclient.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.weasleyclock.weasleyclient.converter.UserTypeConverter
 import com.weasleyclock.weasleyclient.domain.base.BaseTimeEntity
 import com.weasleyclock.weasleyclient.enmus.RoleType
 import com.weasleyclock.weasleyclient.enmus.UserType
@@ -14,7 +13,7 @@ data class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private var id: Long?,
     @Column(nullable = false, length = 300) private var email: String?,
     @Column(nullable = false, length = 300) private var name: String?,
-    @Convert(converter = UserTypeConverter::class) @Column(
+    @Column(
         name = "login_type", nullable = false, length = 10
     ) private var loginType: UserType?,
     @Column(name = "user_key", nullable = false) private var userKey: String?,
