@@ -1,6 +1,6 @@
 package com.weasleyclock.weasleyclient.enmus
 
-enum class RoleName : BaseEnum<String> {
+enum class BandRoleType : BaseEnum<String> {
     LEADER {
         override fun getValue(): String = this.name
     },

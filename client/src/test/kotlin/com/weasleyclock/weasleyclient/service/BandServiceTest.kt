@@ -1,12 +1,11 @@
 package com.weasleyclock.weasleyclient.service
 
 import com.weasleyclock.weasleyclient.config.JpaConfiguration
-import com.weasleyclock.weasleyclient.domain.BandRole
 import com.weasleyclock.weasleyclient.domain.Member
 import com.weasleyclock.weasleyclient.dto.BandDTO
 import com.weasleyclock.weasleyclient.dto.IBandUserCount
 import com.weasleyclock.weasleyclient.dto.IOnlyBandUser
-import com.weasleyclock.weasleyclient.enmus.RoleName
+import com.weasleyclock.weasleyclient.enmus.BandRoleType
 import com.weasleyclock.weasleyclient.mock.BandUserCount
 import com.weasleyclock.weasleyclient.mock.OnlyBandUser
 import com.weasleyclock.weasleyclient.mock.UserAndBandRole
@@ -131,7 +130,7 @@ internal open class BandServiceTest {
 
         val userBandRoleSet = listOf(
             UserAndBandRole(
-                user.getId(), user.getEmail().toString(), AppRole.ADMIN.name
+                user.getId(), user.getEmail().toString(), BandRoleType.LEADER.name
             ) as IOnlyBandUser.UserAndBandRole
         ).toMutableSet()
 
@@ -184,12 +183,12 @@ internal open class BandServiceTest {
 
         val removeId = DEFAULT_ID
 
-        val bandRole = BandRole(RoleName.LEADER)
+        val bandRole = BandRoleType.LEADER
 
         val member = Member(user.getId(), removeId, bandRole)
 
         every {
-            memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(removeId, user.getId(), RoleName.LEADER)
+            memberRepository.findByBand_IdAndUser_IdAndRole(removeId, user.getId(), BandRoleType.LEADER)
         } returns member
 
         every {
@@ -201,7 +200,7 @@ internal open class BandServiceTest {
         assertThat(mock).isEqualTo(removeId)
 
         verify {
-            memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(removeId, user.getId(), RoleName.LEADER)
+            memberRepository.findByBand_IdAndUser_IdAndRole(removeId, user.getId(), BandRoleType.LEADER)
         }
         confirmVerified(memberRepository)
 
@@ -261,7 +260,7 @@ internal open class BandServiceTest {
             userRepository.findById(2L)
         } returns Optional.of(otherUser)
 
-        val member = Member(bandOptional.get(), otherUser, BandRole(RoleName.MEMBER))
+        val member = Member(bandOptional.get(), otherUser, BandRoleType.MEMBER)
 
         every {
             memberRepository.save(member)

@@ -3,7 +3,7 @@ package com.weasleyclock.weasleyclient.mock
 import com.weasleyclock.weasleyclient.config.security.DomainUserDetail
 import com.weasleyclock.weasleyclient.domain.*
 import com.weasleyclock.weasleyclient.dto.BandDTO
-import com.weasleyclock.weasleyclient.enmus.RoleName
+import com.weasleyclock.weasleyclient.enmus.BandRoleType
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import java.util.*
@@ -23,8 +23,8 @@ class UserMock {
         val otherUser = User(2, "otherUser", "otherUser", authoritySet)
 
         val members = listOf(
-            Member(user.getId(), DEFAULT_ID, BandRole(RoleName.LEADER)),
-            Member(2, DEFAULT_ID, BandRole(RoleName.SUB_LEADER)),
+            Member(user.getId(), DEFAULT_ID, BandRole(BandRoleType.LEADER)),
+            Member(2, DEFAULT_ID, BandRole(BandRoleType.SUB_LEADER)),
         ).toMutableSet()
 
         val bandOptional = Optional.of(Band(DEFAULT_TITLE).id(DEFAULT_ID).memberSet(members))

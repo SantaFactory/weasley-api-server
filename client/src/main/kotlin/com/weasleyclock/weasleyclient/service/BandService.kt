@@ -3,13 +3,12 @@ package com.weasleyclock.weasleyclient.service
 import com.weasleyclock.weasleyclient.config.exception.AppException
 import com.weasleyclock.weasleyclient.config.exception.NotFoundDataException
 import com.weasleyclock.weasleyclient.domain.Band
-import com.weasleyclock.weasleyclient.domain.BandRole
 import com.weasleyclock.weasleyclient.domain.Member
 import com.weasleyclock.weasleyclient.dto.BandDTO
 import com.weasleyclock.weasleyclient.dto.IBandUserCount
 import com.weasleyclock.weasleyclient.dto.IOnlyBandUser
 import com.weasleyclock.weasleyclient.enmus.ErrorTypes
-import com.weasleyclock.weasleyclient.enmus.RoleName
+import com.weasleyclock.weasleyclient.enmus.BandRoleType
 import com.weasleyclock.weasleyclient.repository.BandRepository
 import com.weasleyclock.weasleyclient.repository.MemberRepository
 import com.weasleyclock.weasleyclient.repository.UserRepository
@@ -49,7 +48,7 @@ class BandService(
 
         bandRepository.save(saveEntity)
 
-        val member = Member(saveEntity, leaderUser, BandRole(RoleName.LEADER))
+        val member = Member(saveEntity, leaderUser, BandRoleType.LEADER)
 
         saveEntity.changeBandMember(listOf(member).toSet() as MutableSet<Member>)
 
@@ -87,7 +86,7 @@ class BandService(
 
         if (myMember?.isLeader() == true) {
             val subLeader = getSubLeader(memberSet)
-            subLeader!!.changeBandRole(RoleName.LEADER)
+            subLeader!!.changeBandRole(BandRoleType.LEADER)
         }
 
         val nowMemberSet = removeBandMembers(memberSet, userId)
@@ -119,16 +118,16 @@ class BandService(
     fun saveMember(bandId: Long, userId: Long): Member? {
         val band = bandRepository.findById(bandId).orElseThrow { throw NotFoundDataException() }
         val user = userRepository.findById(userId).orElseThrow { throw NotFoundDataException() }
-        val entity = Member(band, user, BandRole(RoleName.MEMBER))
+        val entity = Member(band, user, BandRoleType.MEMBER)
         memberRepository.save(entity)
         return entity
     }
 
     private fun isLeaderAble(bandId: Long, userId: Long): Boolean = ObjectUtils.isNotEmpty(
-        memberRepository.findByBand_IdAndUser_IdAndBandRole_Title(
+        memberRepository.findByBand_IdAndUser_IdAndRole(
             bandId,
             userId,
-            RoleName.LEADER
+            BandRoleType.LEADER
         )
     )
 
@@ -136,7 +135,7 @@ class BandService(
         memberSet.filter { member -> member.notEqUserId(removeUserId) }.toMutableSet()
 
     private fun getSubLeader(memberSet: MutableSet<Member>) =
-        memberSet.stream().filter { member -> RoleName.SUB_LEADER == member.getBandRoleTitle() }
+        memberSet.stream().filter { member -> BandRoleType.SUB_LEADER == member.getBandRole() }
             ?.findAny()
             ?.orElseThrow { throw NotFoundDataException() }
 }
