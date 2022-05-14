@@ -1,10 +1,11 @@
 package com.weasleyclock.weasleyclient.config.security
 
-import com.weasleyclock.weasleyclient.domain.Authority
 import com.weasleyclock.weasleyclient.domain.User
+import com.weasleyclock.weasleyclient.enmus.RoleType
 import com.weasleyclock.weasleyclient.utils.JwtUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.web.filter.OncePerRequestFilter
@@ -32,11 +33,11 @@ class JwtValidationFilter(jwtKey: String) : OncePerRequestFilter() {
 
         val name = claims["name"] as String
 
-        val authorities = (claims["authorities"] as List<String>).map { title -> Authority(title) }.toMutableSet()
+        val authority = RoleType.valueOf(claims["authority"] as String)
 
-        val jwtLoginUser = User(id, email, name, authorities)
+        val jwtLoginUser = User(id, email, name, authority)
 
-        val jwtLoginDetail = DomainUserDetail(jwtLoginUser)
+        val jwtLoginDetail = DomainUserDetail(jwtLoginUser, listOf(SimpleGrantedAuthority(authority.name)))
 
         val userToken = UsernamePasswordAuthenticationToken(jwtLoginDetail, null, jwtLoginDetail.authorities)
 

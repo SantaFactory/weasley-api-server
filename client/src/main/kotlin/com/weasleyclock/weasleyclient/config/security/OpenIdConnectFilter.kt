@@ -7,11 +7,13 @@ import com.weasleyclock.weasleyclient.service.TokenService
 import com.weasleyclock.weasleyclient.service.UserService
 import com.weasleyclock.weasleyclient.config.exception.IdTokenEmptyException
 import com.weasleyclock.weasleyclient.config.exception.NotPostMethodException
+import com.weasleyclock.weasleyclient.enmus.RoleType
 import mu.KotlinLogging
 import org.apache.commons.lang3.StringUtils
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.jwt.JwtHelper
 import org.springframework.security.jwt.crypto.sign.RsaVerifier
@@ -34,7 +36,8 @@ class OpenIdConnectFilter// NoAuth manager class
     userService: UserService,
     tokenService: TokenService,
     jwtKey: String
-) : AbstractAuthenticationProcessingFilter( defaultFilterProcessesUrl
+) : AbstractAuthenticationProcessingFilter(
+    defaultFilterProcessesUrl
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -88,13 +91,19 @@ class OpenIdConnectFilter// NoAuth manager class
 
             val newEntity = userService!!.createByNewUser(authInfo)
 
-            val domainUserDetail = DomainUserDetail(newEntity!!)
+            val authorities = listOf(SimpleGrantedAuthority(RoleType.ROLE_ADMIN.name))
+
+            val domainUserDetail = DomainUserDetail(newEntity!!, authorities)
 
             return UsernamePasswordAuthenticationToken(domainUserDetail, null, domainUserDetail.authorities)
 
         }
 
-        val domainUserDetail = DomainUserDetail(userOptional.get())
+        val user = userOptional.get()
+
+        val authorities = listOf(SimpleGrantedAuthority(user.getRole()!!.name))
+
+        val domainUserDetail = DomainUserDetail(user, authorities)
 
         return UsernamePasswordAuthenticationToken(domainUserDetail, null, domainUserDetail.authorities)
     }
@@ -109,7 +118,7 @@ class OpenIdConnectFilter// NoAuth manager class
 
         val adminUser = adminUserOptional.get()
 
-        val adminUserDetail = DomainUserDetail(adminUser)
+        val adminUserDetail = DomainUserDetail(adminUser, listOf(SimpleGrantedAuthority(RoleType.ROLE_ADMIN.name)))
 
         return UsernamePasswordAuthenticationToken(adminUserDetail, null, adminUserDetail.authorities)
     }

@@ -9,7 +9,7 @@ import javax.persistence.*
 
 @MappedSuperclass
 @EntityListeners(value = [AuditingEntityListener::class])
-class BaseTimeEntity {
+abstract class BaseTimeEntity {
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

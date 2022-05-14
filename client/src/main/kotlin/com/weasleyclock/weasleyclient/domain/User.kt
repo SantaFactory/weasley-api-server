@@ -1,84 +1,38 @@
 package com.weasleyclock.weasleyclient.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.weasleyclock.weasleyclient.converter.UserTypeConverter
 import com.weasleyclock.weasleyclient.domain.base.BaseTimeEntity
-import com.weasleyclock.weasleyclient.domain.convert.UserTypeConvert
+import com.weasleyclock.weasleyclient.enmus.RoleType
 import com.weasleyclock.weasleyclient.enmus.UserType
-import org.hibernate.Hibernate
 import org.springframework.beans.factory.support.ManagedSet
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import javax.persistence.*
 
 @Table(name = "app_user")
 @Entity
-class User() : BaseTimeEntity() {
+data class User(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private var id: Long?,
+    @Column(nullable = false, length = 300) private var email: String?,
+    @Column(nullable = false, length = 300) private var name: String?,
+    @Convert(converter = UserTypeConverter::class) @Column(
+        name = "login_type", nullable = false, length = 10
+    ) private var loginType: UserType?,
+    @Column(name = "user_key", nullable = false) private var userKey: String?,
+    @Column(name = "role", nullable = false) private var role: RoleType?,
+    @JsonIgnore @OneToMany(
+        mappedBy = "user", cascade = [CascadeType.ALL]
+    ) private var weasleySet: MutableSet<Weasley> = ManagedSet()
+) : BaseTimeEntity() {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long? = null
+    // jwt user
+    constructor(id: Long, email: String, name: String, role: RoleType?) : this(id, email, name, null, null, role)
 
-    @Column(nullable = false, length = 300)
-    private var email: String? = null
+    constructor(email: String, name: String) : this(null, email, name, null, null, null)
 
-    @Column(nullable = false, length = 300)
-    private var name: String? = null
-
-    @Convert(converter = UserTypeConvert::class)
-    @Column(name = "login_type", nullable = false, length = 10)
-    private var loginType: UserType? = null
-
-    @Column(name = "user_key", nullable = false)
-    private var userKey: String? = null
-
-    @ManyToMany
-    @JoinTable(
-        name = "user_auth",
-        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "auth_name", referencedColumnName = "title")]
-    )
-    private var authoritySet: MutableSet<Authority> = ManagedSet()
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
-    private var weasleySet: MutableSet<Weasley> = ManagedSet()
-
-    fun getAuthorities(): List<GrantedAuthority> {
-        return authoritySet.map { auth -> SimpleGrantedAuthority(auth.title) }.toList()
-    }
-
-    constructor (id: Long, email: String, name: String, authoritySet: MutableSet<Authority>) : this() {
-        this.id = id
-        this.email = email
-        this.name = name
-        this.authoritySet = authoritySet
-    }
-
-    constructor(email: String, name: String) : this() {
-        this.email = email
-        this.name = name
-    }
-
+    // new user
     constructor(
-        email: String, name: String, loginType: UserType?, userKey: String, authoritySet: MutableSet<Authority>
-    ) : this() {
-        this.email = email
-        this.name = name
-        this.loginType = loginType
-        this.userKey = userKey
-        this.authoritySet = authoritySet
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (other === this) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val anyOther = other as User
-        return anyOther.id!! == this.id
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+        email: String, name: String, loginType: UserType?, userKey: String, role: RoleType?
+    ) : this(null, email, name, loginType, userKey, role)
 
     fun getId() = this.id!!.toLong()
 
@@ -87,4 +41,6 @@ class User() : BaseTimeEntity() {
     fun getName() = this.name
 
     fun getUserKey() = this.userKey
+
+    fun getRole() = this.role
 }
