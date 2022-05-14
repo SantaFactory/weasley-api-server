@@ -3,7 +3,6 @@ package com.weasleyclock.weasleyclient.mock
 import com.weasleyclock.weasleyclient.config.security.DomainUserDetail
 import com.weasleyclock.weasleyclient.domain.*
 import com.weasleyclock.weasleyclient.dto.BandDTO
-import com.weasleyclock.weasleyclient.enmus.AppRole
 import com.weasleyclock.weasleyclient.enmus.RoleName
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder

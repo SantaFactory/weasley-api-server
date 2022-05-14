@@ -6,7 +6,6 @@ import com.weasleyclock.weasleyclient.domain.Member
 import com.weasleyclock.weasleyclient.dto.BandDTO
 import com.weasleyclock.weasleyclient.dto.IBandUserCount
 import com.weasleyclock.weasleyclient.dto.IOnlyBandUser
-import com.weasleyclock.weasleyclient.enmus.AppRole
 import com.weasleyclock.weasleyclient.enmus.RoleName
 import com.weasleyclock.weasleyclient.mock.BandUserCount
 import com.weasleyclock.weasleyclient.mock.OnlyBandUser

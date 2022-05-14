@@ -1,7 +1,6 @@
 package com.weasleyclock.weasleyclient.service
 
 import com.weasleyclock.weasleyclient.domain.User
-import com.weasleyclock.weasleyclient.enmus.AppRole
 import com.weasleyclock.weasleyclient.enmus.RoleType
 import com.weasleyclock.weasleyclient.repository.UserRepository
 import org.springframework.stereotype.Service

@@ -1,6 +1,7 @@
 package com.weasleyclock.weasleyclient.enmus
 
 enum class UserType(var value: String, var desc: String) {
+
     DEFAULT("D", "application user"),
     GOOGLE("G", "google user");
 
