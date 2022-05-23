@@ -1,4 +1,4 @@
-rootProject.name = "weasley"
+rootProject.name = "weasley-api-server"
 
 include(
     "client",
